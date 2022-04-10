@@ -26,7 +26,7 @@
 # hochaddiert.
 #
 # Es besteht die Möglichkeit, alle erstellten Tests und die Musterlösung in einer einzigen Datei
-# zusmmenzufassen ("Sumo-Datei"). Dabei kann eingestellt werden, wie viele Kopien der Tests
+# zusammenzufassen ("Sumo-Datei"). Dabei kann eingestellt werden, wie viele Kopien der Tests
 # pro Doppelgruppe eingebunden werden. Dann kann man zu Beginn des Semesters
 # gleich alles in einem Schwung ausdrucken. Dieses Vorgehen ist nur sinnvoll, wenn die Testaufgaben
 # stabil sind und nicht mehr korrigiert werden müssen.
@@ -43,7 +43,7 @@ from PyPDF2 import PdfFileReader, PdfFileWriter
 
 
 # ================ Einstellungen Beginn =============================
-# Festlegung, wieviel Gruppenpaare erzeugt werden sollen
+# Festlegung, wie viel Gruppenpaare erzeugt werden sollen
 # z.B. 6: Gruppen 01 bis 12
 # 01+02, 03+04, etc. haben dann jeweils die gleichen Aufgaben
 anzahl_gruppen = 5
@@ -96,15 +96,19 @@ class Pool:
         aufgaben_regex = re.compile(f"^aufgabe_{name}_\\d+\\.tex$")
         dateinamen_pool_aufgaben = [datei for datei in dateinamen_tex if
                                     re.match(aufgaben_regex, datei) is not None]
-
+        # Überprüfung, ob es im Pool Aufgaben gibt
         if len(dateinamen_pool_aufgaben) == 0:
             warn(f"Keine Aufgaben im Pool {self.name} gefunden")
 
+        # Ordnet jeder Aufgabe die dazugehörige Lösung zu
         for datei in dateinamen_pool_aufgaben:
             datei_loesung = datei.replace("aufgabe", "loesung")
 
+            # Hinzufügen der Aufgabe und Lösung zum Stapel
             if datei_loesung in dateinamen_tex:
                 self.stapel_verfuegbar.append((datei, datei_loesung))
+
+            # Warnung, falls keine passende Lösung gefunden
             else:
                 warn(f"{datei} besitzt keine passende Loesungsdatei {datei_loesung}")
 
@@ -119,7 +123,7 @@ class Pool:
             else:
                 raise RuntimeError(
                     f"Pool {self.name} ist erschoepft, Aufgaben wuerden sich in Gruppe wiederholen")
-
+        # Zufällige Auswahl einer Aufgabe+Lösung aus verfuegbaren Stapel
         aufg_loes = self.stapel_verfuegbar.pop(random.randint(0, len(self.stapel_verfuegbar) - 1))
         self.stapel_gezogen.append(aufg_loes)
 
@@ -204,6 +208,7 @@ test_all = TestTyp("VX", *[pool_all for i in range(len(pool_all.stapel_verfuegba
 test_liste_all = [test_all]
 # --------------
 
+# Zuweisung der Testlisten zu den jeweiligen Praktika
 if name_variante == "ET1":
     titel_praktikum = "Praktikum Regelungstechnik 1 (ET)"
     test_liste_variante = test_liste_ET1
@@ -267,15 +272,18 @@ for gruppe in range(anzahl_gruppen):
 
     for test_index, test_typ in enumerate(test_liste_variante):
         # Aufgabe
+        # Festlegung des Dateinamens und Pfades
         datei_name = f"ETest-{name_variante}-{test_typ.name}-{gruppe_name}.tex"
         datei_pfad = os.path.join(latex_verzeichnis, datei_name)
 
+        # Ersetzen der Dateiparameter in LaTeX mit Einstellungen
         datei_inhalt = template_aufgabe
         datei_inhalt = datei_inhalt.replace("__PRAKTIKUM__", titel_praktikum)
         datei_inhalt = datei_inhalt.replace("__SEMESTER__", semester)
         datei_inhalt = datei_inhalt.replace("__VERSUCH__", test_typ.name)
         datei_inhalt = datei_inhalt.replace("__GRUPPE__", gruppe_name)
 
+        # Erstellen des Aufgabenstrings + Implementieren in LaTeX Datei
         aufgaben_string = ""
         for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
             aufgaben_string += f"\\item\n"
@@ -286,18 +294,22 @@ for gruppe in range(anzahl_gruppen):
         with open(datei_pfad, "w+") as d:
             d.write(datei_inhalt)
 
+        # LaTeX Datei der Aufgaben in PDF umwandeln
         dateinamen_aufgaben_pdf.append(datei_name.replace(".tex", ".pdf"))
 
         # Lösung
+        # Festlegung des Dateinamens und Pfades
         datei_name = f"ETest-{name_variante}-{test_typ.name}-{gruppe_name}-Loesung.tex"
         datei_pfad = os.path.join(latex_verzeichnis, datei_name)
 
+        # Ersetzen der Dateiparameter in LaTeX mit Einstellungen
         datei_inhalt = template_loesung
         datei_inhalt = datei_inhalt.replace("__PRAKTIKUM__", titel_praktikum)
         datei_inhalt = datei_inhalt.replace("__SEMESTER__", semester)
         datei_inhalt = datei_inhalt.replace("__VERSUCH__", test_typ.name)
         datei_inhalt = datei_inhalt.replace("__GRUPPE__", gruppe_name)
 
+        # Erstellen des Lösungsstrings + Implementieren in LaTeX Datei
         loesung_string = ""
         for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
             loesung_string += f"\\item\n"
@@ -308,6 +320,7 @@ for gruppe in range(anzahl_gruppen):
         with open(datei_pfad, "w+") as d:
             d.write(datei_inhalt)
 
+        # LaTeX Datei der Lösungen in PDF umwandeln
         dateinamen_loesungen_pdf.append(datei_name.replace(".tex", ".pdf"))
 
 # ===================
