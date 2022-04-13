@@ -16,7 +16,7 @@
 #
 # Die Teilaufgaben einer Aufgabe sollten mit der enumerate-Umgebung gegliedert werden.
 #
-# In den Lösunsdateien muss der Lösungstext in der Umgebung \begin{Loesung} \end{Loesung}
+# In den Lösungsdateien muss der Lösungstext in der Umgebung \begin{Loesung} \end{Loesung}
 # liegen (anstelle von enumerate). Die Lösung einer jeden Teilaufgabe beginnt dann mit
 # Schlüsselwort \lsgitem.
 # ToDo: Wenn man alles in eine LaTeX-Klasse packt könnte man das vereinfachen

@@ -15,6 +15,64 @@
 \usepackage{units}
 \usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcounter{TeilPunkte}
+\newcounter{AufgabePunkte}
+\newcounter{GesamtPunkte}
+\setcounter{GesamtPunkte}{0}
+
+% Benutzung: \Pkte{2} vergibt 2 Punkte
+%            \Pkte[6]{2} zeigt 2-Punkte-Kasten, aber vergibt 6 Punkte
+\newcommand{\Pkte}[2][-999]{
+    \fbox{\textcolor{black}{\textbf{#2\,P.}}}
+    \ifnum#1>-999
+    \addtocounter{TeilPunkte}{#1}
+    \addtocounter{AufgabePunkte}{#1}
+    \addtocounter{GesamtPunkte}{#1}
+    \else
+    \ifnum#2>0
+    \addtocounter{TeilPunkte}{#2}
+    \addtocounter{AufgabePunkte}{#2}
+    \addtocounter{GesamtPunkte}{#2}
+    \fi
+    \fi
+}
+\newcommand{\SumPkte}{
+    \dotfill \textcolor{black}{$\mathbf{\Sigma}$: \textbf{\arabic{TeilPunkte}\,P.}}
+    \setcounter{TeilPunkte}{0}
+}
+\newcommand{\AufgabePkte}{
+    \hrulefill \textcolor{black}{\large $\mathbf{\Sigma}$ Aufgabe: \textbf{\arabic{AufgabePunkte}\,P.}}\\[2ex]
+    \setcounter{TeilPunkte}{0}
+    \setcounter{AufgabePunkte}{0}
+}
+\newcommand{\GesamtPkte}{
+    \hfill \fbox{\textcolor{black}{\Large Gesamtpunktzahl Eingangstest: \textbf{\arabic{GesamtPunkte}\,P.}}}
+}
+
+\newenvironment{Loesung}{
+    \setcounter{TeilPunkte}{0}
+    \setcounter{AufgabePunkte}{0}
+    \begin{enumerate}
+}{
+    \SumPkte
+    \end{enumerate}
+    
+    \AufgabePkte
+    \setcounter{AufgabePunkte}{0}
+}
+
+\newcommand{\lsgitem}{
+\ifnum\value{TeilPunkte}>0
+\SumPkte
+\fi
+\item
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \setlength{\parskip}{2ex}
 \setlength{\parindent}{0ex}
 \setlength{\leftmargin}{0ex}
@@ -55,5 +113,7 @@ Name: \rule{7cm}{1pt} \hspace{2ex} Gruppe: \rule{2cm}{1pt} \hfill Datum: \rule{3
 __AUFGABEN__
 
 \end{enumerate}
+
+\GesamtPkte
 
 \end{document}
