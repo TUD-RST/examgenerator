@@ -44,35 +44,37 @@ import json
 
 
 # ================ Einstellungen Beginn =============================
+
+# Laden der Einstellungen aus json Datei in eine Python Liste
+with open('einstellungen.json', 'r') as json_datei:
+    einstellungen_dictionary = json.load(json_datei)
+
 # Festlegung, wie viel Gruppenpaare erzeugt werden sollen
 # z.B. 6: Gruppen 01 bis 12
 # 01+02, 03+04, etc. haben dann jeweils die gleichen Aufgaben
-anzahl_gruppen = 5
+anzahl_gruppen = einstellungen_dictionary['anzahl_gruppen']
 
 # Studiengang, für den erzeugt werden soll.
 # Mögliche Optionen: ET1, ET2, MT, RES
-name_variante = "ET1"
+name_variante = einstellungen_dictionary['name_variante']
 
 # Semester
-semester = "WS 2021/22"
+semester = einstellungen_dictionary['semester']
 
 # SUMO-pdf:
 # Datei, die sämtliche Tests des Semesters zum Ausdruck enthält
 # Dann kann man zu Beginn des Semesters gleich alles auf einen
 # Schwung erzeugen und an die Betreuer verteilen
-sumo_seiten_pro_blatt_test = 4  # 4 = Ausdruck doppelseitig A5
-sumo_kopien_pro_test = 4  # Muss der Anzahl der Mitglieder pro Doppelgruppe entsprechen
-sumo_seiten_pro_blatt_loesung = 4
-sumo_kopien_pro_loesung = 1
+sumo_seiten_pro_blatt_test = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_test']  # 4 = Ausdruck doppelseitig A5
+sumo_kopien_pro_test = einstellungen_dictionary['sumo']['sumo_kopien_pro_test']  # Muss der Anzahl der Mitglieder pro Doppelgruppe entsprechen
+sumo_seiten_pro_blatt_loesung = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_loesung']
+sumo_kopien_pro_loesung = einstellungen_dictionary['sumo']['sumo_kopien_pro_loesung']
 
 # Einstellungen, was erzeugt und gelöscht werden soll.
-generiere_einzel_pdfs = True
-generiere_sumo_pdf = True
-temp_dateien_loeschen = True
+generiere_einzel_pdfs = einstellungen_dictionary['loeschen_daten']['generiere_einzel_pdfs']
+generiere_sumo_pdf = einstellungen_dictionary['loeschen_daten']['generiere_sumo_pdf']
+temp_dateien_loeschen = einstellungen_dictionary['loeschen_daten']['temp_dateien_loeschen']
 
-# Laden der Einstellungen aus json Datei in eine Python Liste
-with open("einstellungen.json", "r") as json_datei
-    einstellungen_liste = json.load(json_datei)
 # ================ Einstellungen Ende =============================
 
 
