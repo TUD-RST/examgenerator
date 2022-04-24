@@ -45,11 +45,11 @@ import json
 
 # ================ Einstellungen Beginn =============================
 
-# Laden der Einstellungen aus json Datei in eine Python Liste
+# Laden der Einstellungen aus json Datei in ein Python Dictionary
 with open('einstellungen.json', 'r') as json_datei:
     einstellungen_dictionary = json.load(json_datei)
 
-# Festlegung, wie viel Gruppenpaare erzeugt werden sollen
+# Festlegung, wie viele Gruppenpaare erzeugt werden sollen
 # z.B. 6: Gruppen 01 bis 12
 # 01+02, 03+04, etc. haben dann jeweils die gleichen Aufgaben
 anzahl_gruppen = einstellungen_dictionary['anzahl_gruppen']
