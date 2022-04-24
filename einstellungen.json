@@ -1,0 +1,16 @@
+{
+  "anzahl_gruppen": 5,
+  "name_variante": "ET1",
+  "semester": "WS 2021/22",
+  "sumo": {
+    "sumo_seiten_pro_blatt_test": 4,
+    "sumo_kopien_pro_test": 4
+    "sumo_seiten_pro_blatt_loesung": 4,
+    "sumo_kopien_pro_loesung": 1,
+  },
+  "loeschen_daten": {
+    "generiere_einzel_pdfs": True,
+    "generiere_sumo_pdf": True,
+    "temp_dateien_loeschen": True,
+  }
+}

@@ -40,6 +40,7 @@ from warnings import warn
 import re
 import subprocess
 from PyPDF2 import PdfFileReader, PdfFileWriter
+import json
 
 
 # ================ Einstellungen Beginn =============================
@@ -68,6 +69,10 @@ sumo_kopien_pro_loesung = 1
 generiere_einzel_pdfs = True
 generiere_sumo_pdf = True
 temp_dateien_loeschen = True
+
+# Laden der Einstellungen aus json Datei in eine Python Liste
+with open("einstellungen.json", "r") as json_datei
+    einstellungen_liste = json.load(json_datei)
 # ================ Einstellungen Ende =============================
 
 
