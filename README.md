@@ -6,7 +6,8 @@
 python3 etest_generator.py
 ```
 
-**Folgende Anpassungsmöglichkeiten gibt es in ``etest_generator.py``**
+**Folgende Anpassungsmöglichkeiten gibt es für ``etest_generator.py``**
+**Die Einstellungen erfolgen in ``einstellungen.json``**
 
 ```python
 # ================ Einstellungen Beginn =============================
@@ -35,5 +36,5 @@ temp_dateien_loeschen = True
 # ================ Einstellungen Ende =============================
 ```
 
-Die generierten Tests finden sich dann im Verzeichnis 
+Die generierten Tests finden sich dann im Verzeichnis
 ``Tests-[Studiengang]-[Semester]`` wieder.

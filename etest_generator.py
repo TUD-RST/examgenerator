@@ -45,6 +45,8 @@ import json
 
 # ================ Einstellungen Beginn =============================
 
+# Die Einstellungen werden über die einstellungen.json Datei festgelegt und dann in Python verarbeitet
+
 # Laden der Einstellungen aus json Datei in ein Python Dictionary
 with open('einstellungen.json', 'r') as json_datei:
     einstellungen_dictionary = json.load(json_datei)
