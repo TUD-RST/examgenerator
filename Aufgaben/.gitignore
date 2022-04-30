@@ -13,7 +13,7 @@
 *.pdf
 *.tex
 
-!/Aufgaben/poolA
-!/Aufgaben/poolB
-!/Aufgaben/poolC
-!/Aufgaben/pool
+!/Aufgaben/poolA/*.tex
+!/Aufgaben/poolB/*.tex
+!/Aufgaben/poolC/*.tex
+!/Aufgaben/pool/*.tex
