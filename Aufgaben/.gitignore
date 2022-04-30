@@ -12,3 +12,8 @@
 *.txt
 *.pdf
 *.tex
+
+!/Aufgaben/poolA
+!/Aufgaben/poolB
+!/Aufgaben/poolC
+!/Aufgaben/pool
