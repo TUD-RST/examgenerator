@@ -16,20 +16,20 @@
 #
 # Die Teilaufgaben einer Aufgabe sollten mit der enumerate-Umgebung gegliedert werden.
 #
-# In den Lösungsdateien muss der Lösungstext in der Umgebung \begin{Loesung} \end{Loesung}
+# In den Loesungsdateien muss der Lösungstext in der Umgebung \begin{Loesung} \end{Loesung}
 # liegen (anstelle von enumerate). Die Lösung einer jeden Teilaufgabe beginnt dann mit
-# Schlüsselwort \lsgitem.
-# ToDo: Wenn man alles in eine LaTeX-Klasse packt könnte man das vereinfachen
+# Schluesselwort \lsgitem.
+# ToDo: Wenn man alles in eine LaTeX-Klasse packt koennte man das vereinfachen
 #
-# In den Lösungen können mit dem Makro \Pkte{n} Punkte für die Teilaufgaben vergeben werden.
-# Bei der Kompilierung werden die Punkte automatisch für die Aufgaben und den gesamten Test
+# In den Loesungen koennen mit dem Makro \Pkte{n} Punkte fuer die Teilaufgaben vergeben werden.
+# Bei der Kompilierung werden die Punkte automatisch fuer die Aufgaben und den gesamten Test
 # hochaddiert.
 #
-# Es besteht die Möglichkeit, alle erstellten Tests und die Musterlösung in einer einzigen Datei
+# Es besteht die Moeglichkeit, alle erstellten Tests und die Musterlösung in einer einzigen Datei
 # zusammenzufassen ("Sumo-Datei"). Dabei kann eingestellt werden, wie viele Kopien der Tests
 # pro Doppelgruppe eingebunden werden. Dann kann man zu Beginn des Semesters
 # gleich alles in einem Schwung ausdrucken. Dieses Vorgehen ist nur sinnvoll, wenn die Testaufgaben
-# stabil sind und nicht mehr korrigiert werden müssen.
+# stabil sind und nicht mehr korrigiert werden muessen.
 #
 # Das Script nutzt einige Betriebssystembefehle, die derzeit nur für Windows implementiert sind.
 import os
@@ -46,6 +46,7 @@ import json
 # ================ Einstellungen Beginn =============================
 
 # Die Einstellungen werden über die einstellungen.json Datei festgelegt und dann in Python verarbeitet
+# Hier keine Veraenderung der Einstellungen!
 
 # Laden der Einstellungen aus json Datei in ein Python Dictionary
 with open('einstellungen.json', 'r') as json_datei:
@@ -57,14 +58,14 @@ with open('einstellungen.json', 'r') as json_datei:
 anzahl_gruppen = einstellungen_dictionary['anzahl_gruppen']
 
 # Studiengang, für den erzeugt werden soll.
-# Mögliche Optionen: ET1, ET2, MT, RES
+# Moegliche Optionen: ET1, ET2, MT, RES
 name_variante = einstellungen_dictionary['name_variante']
 
 # Semester
 semester = einstellungen_dictionary['semester']
 
 # SUMO-pdf:
-# Datei, die sämtliche Tests des Semesters zum Ausdruck enthält
+# Datei, die saemtliche Tests des Semesters zum Ausdruck enthält
 # Dann kann man zu Beginn des Semesters gleich alles auf einen
 # Schwung erzeugen und an die Betreuer verteilen
 sumo_seiten_pro_blatt_test = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_test']  # 4 = Ausdruck doppelseitig A5
@@ -87,12 +88,12 @@ class Pool:
 
         self.stapel_verfuegbar = []
         """
-        [(dateiname_aufgabe, dateiname_loesung)]; Zur Auswahl verfügbare Aufgaben
+        [(dateiname_aufgabe, dateiname_loesung)]; Zur Auswahl verfuegbare Aufgaben
         """
 
         self.stapel_gezogen = []
         """
-        [(dateiname_aufgabe, dateiname_loesung)]; Aufgaben, die für die aktuelle Gruppe gezogen 
+        [(dateiname_aufgabe, dateiname_loesung)]; Aufgaben, die fuer die aktuelle Gruppe gezogen 
         wurden
         """
 
@@ -101,30 +102,31 @@ class Pool:
         [(dateiname_aufgabe, dateiname_loesung)]; Aufgaben, die von den letzten Gruppen gezogen 
         wurden
         """
-
+        # Erstellt eine Liste mit allen Aufgaben aus gefragten Pool
         aufgaben_regex = re.compile(f"^aufgabe_{name}_\\d+\\.tex$")
         dateinamen_pool_aufgaben = [datei for datei in dateinamen_tex if
                                     re.match(aufgaben_regex, datei) is not None]
-        # Überprüfung, ob es im Pool Aufgaben gibt
+        
+        # Ue�berpruefung, ob es im Pool Aufgaben mit dazugeh�rigen Loesungen gibt
         if len(dateinamen_pool_aufgaben) == 0:
             warn(f"Keine Aufgaben im Pool {self.name} gefunden")
 
-        # Ordnet jeder Aufgabe die dazugehörige Lösung zu
+        # Sucht nach der Loesung zur jeweiligen Aufgabe
         for datei in dateinamen_pool_aufgaben:
             datei_loesung = datei.replace("aufgabe", "loesung")
 
-            # Hinzufügen der Aufgabe und Lösung zum Stapel
+            # Hinzufuegen der Aufgabe und Loesung zum Stapel falls L�sung vorhanden
             if datei_loesung in dateinamen_tex:
                 self.stapel_verfuegbar.append((datei, datei_loesung))
 
-            # Warnung, falls keine passende Lösung gefunden
+            # Warnung, falls keine passende Loesung gefunden
             else:
                 warn(f"{datei} besitzt keine passende Loesungsdatei {datei_loesung}")
 
     def ziehen(self):
         if len(self.stapel_verfuegbar) == 0:
-            # Stapel mit verfügbaren Aufgaben ist leer,
-            # Ablagestapel wird zum neuen verfügbaren Stapel
+            # Stapel mit verfuegbaren Aufgaben ist leer,
+            # Ablagestapel wird zum neuen verfuegbaren Stapel
 
             if len(self.stapel_ablage) > 0:
                 self.stapel_verfuegbar = self.stapel_ablage
@@ -132,7 +134,7 @@ class Pool:
             else:
                 raise RuntimeError(
                     f"Pool {self.name} ist erschoepft, Aufgaben wuerden sich in Gruppe wiederholen")
-        # Zufällige Auswahl einer Aufgabe+Lösung aus verfuegbaren Stapel
+        # Zufaellige Auswahl einer Aufgabe+Loesung aus verfuegbaren Stapel
         aufg_loes = self.stapel_verfuegbar.pop(random.randint(0, len(self.stapel_verfuegbar) - 1))
         self.stapel_gezogen.append(aufg_loes)
 
@@ -155,33 +157,51 @@ class TestTyp:
 # ==================================
 random.seed("WS2122")
 
-# Arbeitsverzeichnis für den LaTeX-Compiler
-latex_verzeichnis = os.path.join(os.getcwd(), "Latex")
+# Arbeitsverzeichnis fuer den LaTeX-Compiler
+latex_verzeichnis = os.path.join(os.getcwd(), "Aufgaben")
 
 # Verzeichnis mit den Vorlagen
 template_verzeichnis = os.path.join(os.getcwd(), "Templates")
 
-# Ausgabeverzeichnis für die erstellten Tests (z.B. Tests-ET1-WS201920)
+# Ausgabeverzeichnis fuer die erstellten Tests (z.B. Tests-ET1-WS201920)
 test_verzeichnis = os.path.join(os.getcwd(), "Tests-{}-{}".format(name_variante, semester)).replace(
     " ", "").replace("/", "")
 
-# Verzeichnis mit dem LaTeX-Quellcode der Aufgaben und Lösungen
-aufgaben_verzeichnis = os.path.join(latex_verzeichnis, "Aufgaben")
+# Verzeichnis mit dem LaTeX-Quellcode der Aufgaben und Loesungen
+poolA_verzeichnis = os.path.join(latex_verzeichnis, "poolA")
+poolB_verzeichnis = os.path.join(latex_verzeichnis, "poolB")
+poolC_verzeichnis = os.path.join(latex_verzeichnis, "poolC")
+poolD_verzeichnis = os.path.join(latex_verzeichnis, "poolD")
 
-# Dateinamen der Aufgaben
-dateinamen_tex = [os.path.basename(fn) for fn in
-                  glob.iglob(os.path.join(aufgaben_verzeichnis, "*.tex"))]
 
+# Erstellt f�r jeden Pool Liste mit den Dateinamen der Aufgaben und L�sungen
+dateinamen_poolA_tex = [os.path.basename(fn) for fn in
+                  glob.iglob(os.path.join(poolA_verzeichnis, "*.tex"))]
+
+dateinamen_poolB_tex = [os.path.basename(fn) for fn in
+                  glob.iglob(os.path.join(poolB_verzeichnis, "*.tex"))]
+
+dateinamen_poolC_tex = [os.path.basename(fn) for fn in
+                  glob.iglob(os.path.join(poolC_verzeichnis, "*.tex"))]
+
+dateinamen_poolD_tex = [os.path.basename(fn) for fn in
+                  glob.iglob(os.path.join(poolD_verzeichnis, "*.tex"))]
+
+# F�gt die Liste der einzelnen Pools zusammen
+dateinamen_tex = (dateinamen_poolA_tex + dateinamen_poolB_tex + 
+                  dateinamen_poolC_tex + dateinamen_poolD_tex)
+                
+                             
 
 # Grundaufgaben, die in jedem Test vorkommen.
-# A1, B1 -> für fünftes Semester RT sowie sechstes Semester MT sowie RES
-# A2, B2 -> für sechstes Semester RT (benötigt Kenntnisse aus RT 2)
+# A1, B1 -> fuer fuenftes Semester RT sowie sechstes Semester MT sowie RES
+# A2, B2 -> fuer sechstes Semester RT (benoetigt Kenntnisse aus RT 2)
 poolA1 = Pool("A1", dateinamen_tex)
 poolB1 = Pool("B1", dateinamen_tex)
 poolA2 = Pool("A2", dateinamen_tex)
 poolB2 = Pool("B2", dateinamen_tex)
 
-# Versuchsspezifische Aufgaben für V1, V3, V7, V8, V15 und V21
+# Versuchsspezifische Aufgaben fuer V1, V3, V7, V8, V15 und V21
 poolCV01 = Pool("CV01", dateinamen_tex)
 poolCV03 = Pool("CV03", dateinamen_tex)
 poolCV07 = Pool("CV07", dateinamen_tex)
@@ -195,7 +215,7 @@ poolDV08 = Pool("DV08", dateinamen_tex)
 poolDV15 = Pool("DV15", dateinamen_tex)
 poolDV21 = Pool("DV21", dateinamen_tex)
 
-# Tests für RT1 sowie MT und RES-Praktikum
+# Tests fuer RT1 sowie MT und RES-Praktikum
 testV1 = TestTyp("V01", poolA1, poolB1, poolCV01)
 testV7 = TestTyp("V07", poolA1, poolB1, poolCV07, poolDV07)
 testV8_MT_RES = TestTyp("V08", poolA1, poolB1, poolCV08)
@@ -205,7 +225,7 @@ test_liste_ET1 = [testV1, testV7, testV21]
 test_liste_MT = [testV21, testV8_MT_RES]
 test_liste_RES = [testV21, testV8_MT_RES, testV15_MT_RES]
 
-# Tests für RT2 (6. Semester)
+# Tests fuer RT2 (6. Semester)
 testV3 = TestTyp("V03", poolA2, poolB2, poolCV03)
 testV8_ET = TestTyp("V08", poolA2, poolB2, poolCV08)
 testV15_ET = TestTyp("V15", poolA2, poolB2, poolCV15, poolDV15)
@@ -231,7 +251,7 @@ elif name_variante == "RES":
     titel_praktikum = "Praktikum Regelungstechnik (RES)"
     test_liste_variante = test_liste_RES
 else:
-    warn("Unbekannter Bezeichner. Gewünscht: ET1, ET2, MT oder RES!")
+    warn("Unbekannter Bezeichner. Gewuenscht: ET1, ET2, MT oder RES!")
     test_liste_variante = []
     titel_praktikum = ""
     quit()
@@ -244,7 +264,7 @@ test_saetze_pro_gruppe = []
 for i in range(anzahl_gruppen):
     test_satz = []
 
-    # Für jeden Test aus jedem Pool Aufgaben ziehen
+    # Fuer jeden Test aus jedem Pool Aufgaben ziehen
     for test_typ in test_liste_variante:
         aufg_loes = []
 
@@ -253,7 +273,7 @@ for i in range(anzahl_gruppen):
 
         test_satz.append(aufg_loes)
 
-    # Für jeden genutzten Pool die gezogenen Aufgaben ablegen
+    # Fuer jeden genutzten Pool die gezogenen Aufgaben ablegen
     for test_typ in test_liste_variante:
         for pool in test_typ.pools:
             pool.ablegen()
@@ -263,8 +283,11 @@ for i in range(anzahl_gruppen):
 # ==================================
 # --- Generieren der TeX-Dateien ---
 # ==================================
+
+# Loescht alle Dateien im Aufgaben Ordner 
 for file in glob.glob(os.path.join(latex_verzeichnis, "*.*")):
     os.remove(file)
+    
 template_aufgabe_pfad = os.path.join(template_verzeichnis, "template_aufgabe.tex")
 template_loesung_pfad = os.path.join(template_verzeichnis, "template_loesung.tex")
 
@@ -293,10 +316,23 @@ for gruppe in range(anzahl_gruppen):
         datei_inhalt = datei_inhalt.replace("__GRUPPE__", gruppe_name)
 
         # Erstellen des Aufgabenstrings + Implementieren in LaTeX Datei
+        # Der String muss f�r jeden Pool angepasst werden, damit auf das
+        # richtige Verzeichnis zugegriffen wird, daher werden die Tuples abgefragt
         aufgaben_string = ""
         for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
             aufgaben_string += f"\\item\n"
-            aufgaben_string += f"\\input{{Aufgaben/{aufg_loes[0]}}}\n\n"
+                
+            if "A" in aufg_loes[0]:
+                aufgaben_string += f"\\input{{poolA/{aufg_loes[0]}}}\n\n"
+            
+            if "B" in aufg_loes[0]:
+                aufgaben_string += f"\\input{{poolB/{aufg_loes[0]}}}\n\n"
+            
+            if "C" in aufg_loes[0]:
+                aufgaben_string += f"\\input{{poolC/{aufg_loes[0]}}}\n\n"
+            
+            if "D" in aufg_loes[0]:
+                aufgaben_string += f"\\input{{poolD/{aufg_loes[0]}}}\n\n"
 
         datei_inhalt = datei_inhalt.replace("__AUFGABEN__", aufgaben_string)
 
@@ -306,10 +342,10 @@ for gruppe in range(anzahl_gruppen):
         # LaTeX Datei der Aufgaben in PDF umwandeln
         dateinamen_aufgaben_pdf.append(datei_name.replace(".tex", ".pdf"))
 
-        # Lösung
+        # Loesung
         # Festlegung des Dateinamens und Pfades
         datei_name = f"ETest-{name_variante}-{test_typ.name}-{gruppe_name}-Loesung.tex"
-        datei_pfad = os.path.join(latex_verzeichnis, datei_name)
+        datei_pfad = os.path.join(latex_verzeichnis, datei_name) 
 
         # Ersetzen der Dateiparameter in LaTeX mit Einstellungen
         datei_inhalt = template_loesung
@@ -318,18 +354,31 @@ for gruppe in range(anzahl_gruppen):
         datei_inhalt = datei_inhalt.replace("__VERSUCH__", test_typ.name)
         datei_inhalt = datei_inhalt.replace("__GRUPPE__", gruppe_name)
 
-        # Erstellen des Lösungsstrings + Implementieren in LaTeX Datei
+        # Erstellen des Loesungsstrings + Implementieren in LaTeX Datei
+        # Der String muss f�r jeden Pool angepasst werden, damit auf das
+        # richtige Verzeichnis zugegriffen wird, daher werden die Tuples abgefragt
         loesung_string = ""
         for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
             loesung_string += f"\\item\n"
-            loesung_string += f"\\input{{Aufgaben/{aufg_loes[1]}}}\n\n"
+            
+            if "A" in aufg_loes[0]:
+                 loesung_string += f"\\input{{poolA/{aufg_loes[1]}}}\n\n"
+             
+            if "B" in aufg_loes[0]:
+                 loesung_string += f"\\input{{poolB/{aufg_loes[1]}}}\n\n"
+             
+            if "C" in aufg_loes[0]:
+                 loesung_string += f"\\input{{poolC/{aufg_loes[1]}}}\n\n"
+             
+            if "D" in aufg_loes[0]:
+                loesung_string += f"\\input{{poolD/{aufg_loes[1]}}}\n\n"
 
         datei_inhalt = datei_inhalt.replace("__AUFGABEN__", loesung_string)
 
         with open(datei_pfad, "w+") as d:
             d.write(datei_inhalt)
 
-        # LaTeX Datei der Lösungen in PDF umwandeln
+        # LaTeX Datei der Loesungen in PDF umwandeln
         dateinamen_loesungen_pdf.append(datei_name.replace(".tex", ".pdf"))
 
 # ===================
@@ -343,7 +392,7 @@ if generiere_einzel_pdfs:
     tex_dateien = [datei for datei in os.listdir(latex_verzeichnis) if datei.endswith(".tex")]
 
     for datei in tex_dateien:
-        # pdflatex 2 mal ausführen, um Referenzen aufzulösen
+        # pdflatex 2 mal ausfuehren, um Referenzen aufzuloesen
         command = f"pdflatex -interaction=batchmode {datei} && " \
                   f"pdflatex -interaction=batchmode {datei}"
         print(command)
@@ -352,7 +401,7 @@ if generiere_einzel_pdfs:
         process.wait()
         if process.returncode != 0:
             warn(f"Problem beim Kompilieren von {datei}. "
-                 f"Temporäre Dateien werden nicht gelöscht zur Fehlersuche.")
+                 f"Temporaere Dateien werden nicht geloescht zur Fehlersuche.")
             temp_dateien_loeschen = False
         else:
             shutil.move(datei.replace(".tex", ".pdf"), test_verzeichnis)
