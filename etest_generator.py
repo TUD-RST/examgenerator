@@ -1,23 +1,23 @@
-# Script zur Erstellung von Eingangstests für das Praktikum Regelungstechnik
+# Script zur Erstellung von Eingangstests fuer das Praktikum Regelungstechnik
 #
-# Aus einem Pool von Aufgaben werden Eingangstests für alle Versuche und alle Praktikumsgruppen
+# Aus einem Pool von Aufgaben werden Eingangstests fuer alle Versuche und alle Praktikumsgruppen
 # erstellt und zwar so, dass sich die Aufgaben für eine Gruppe nicht wiederholen.
 #
-# Dazu gibt es im Verzeichnis Templates zwei LaTeX-Vorlagen: Eine für den Test, eine für
-# die Musterlösung und Bewertung. In den Vorlagen gibt es Platzhalter, die von diesem Script
-# mit dem entsprechenden Inhalt befüllt werden (Gruppennummer, Praktikumsname, Aufgaben, ...).
+# Dazu gibt es im Verzeichnis Templates zwei LaTeX-Vorlagen: Eine fuer den Test, eine fuer
+# die Musterloesung und Bewertung. In den Vorlagen gibt es Platzhalter, die von diesem Script
+# mit dem entsprechenden Inhalt befuellt werden (Gruppennummer, Praktikumsname, Aufgaben, ...).
 #
 # Die Aufgaben finden sich im Verzeichnis Latex/Aufgaben. Diese ordnen sich nach allgemeinen
-# Aufgaben, die in jedem Test vorkommen, und Aufgaben, die spezifisch für den jeweiligen Versuch
-# sind. Die Zusammenstellung der Tests aus diesen Aufgaben erfolgt über Instanzen der Klasse
-# TestTyp, die Verwaltung der Aufgaben über Instanzen vom Typ Pool. Die Lösungen sind in separaten
-# Dateien abgelegt. Aufgabendateien haben das Präfix "aufgabe_", Lösungen das Präfix "loesung_".
+# Aufgaben, die in jedem Test vorkommen, und Aufgaben, die spezifisch fuer den jeweiligen Versuch
+# sind. Die Zusammenstellung der Tests aus diesen Aufgaben erfolgt ueber Instanzen der Klasse
+# TestTyp, die Verwaltung der Aufgaben ueber Instanzen vom Typ Pool. Die Loesungen sind in separaten
+# Dateien abgelegt. Aufgabendateien haben das Präfix "aufgabe_", Loesungen das Praefix "loesung_".
 # Das Schema lautet dann z.B.: aufgabe_A1_2.tex -> 2. Aufgabe vom Typ A1
 #
 # Die Teilaufgaben einer Aufgabe sollten mit der enumerate-Umgebung gegliedert werden.
 #
-# In den Loesungsdateien muss der Lösungstext in der Umgebung \begin{Loesung} \end{Loesung}
-# liegen (anstelle von enumerate). Die Lösung einer jeden Teilaufgabe beginnt dann mit
+# In den Loesungsdateien muss der Loesungstext in der Umgebung \begin{Loesung} \end{Loesung}
+# liegen (anstelle von enumerate). Die Loesung einer jeden Teilaufgabe beginnt dann mit
 # Schluesselwort \lsgitem.
 # ToDo: Wenn man alles in eine LaTeX-Klasse packt koennte man das vereinfachen
 #
@@ -25,13 +25,13 @@
 # Bei der Kompilierung werden die Punkte automatisch fuer die Aufgaben und den gesamten Test
 # hochaddiert.
 #
-# Es besteht die Moeglichkeit, alle erstellten Tests und die Musterlösung in einer einzigen Datei
+# Es besteht die Moeglichkeit, alle erstellten Tests und die Musterloesung in einer einzigen Datei
 # zusammenzufassen ("Sumo-Datei"). Dabei kann eingestellt werden, wie viele Kopien der Tests
 # pro Doppelgruppe eingebunden werden. Dann kann man zu Beginn des Semesters
 # gleich alles in einem Schwung ausdrucken. Dieses Vorgehen ist nur sinnvoll, wenn die Testaufgaben
 # stabil sind und nicht mehr korrigiert werden muessen.
 #
-# Das Script nutzt einige Betriebssystembefehle, die derzeit nur für Windows implementiert sind.
+# Das Script nutzt einige Betriebssystembefehle, die derzeit nur fuer Windows implementiert sind.
 import os
 import shutil
 import glob
@@ -45,7 +45,7 @@ import json
 
 # ================ Einstellungen Beginn =============================
 
-# Die Einstellungen werden über die einstellungen.json Datei festgelegt und dann in Python verarbeitet
+# Die Einstellungen werden ueber die einstellungen.json Datei festgelegt und dann in Python verarbeitet
 # Hier keine Veraenderung der Einstellungen!
 
 # Laden der Einstellungen aus json Datei in ein Python Dictionary
@@ -57,7 +57,7 @@ with open('einstellungen.json', 'r') as json_datei:
 # 01+02, 03+04, etc. haben dann jeweils die gleichen Aufgaben
 anzahl_gruppen = einstellungen_dictionary['anzahl_gruppen']
 
-# Studiengang, für den erzeugt werden soll.
+# Studiengang, fuer den erzeugt werden soll.
 # Moegliche Optionen: ET1, ET2, MT, RES
 name_variante = einstellungen_dictionary['name_variante']
 
@@ -73,7 +73,7 @@ sumo_kopien_pro_test = einstellungen_dictionary['sumo']['sumo_kopien_pro_test'] 
 sumo_seiten_pro_blatt_loesung = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_loesung']
 sumo_kopien_pro_loesung = einstellungen_dictionary['sumo']['sumo_kopien_pro_loesung']
 
-# Einstellungen, was erzeugt und gelöscht werden soll.
+# Einstellungen, was erzeugt und geloescht werden soll.
 generiere_einzel_pdfs = einstellungen_dictionary['loeschen_daten']['generiere_einzel_pdfs']
 generiere_sumo_pdf = einstellungen_dictionary['loeschen_daten']['generiere_sumo_pdf']
 temp_dateien_loeschen = einstellungen_dictionary['loeschen_daten']['temp_dateien_loeschen']
