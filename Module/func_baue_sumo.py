@@ -1,7 +1,7 @@
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 
-def baue_sumo(sumo_name, pdf_liste, seiten_pro_blatt, kopien_pro_datei):
+def baue_sumo(test_verzeichnis, sumo_name, pdf_liste, seiten_pro_blatt, kopien_pro_datei):
     os.chdir(test_verzeichnis)
     writer = PdfFileWriter()
 

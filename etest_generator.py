@@ -90,7 +90,7 @@ from Module import TestTyp
 # --- Konfiguration ---
 # ==================================
 
-random.seed("WS2122")
+random.seed()
 
 # Arbeitsverzeichnis fuer den LaTeX-Compiler
 latex_verzeichnis = os.path.join(os.getcwd(), "Aufgaben")
@@ -194,203 +194,44 @@ else:
 # ================================
 # --- Kombination der Aufgaben ---
 # ================================
-test_saetze_pro_gruppe = []
 
-for i in range(anzahl_gruppen):
-    test_satz = []
+from Module import kombination_aufgaben
 
-    # Fuer jeden Test aus jedem Pool Aufgaben ziehen
-    for test_typ in test_liste_variante:
-        aufg_loes = []
-
-        for pool in test_typ.pools:
-            aufg_loes.append(pool.ziehen())
-
-        test_satz.append(aufg_loes)
-
-    # Fuer jeden genutzten Pool die gezogenen Aufgaben ablegen
-    for test_typ in test_liste_variante:
-        for pool in test_typ.pools:
-            pool.ablegen()
-
-    test_saetze_pro_gruppe.append(test_satz)
+test_saetze_pro_gruppe = kombination_aufgaben(anzahl_gruppen, test_liste_variante)
 
 # ==================================
 # --- Generieren der TeX-Dateien ---
 # ==================================
 
-# Loescht alle Dateien im Aufgaben Ordner 
-for file in glob.glob(os.path.join(latex_verzeichnis, "*.*")):
-    os.remove(file)
-    
-template_aufgabe_pfad = os.path.join(template_verzeichnis, "template_aufgabe.tex")
-template_loesung_pfad = os.path.join(template_verzeichnis, "template_loesung.tex")
+from Module import generieren_tex_dateien
 
-with open(template_aufgabe_pfad, "r") as d:
-    template_aufgabe = d.read()
-with open(template_loesung_pfad, "r") as d:
-    template_loesung = d.read()
+# Erstellung des Tuples aus den Listen dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf für Verarbeitung in Sumo
+namen_aufg_loesungen_pdf = generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_gruppen, test_liste_variante,
+                       name_variante, titel_praktikum, semester, test_saetze_pro_gruppe)
 
-dateinamen_aufgaben_pdf = []
-dateinamen_loesungen_pdf = []
 
-for gruppe in range(anzahl_gruppen):
-    gruppe_name = f"{gruppe*2 + 1:02d}{gruppe*2+2:02d}"
-
-    for test_index, test_typ in enumerate(test_liste_variante):
-        # Aufgabe
-        # Festlegung des Dateinamens und Pfades
-        datei_name = f"ETest-{name_variante}-{test_typ.name}-{gruppe_name}.tex"
-        datei_pfad = os.path.join(latex_verzeichnis, datei_name)
-
-        # Ersetzen der Dateiparameter in LaTeX mit Einstellungen
-        datei_inhalt = template_aufgabe
-        datei_inhalt = datei_inhalt.replace("__PRAKTIKUM__", titel_praktikum)
-        datei_inhalt = datei_inhalt.replace("__SEMESTER__", semester)
-        datei_inhalt = datei_inhalt.replace("__VERSUCH__", test_typ.name)
-        datei_inhalt = datei_inhalt.replace("__GRUPPE__", gruppe_name)
-
-        # Erstellen des Aufgabenstrings + Implementieren in LaTeX Datei
-        # Der String muss für jeden Pool angepasst werden, damit auf das
-        # richtige Verzeichnis zugegriffen wird, daher werden die Tuples abgefragt
-        aufgaben_string = ""
-        for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
-            aufgaben_string += f"\\item\n"
-                
-            if "A" in aufg_loes[0]:
-                aufgaben_string += f"\\input{{poolA/{aufg_loes[0]}}}\n\n"
-            
-            if "B" in aufg_loes[0]:
-                aufgaben_string += f"\\input{{poolB/{aufg_loes[0]}}}\n\n"
-            
-            if "C" in aufg_loes[0]:
-                aufgaben_string += f"\\input{{poolC/{aufg_loes[0]}}}\n\n"
-            
-            if "D" in aufg_loes[0]:
-                aufgaben_string += f"\\input{{poolD/{aufg_loes[0]}}}\n\n"
-
-        datei_inhalt = datei_inhalt.replace("__AUFGABEN__", aufgaben_string)
-
-        with open(datei_pfad, "w+") as d:
-            d.write(datei_inhalt)
-
-        # LaTeX Datei der Aufgaben in PDF umwandeln
-        dateinamen_aufgaben_pdf.append(datei_name.replace(".tex", ".pdf"))
-
-        # Loesung
-        # Festlegung des Dateinamens und Pfades
-        datei_name = f"ETest-{name_variante}-{test_typ.name}-{gruppe_name}-Loesung.tex"
-        datei_pfad = os.path.join(latex_verzeichnis, datei_name) 
-
-        # Ersetzen der Dateiparameter in LaTeX mit Einstellungen
-        datei_inhalt = template_loesung
-        datei_inhalt = datei_inhalt.replace("__PRAKTIKUM__", titel_praktikum)
-        datei_inhalt = datei_inhalt.replace("__SEMESTER__", semester)
-        datei_inhalt = datei_inhalt.replace("__VERSUCH__", test_typ.name)
-        datei_inhalt = datei_inhalt.replace("__GRUPPE__", gruppe_name)
-
-        # Erstellen des Loesungsstrings + Implementieren in LaTeX Datei
-        # Der String muss für jeden Pool angepasst werden, damit auf das
-        # richtige Verzeichnis zugegriffen wird, daher werden die Tuples abgefragt
-        loesung_string = ""
-        for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
-            loesung_string += f"\\item\n"
-            
-            if "A" in aufg_loes[0]:
-                 loesung_string += f"\\input{{poolA/{aufg_loes[1]}}}\n\n"
-             
-            if "B" in aufg_loes[0]:
-                 loesung_string += f"\\input{{poolB/{aufg_loes[1]}}}\n\n"
-             
-            if "C" in aufg_loes[0]:
-                 loesung_string += f"\\input{{poolC/{aufg_loes[1]}}}\n\n"
-             
-            if "D" in aufg_loes[0]:
-                loesung_string += f"\\input{{poolD/{aufg_loes[1]}}}\n\n"
-
-        datei_inhalt = datei_inhalt.replace("__AUFGABEN__", loesung_string)
-
-        with open(datei_pfad, "w+") as d:
-            d.write(datei_inhalt)
-
-        # LaTeX Datei der Loesungen in PDF umwandeln
-        dateinamen_loesungen_pdf.append(datei_name.replace(".tex", ".pdf"))
 
 # ===================
 # --- Kompilieren ---
 # ===================
-shutil.rmtree(test_verzeichnis, ignore_errors=True)
-os.mkdir(test_verzeichnis)
-os.chdir(latex_verzeichnis)
 
-if generiere_einzel_pdfs:
-    tex_dateien = [datei for datei in os.listdir(latex_verzeichnis) if datei.endswith(".tex")]
+from Module import kompilieren
 
-    for datei in tex_dateien:
-        # pdflatex 2 mal ausfuehren, um Referenzen aufzuloesen
-        command = f"pdflatex -interaction=batchmode {datei} && " \
-                  f"pdflatex -interaction=batchmode {datei}"
-        print(command)
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL,
-                                   stderr=subprocess.STDOUT)
-        process.wait()
-        if process.returncode != 0:
-            warn(f"Problem beim Kompilieren von {datei}. "
-                 f"Temporaere Dateien werden nicht geloescht zur Fehlersuche.")
-            temp_dateien_loeschen = False
-        else:
-            shutil.move(datei.replace(".tex", ".pdf"), test_verzeichnis)
-
-# ToDo: mit python machen!
-if temp_dateien_loeschen:
-    command = 'del /Q *.dvi *.ps *.aux *.log'
-    print(command)
-    process = subprocess.Popen(command, shell=True)
-    process.wait()
-    if process.returncode != 0:
-        warn("Temporaere Dateien konnten nicht geloescht werden")
-
+kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp_dateien_loeschen)
 
 # ==================================
 # --- Sumo-Files ---
 # ==================================
 
-def baue_sumo(sumo_name, pdf_liste, seiten_pro_blatt, kopien_pro_datei):
-    os.chdir(test_verzeichnis)
-    writer = PdfFileWriter()
-
-    open_files = []
-    for pdf in pdf_liste:
-        d = open(pdf, "rb")
-        open_files.append(d)
-
-        reader = PdfFileReader(d)
-        num_pages = reader.getNumPages()
-        mehr_als_vielfaches = num_pages % seiten_pro_blatt
-        if mehr_als_vielfaches == 0:
-            blank_pages = 0
-        else:
-            blank_pages = seiten_pro_blatt - mehr_als_vielfaches
-
-        for kopie in range(kopien_pro_datei):
-            for page in range(num_pages):
-                writer.addPage(reader.getPage(page))
-            for blank_page in range(blank_pages):
-                writer.addBlankPage()
-
-    with open(sumo_name, "wb+") as d:
-        writer.write(d)
-
-    for d in open_files:
-        d.close()
+from Module import baue_sumo
 
 if generiere_sumo_pdf:
-    dateinamen_aufgaben_pdf.sort()
+    namen_aufg_loesungen_pdf[0].sort()
     sumo_aufgaben_name = f"Sumo-{name_variante}-Aufgaben.pdf"
-    baue_sumo(sumo_aufgaben_name, dateinamen_aufgaben_pdf, sumo_seiten_pro_blatt_test,
+    baue_sumo(test_verzeichnis, sumo_aufgaben_name, namen_aufg_loesungen_pdf[0], sumo_seiten_pro_blatt_test,
               sumo_kopien_pro_test)
 
-    dateinamen_loesungen_pdf.sort()
+    namen_aufg_loesungen_pdf[1].sort()
     sumo_loesungen_name = f"Sumo-{name_variante}-Loesungen.pdf"
-    baue_sumo(sumo_loesungen_name, dateinamen_loesungen_pdf, sumo_seiten_pro_blatt_loesung,
+    baue_sumo(test_verzeichnis, sumo_loesungen_name, namen_aufg_loesungen_pdf[1], sumo_seiten_pro_blatt_loesung,
               sumo_kopien_pro_loesung)
