@@ -1,6 +1,6 @@
-/Latex/*.fdb_latexmk
-/Latex/*.fls
-/Latex/*.tex
+/Aufgaben/*.fdb_latexmk
+/Aufgaben/*.fls
+/Aufgaben/*.tex
 /Tests-ET1-WS201920
 /Tests-ET1-SS2020
 /Tests-ET1-WS202021
