@@ -33,205 +33,207 @@
 #
 # Das Script nutzt einige Betriebssystembefehle, die derzeit nur fuer Windows implementiert sind.
 import os
-import shutil
 import glob
 import random
 from warnings import warn
-import subprocess
-from PyPDF2 import PdfFileReader, PdfFileWriter
 import json
 
 
-# ================ Einstellungen Beginn =============================
-
-# Die Einstellungen werden ueber die einstellungen.json Datei festgelegt und dann in Python verarbeitet
-# Hier keine Veraenderung der Einstellungen!
-
-# Laden der Einstellungen aus json Datei in ein Python Dictionary
-with open('einstellungen.json', 'r') as json_datei:
-    einstellungen_dictionary = json.load(json_datei)
-
-# Festlegung, wie viele Gruppenpaare erzeugt werden sollen
-# z.B. 6: Gruppen 01 bis 12
-# 01+02, 03+04, etc. haben dann jeweils die gleichen Aufgaben
-anzahl_gruppen = einstellungen_dictionary['anzahl_gruppen']
-
-# Studiengang, fuer den erzeugt werden soll.
-# Moegliche Optionen: ET1, ET2, MT, RES
-name_variante = einstellungen_dictionary['name_variante']
-
-# Semester
-semester = einstellungen_dictionary['semester']
-
-# SUMO-pdf:
-# Datei, die saemtliche Tests des Semesters zum Ausdruck enthÃ¤lt
-# Dann kann man zu Beginn des Semesters gleich alles auf einen
-# Schwung erzeugen und an die Betreuer verteilen
-sumo_seiten_pro_blatt_test = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_test']  # 4 = Ausdruck doppelseitig A5
-sumo_kopien_pro_test = einstellungen_dictionary['sumo']['sumo_kopien_pro_test']  # Muss der Anzahl der Mitglieder pro Doppelgruppe entsprechen
-sumo_seiten_pro_blatt_loesung = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_loesung']
-sumo_kopien_pro_loesung = einstellungen_dictionary['sumo']['sumo_kopien_pro_loesung']
-
-# Einstellungen, was erzeugt und geloescht werden soll.
-generiere_einzel_pdfs = einstellungen_dictionary['loeschen_daten']['generiere_einzel_pdfs']
-generiere_sumo_pdf = einstellungen_dictionary['loeschen_daten']['generiere_sumo_pdf']
-temp_dateien_loeschen = einstellungen_dictionary['loeschen_daten']['temp_dateien_loeschen']
-
-
-# ==================================
-# --- Klassen ---
-# ==================================
-
-from Module import Pool
-
-from Module import TestTyp
-
-# ==================================
-# --- Konfiguration ---
-# ==================================
-
-random.seed()
-
-# Arbeitsverzeichnis fuer den LaTeX-Compiler
-latex_verzeichnis = os.path.join(os.getcwd(), "Aufgaben")
-
-# Verzeichnis mit den Vorlagen
-template_verzeichnis = os.path.join(os.getcwd(), "Templates")
-
-# Ausgabeverzeichnis fuer die erstellten Tests (z.B. Tests-ET1-WS201920)
-test_verzeichnis = os.path.join(os.getcwd(), "Tests-{}-{}".format(name_variante, semester)).replace(
-    " ", "").replace("/", "")
-
-# Verzeichnis mit dem LaTeX-Quellcode der Aufgaben und Loesungen
-poolA_verzeichnis = os.path.join(latex_verzeichnis, "poolA")
-poolB_verzeichnis = os.path.join(latex_verzeichnis, "poolB")
-poolC_verzeichnis = os.path.join(latex_verzeichnis, "poolC")
-poolD_verzeichnis = os.path.join(latex_verzeichnis, "poolD")
-
-
-# Erstellt für jeden Pool Liste mit den Dateinamen der Aufgaben und Lösungen
-dateinamen_poolA_tex = [os.path.basename(fn) for fn in
-                  glob.iglob(os.path.join(poolA_verzeichnis, "*.tex"))]
-
-dateinamen_poolB_tex = [os.path.basename(fn) for fn in
-                  glob.iglob(os.path.join(poolB_verzeichnis, "*.tex"))]
-
-dateinamen_poolC_tex = [os.path.basename(fn) for fn in
-                  glob.iglob(os.path.join(poolC_verzeichnis, "*.tex"))]
-
-dateinamen_poolD_tex = [os.path.basename(fn) for fn in
-                  glob.iglob(os.path.join(poolD_verzeichnis, "*.tex"))]
-
-# Fügt die Liste der einzelnen Pools zusammen
-dateinamen_tex = (dateinamen_poolA_tex + dateinamen_poolB_tex + 
-                  dateinamen_poolC_tex + dateinamen_poolD_tex)
-                
-                             
-
-# Grundaufgaben, die in jedem Test vorkommen.
-# A1, B1 -> fuer fuenftes Semester RT sowie sechstes Semester MT sowie RES
-# A2, B2 -> fuer sechstes Semester RT (benoetigt Kenntnisse aus RT 2)
-poolA1 = Pool("A1", dateinamen_tex)
-poolB1 = Pool("B1", dateinamen_tex)
-poolA2 = Pool("A2", dateinamen_tex)
-poolB2 = Pool("B2", dateinamen_tex)
-
-# Versuchsspezifische Aufgaben fuer V1, V3, V7, V8, V15 und V21
-poolCV01 = Pool("CV01", dateinamen_tex)
-poolCV03 = Pool("CV03", dateinamen_tex)
-poolCV07 = Pool("CV07", dateinamen_tex)
-poolCV08 = Pool("CV08", dateinamen_tex)
-poolCV15 = Pool("CV15", dateinamen_tex)
-poolCV21 = Pool("CV21", dateinamen_tex)
-
-# Weitere versuchsspezifische Aufgaben, falls die aus C zu kurz sind
-poolDV07 = Pool("DV07", dateinamen_tex)
-poolDV08 = Pool("DV08", dateinamen_tex)
-poolDV15 = Pool("DV15", dateinamen_tex)
-poolDV21 = Pool("DV21", dateinamen_tex)
-
-# Tests fuer RT1 sowie MT und RES-Praktikum
-testV1 = TestTyp("V01", poolA1, poolB1, poolCV01)
-testV7 = TestTyp("V07", poolA1, poolB1, poolCV07, poolDV07)
-testV8_MT_RES = TestTyp("V08", poolA1, poolB1, poolCV08)
-testV15_MT_RES = TestTyp("V15", poolA1, poolB1, poolCV15, poolDV15)
-testV21 = TestTyp("V21", poolA1, poolB1, poolCV21, poolDV21)
-test_liste_ET1 = [testV1, testV7, testV21]
-test_liste_MT = [testV21, testV8_MT_RES]
-test_liste_RES = [testV21, testV8_MT_RES, testV15_MT_RES]
-
-# Tests fuer RT2 (6. Semester)
-testV3 = TestTyp("V03", poolA2, poolB2, poolCV03)
-testV8_ET = TestTyp("V08", poolA2, poolB2, poolCV08)
-testV15_ET = TestTyp("V15", poolA2, poolB2, poolCV15, poolDV15)
-test_liste_ET2 = [testV3, testV8_ET, testV15_ET]
-
-# Zum debuggen
-pool_all = Pool(".*", dateinamen_tex)
-test_all = TestTyp("VX", *[pool_all for i in range(len(pool_all.stapel_verfuegbar))])
-test_liste_all = [test_all]
-# --------------
-
-# Zuweisung der Testlisten zu den jeweiligen Praktika
-if name_variante == "ET1":
-    titel_praktikum = "Praktikum Regelungstechnik 1 (ET)"
-    test_liste_variante = test_liste_ET1
-elif name_variante == "ET2":
-    titel_praktikum = "Praktikum Regelungstechnik 2 (ET)"
-    test_liste_variante = test_liste_ET2
-elif name_variante == "MT":
-    titel_praktikum = "Praktikum Regelung \\& Steuerung (MT)"
-    test_liste_variante = test_liste_MT
-elif name_variante == "RES":
-    titel_praktikum = "Praktikum Regelungstechnik (RES)"
-    test_liste_variante = test_liste_RES
-else:
-    warn("Unbekannter Bezeichner. Gewuenscht: ET1, ET2, MT oder RES!")
-    test_liste_variante = []
-    titel_praktikum = ""
-    quit()
-
-# ================================
-# --- Kombination der Aufgaben ---
-# ================================
-
-from Module import kombination_aufgaben
-
-test_saetze_pro_gruppe = kombination_aufgaben(anzahl_gruppen, test_liste_variante)
-
-# ==================================
-# --- Generieren der TeX-Dateien ---
-# ==================================
-
-from Module import generieren_tex_dateien
-
-# Erstellung des Tuples aus den Listen dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf für Verarbeitung in Sumo
-namen_aufg_loesungen_pdf = generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_gruppen, test_liste_variante,
-                       name_variante, titel_praktikum, semester, test_saetze_pro_gruppe)
-
-
-
-# ===================
-# --- Kompilieren ---
-# ===================
-
-from Module import kompilieren
-
-kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp_dateien_loeschen)
-
-# ==================================
-# --- Sumo-Files ---
-# ==================================
-
-from Module import baue_sumo
-
-if generiere_sumo_pdf:
-    namen_aufg_loesungen_pdf[0].sort()
-    sumo_aufgaben_name = f"Sumo-{name_variante}-Aufgaben.pdf"
-    baue_sumo(test_verzeichnis, sumo_aufgaben_name, namen_aufg_loesungen_pdf[0], sumo_seiten_pro_blatt_test,
-              sumo_kopien_pro_test)
-
-    namen_aufg_loesungen_pdf[1].sort()
-    sumo_loesungen_name = f"Sumo-{name_variante}-Loesungen.pdf"
-    baue_sumo(test_verzeichnis, sumo_loesungen_name, namen_aufg_loesungen_pdf[1], sumo_seiten_pro_blatt_loesung,
-              sumo_kopien_pro_loesung)
+def test_generator():
+    # ================ Einstellungen Beginn =============================
+    
+    # Die Einstellungen werden ueber die einstellungen.json Datei festgelegt und dann in Python verarbeitet
+    # Hier keine Veraenderung der Einstellungen!
+    
+    # Laden der Einstellungen aus json Datei in ein Python Dictionary
+    with open('einstellungen.json', 'r') as json_datei:
+        einstellungen_dictionary = json.load(json_datei)
+    
+    # Festlegung, wie viele Gruppenpaare erzeugt werden sollen
+    # z.B. 6: Gruppen 01 bis 12
+    # 01+02, 03+04, etc. haben dann jeweils die gleichen Aufgaben
+    anzahl_gruppen = einstellungen_dictionary['anzahl_gruppen']
+    
+    # Studiengang, fuer den erzeugt werden soll.
+    # Moegliche Optionen: ET1, ET2, MT, RES
+    name_variante = einstellungen_dictionary['name_variante']
+    
+    # Semester
+    semester = einstellungen_dictionary['semester']
+    
+    # SUMO-pdf:
+    # Datei, die saemtliche Tests des Semesters zum Ausdruck enthÃ¤lt
+    # Dann kann man zu Beginn des Semesters gleich alles auf einen
+    # Schwung erzeugen und an die Betreuer verteilen
+    sumo_seiten_pro_blatt_test = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_test']  # 4 = Ausdruck doppelseitig A5
+    sumo_kopien_pro_test = einstellungen_dictionary['sumo']['sumo_kopien_pro_test']  # Muss der Anzahl der Mitglieder pro Doppelgruppe entsprechen
+    sumo_seiten_pro_blatt_loesung = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_loesung']
+    sumo_kopien_pro_loesung = einstellungen_dictionary['sumo']['sumo_kopien_pro_loesung']
+    
+    # Einstellungen, was erzeugt und geloescht werden soll.
+    generiere_einzel_pdfs = einstellungen_dictionary['loeschen_daten']['generiere_einzel_pdfs']
+    generiere_sumo_pdf = einstellungen_dictionary['loeschen_daten']['generiere_sumo_pdf']
+    temp_dateien_loeschen = einstellungen_dictionary['loeschen_daten']['temp_dateien_loeschen']
+    
+    
+    # ==================================
+    # --- Klassen ---
+    # ==================================
+    
+    from Module import Pool
+    
+    from Module import TestTyp
+    
+    # ==================================
+    # --- Konfiguration ---
+    # ==================================
+    
+    random.seed()
+    
+    # Arbeitsverzeichnis fuer den LaTeX-Compiler
+    latex_verzeichnis = os.path.join(os.getcwd(), "Aufgaben")
+    
+    # Verzeichnis mit den Vorlagen
+    template_verzeichnis = os.path.join(os.getcwd(), "Templates")
+    
+    # Ausgabeverzeichnis fuer die erstellten Tests (z.B. Tests-ET1-WS201920)
+    test_verzeichnis = os.path.join(os.getcwd(), "Tests-{}-{}".format(name_variante, semester)).replace(
+        " ", "").replace("/", "")
+    
+    # Verzeichnis mit dem LaTeX-Quellcode der Aufgaben und Loesungen
+    poolA_verzeichnis = os.path.join(latex_verzeichnis, "poolA")
+    poolB_verzeichnis = os.path.join(latex_verzeichnis, "poolB")
+    poolC_verzeichnis = os.path.join(latex_verzeichnis, "poolC")
+    poolD_verzeichnis = os.path.join(latex_verzeichnis, "poolD")
+    
+    
+    # Erstellt für jeden Pool Liste mit den Dateinamen der Aufgaben und Lösungen
+    dateinamen_poolA_tex = [os.path.basename(fn) for fn in
+                      glob.iglob(os.path.join(poolA_verzeichnis, "*.tex"))]
+    
+    dateinamen_poolB_tex = [os.path.basename(fn) for fn in
+                      glob.iglob(os.path.join(poolB_verzeichnis, "*.tex"))]
+    
+    dateinamen_poolC_tex = [os.path.basename(fn) for fn in
+                      glob.iglob(os.path.join(poolC_verzeichnis, "*.tex"))]
+    
+    dateinamen_poolD_tex = [os.path.basename(fn) for fn in
+                      glob.iglob(os.path.join(poolD_verzeichnis, "*.tex"))]
+    
+    # Fügt die Liste der einzelnen Pools zusammen
+    dateinamen_tex = (dateinamen_poolA_tex + dateinamen_poolB_tex + 
+                      dateinamen_poolC_tex + dateinamen_poolD_tex)
+                    
+                                 
+    
+    # Grundaufgaben, die in jedem Test vorkommen.
+    # A1, B1 -> fuer fuenftes Semester RT sowie sechstes Semester MT sowie RES
+    # A2, B2 -> fuer sechstes Semester RT (benoetigt Kenntnisse aus RT 2)
+    poolA1 = Pool("A1", dateinamen_tex)
+    poolB1 = Pool("B1", dateinamen_tex)
+    poolA2 = Pool("A2", dateinamen_tex)
+    poolB2 = Pool("B2", dateinamen_tex)
+    
+    # Versuchsspezifische Aufgaben fuer V1, V3, V7, V8, V15 und V21
+    poolCV01 = Pool("CV01", dateinamen_tex)
+    poolCV03 = Pool("CV03", dateinamen_tex)
+    poolCV07 = Pool("CV07", dateinamen_tex)
+    poolCV08 = Pool("CV08", dateinamen_tex)
+    poolCV15 = Pool("CV15", dateinamen_tex)
+    poolCV21 = Pool("CV21", dateinamen_tex)
+    
+    # Weitere versuchsspezifische Aufgaben, falls die aus C zu kurz sind
+    poolDV07 = Pool("DV07", dateinamen_tex)
+    poolDV08 = Pool("DV08", dateinamen_tex)
+    poolDV15 = Pool("DV15", dateinamen_tex)
+    poolDV21 = Pool("DV21", dateinamen_tex)
+    
+    # Tests fuer RT1 sowie MT und RES-Praktikum
+    testV1 = TestTyp("V01", poolA1, poolB1, poolCV01)
+    testV7 = TestTyp("V07", poolA1, poolB1, poolCV07, poolDV07)
+    testV8_MT_RES = TestTyp("V08", poolA1, poolB1, poolCV08)
+    testV15_MT_RES = TestTyp("V15", poolA1, poolB1, poolCV15, poolDV15)
+    testV21 = TestTyp("V21", poolA1, poolB1, poolCV21, poolDV21)
+    test_liste_ET1 = [testV1, testV7, testV21]
+    test_liste_MT = [testV21, testV8_MT_RES]
+    test_liste_RES = [testV21, testV8_MT_RES, testV15_MT_RES]
+    
+    # Tests fuer RT2 (6. Semester)
+    testV3 = TestTyp("V03", poolA2, poolB2, poolCV03)
+    testV8_ET = TestTyp("V08", poolA2, poolB2, poolCV08)
+    testV15_ET = TestTyp("V15", poolA2, poolB2, poolCV15, poolDV15)
+    test_liste_ET2 = [testV3, testV8_ET, testV15_ET]
+    
+    # Zum debuggen
+    pool_all = Pool(".*", dateinamen_tex)
+    test_all = TestTyp("VX", *[pool_all for i in range(len(pool_all.stapel_verfuegbar))])
+    test_liste_all = [test_all]
+    # --------------
+    
+    # Zuweisung der Testlisten zu den jeweiligen Praktika
+    if name_variante == "ET1":
+        titel_praktikum = "Praktikum Regelungstechnik 1 (ET)"
+        test_liste_variante = test_liste_ET1
+    elif name_variante == "ET2":
+        titel_praktikum = "Praktikum Regelungstechnik 2 (ET)"
+        test_liste_variante = test_liste_ET2
+    elif name_variante == "MT":
+        titel_praktikum = "Praktikum Regelung \\& Steuerung (MT)"
+        test_liste_variante = test_liste_MT
+    elif name_variante == "RES":
+        titel_praktikum = "Praktikum Regelungstechnik (RES)"
+        test_liste_variante = test_liste_RES
+    else:
+        warn("Unbekannter Bezeichner. Gewuenscht: ET1, ET2, MT oder RES!")
+        test_liste_variante = []
+        titel_praktikum = ""
+        quit()
+    
+    # ================================
+    # --- Kombination der Aufgaben ---
+    # ================================
+    
+    from Module import kombination_aufgaben
+    
+    test_saetze_pro_gruppe = kombination_aufgaben(anzahl_gruppen, test_liste_variante)
+    
+    # ==================================
+    # --- Generieren der TeX-Dateien ---
+    # ==================================
+    
+    from Module import generieren_tex_dateien
+    
+    # Erstellung des Tuples aus den Listen dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf für Verarbeitung in Sumo
+    namen_aufg_loesungen_pdf = generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_gruppen, test_liste_variante,
+                           name_variante, titel_praktikum, semester, test_saetze_pro_gruppe)
+    
+    
+    
+    # ===================
+    # --- Kompilieren ---
+    # ===================
+    
+    from Module import kompilieren
+    
+    kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp_dateien_loeschen)
+    
+    # ==================================
+    # --- Sumo-Files ---
+    # ==================================
+    
+    from Module import baue_sumo
+    
+    if generiere_sumo_pdf:
+        namen_aufg_loesungen_pdf[0].sort()
+        sumo_aufgaben_name = f"Sumo-{name_variante}-Aufgaben.pdf"
+        baue_sumo(test_verzeichnis, sumo_aufgaben_name, namen_aufg_loesungen_pdf[0], sumo_seiten_pro_blatt_test,
+                  sumo_kopien_pro_test)
+    
+        namen_aufg_loesungen_pdf[1].sort()
+        sumo_loesungen_name = f"Sumo-{name_variante}-Loesungen.pdf"
+        baue_sumo(test_verzeichnis, sumo_loesungen_name, namen_aufg_loesungen_pdf[1], sumo_seiten_pro_blatt_loesung,
+                  sumo_kopien_pro_loesung)
+        
+        
+if __name__ == "__main__":
+    test_generator()
