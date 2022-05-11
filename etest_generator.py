@@ -40,7 +40,9 @@ import json
 
 
 def test_generator():
-    # ================ Einstellungen Beginn =============================
+    # ================ Einstellungen =============================
+    
+    #%% click on the left to view options
     
     # Die Einstellungen werden ueber die einstellungen.json Datei festgelegt und dann in Python verarbeitet
     # Hier keine Veraenderung der Einstellungen!
@@ -74,19 +76,23 @@ def test_generator():
     generiere_einzel_pdfs = einstellungen_dictionary['loeschen_daten']['generiere_einzel_pdfs']
     generiere_sumo_pdf = einstellungen_dictionary['loeschen_daten']['generiere_sumo_pdf']
     temp_dateien_loeschen = einstellungen_dictionary['loeschen_daten']['temp_dateien_loeschen']
-    
+    #%%
     
     # ==================================
     # --- Klassen ---
     # ==================================
     
+    
     from Module import Pool
     
     from Module import TestTyp
+  
     
     # ==================================
     # --- Konfiguration ---
     # ==================================
+    
+    #%% click on the left to view configurations
     
     random.seed()
     
@@ -188,6 +194,7 @@ def test_generator():
         test_liste_variante = []
         titel_praktikum = ""
         quit()
+    #%%    
     
     # ================================
     # --- Kombination der Aufgaben ---
@@ -206,20 +213,21 @@ def test_generator():
     # Erstellung des Tuples aus den Listen dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf für Verarbeitung in Sumo
     namen_aufg_loesungen_pdf = generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_gruppen, test_liste_variante,
                            name_variante, titel_praktikum, semester, test_saetze_pro_gruppe)
-    
+ 
     
     
     # ===================
     # --- Kompilieren ---
     # ===================
-    
     from Module import kompilieren
     
     kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp_dateien_loeschen)
+
     
     # ==================================
     # --- Sumo-Files ---
     # ==================================
+    
     
     from Module import baue_sumo
     
@@ -233,7 +241,8 @@ def test_generator():
         sumo_loesungen_name = f"Sumo-{name_variante}-Loesungen.pdf"
         baue_sumo(test_verzeichnis, sumo_loesungen_name, namen_aufg_loesungen_pdf[1], sumo_seiten_pro_blatt_loesung,
                   sumo_kopien_pro_loesung)
-        
-        
+    
+     
+
 if __name__ == "__main__":
     test_generator()
