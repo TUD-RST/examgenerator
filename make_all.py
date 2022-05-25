@@ -8,7 +8,8 @@ import subprocess
 
 DATEINAME = "alle_aufgaben"
 
-filenames_aufgaben = glob.glob("Latex/Aufgaben/aufgabe*.tex")
+
+filenames_aufgaben = glob.glob("Aufgaben/Pool*/aufgabe*.tex")
 
 with open("{0}.tex".format(DATEINAME), "w", encoding="utf-8") as f:
     # Latex-Preamble

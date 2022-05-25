@@ -238,6 +238,9 @@ def test_generator():
                   sumo_kopien_pro_test)
     
         namen_aufg_loesungen_pdf[1].sort()
+
+
+
         sumo_loesungen_name = f"Sumo-{name_variante}-Loesungen.pdf"
         baue_sumo(test_verzeichnis, sumo_loesungen_name, namen_aufg_loesungen_pdf[1], sumo_seiten_pro_blatt_loesung,
                   sumo_kopien_pro_loesung)
