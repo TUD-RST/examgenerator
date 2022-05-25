@@ -4,7 +4,13 @@ from warnings import warn
 import subprocess
 
 def kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp_dateien_loeschen):
-
+    
+    """
+        This function compiles the tex files and turns them into pdf format and moves them to
+        the test directory. Lastly, it deletes temporary data.
+        
+        input: test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp_dateien_loeschen"""
+        
     shutil.rmtree(test_verzeichnis, ignore_errors=True)
     os.mkdir(test_verzeichnis)
     os.chdir(latex_verzeichnis)

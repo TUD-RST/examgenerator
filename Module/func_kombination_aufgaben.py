@@ -1,7 +1,12 @@
 def kombination_aufgaben(anzahl_gruppen, test_liste_variante):
+    
    """For each group this function adds to a list which contains
        problems and their according solutions from given pools
-       depending on the test variant. This list is returned."""
+       depending on the test variant.
+       
+      input: anzahl_gruppen, test_liste_variante
+      
+      output: test_saetze_pro_gruppe"""
     
    test_saetze_pro_gruppe = []
    

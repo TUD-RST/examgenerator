@@ -1,10 +1,18 @@
-# Das Script nutzt einige Betriebssystembefehle, die derzeit nur fuer Windows implementiert sind.
 import os
 import glob
 
 
 def generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_gruppen, test_liste_variante,
                            name_variante, titel_praktikum, semester, test_saetze_pro_gruppe):
+    
+    """This function replaces the variables within the tex problem/ solution files with the information given
+    by the settings. Lastly, it returns a tuple of lists: [0] = problem pdf names, [1] = solution pdf names.
+    
+    input: latex_verzeichnis, template_verzeichnis,anzahl_gruppen, test_liste_variante,
+            name_variante, titel_praktikum, semester, test_saetze_pro_gruppe 
+        
+    output: (dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf)"""
+    
     # Loescht alle Dateien im Aufgaben Ordner 
     for file in glob.glob(os.path.join(latex_verzeichnis, "*.*")):
         os.remove(file)

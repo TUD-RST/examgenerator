@@ -2,6 +2,13 @@ import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 
 def baue_sumo(test_verzeichnis, sumo_name, pdf_liste, seiten_pro_blatt, kopien_pro_datei):
+    
+    """This function creates the sumo file which contains all problems/ solutions for all groups.
+    
+    input: test_verzeichnis, sumo_name, pdf_liste, seiten_pro_blatt, kopien_pro_datei
+    
+    creates: sumo file"""
+    
     os.chdir(test_verzeichnis)
     writer = PdfFileWriter()
 
