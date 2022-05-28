@@ -53,6 +53,8 @@ python3 make_specific.py
  "make_PoolC": false,
  "make_PoolD": false,
  "make_einzel_datei": false,
- "name_einzel_datei": "Name der ausgewählten Aufgabe"
+ "liste_namen_einzel_dateien": ["Name einer Aufgabe", "Name einer weiteren Aufgabe", "..."]
 }
 ```
+
+**Die erstellten Previews sind im Verzeichnis ``Previews`` zu finden.**
