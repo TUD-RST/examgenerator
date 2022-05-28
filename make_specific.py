@@ -10,6 +10,8 @@
 import glob
 import subprocess
 import json
+import os
+import shutil
 
 #-----------------Einstellungen--------------------#
 
@@ -22,12 +24,15 @@ make_PoolC = einstellungen_dictionary['make_PoolC']
 make_PoolD = einstellungen_dictionary['make_PoolD']
 
 make_einzel_datei = einstellungen_dictionary['make_einzel_datei']
-name_einzel_datei = einstellungen_dictionary['name_einzel_datei']
+liste_einzel_dateien = einstellungen_dictionary['liste_namen_einzel_dateien']
 
 DATEINAME = einstellungen_dictionary['datei_name']
 
-# Zusammensetzen der Liste mit den ausgewählten Aufgaben/ Pools
+specific_verzeichnis = os.path.join(os.getcwd(), "Previews")
 
+#---------------Einstellungen Ende-----------------#
+
+# Zusammensetzen der Liste mit den ausgewählten Aufgaben/ Pools
 filenames_aufgaben = []
 
 if make_PoolA:
@@ -43,14 +48,19 @@ if make_PoolD:
     filenames_aufgaben.extend(glob.glob("Aufgaben/PoolD/aufgabe*.tex"))
     
 if make_einzel_datei:
-    filenames_aufgaben.extend(glob.glob("Aufgaben/Pool*/" + name_einzel_datei + ".tex"))
+    for aufgabe in liste_einzel_dateien:
+        name_einzel_datei = aufgabe
+        filenames_aufgaben.extend(glob.glob("Aufgaben/Pool*/" + name_einzel_datei + ".tex"))
 
+# Fehlermeldung, falls keine Aufgabe ausgewaehlt wurde
 if not (make_PoolA or make_PoolB or make_PoolC or make_einzel_datei):
     print("You did not select any problem to  be made. Please revisit the settings " + 
           "in einstellungen_make_specific.json and adjust them accordingly.")
 
+#-------------Erstellen der PDF Datei-------------#
+
 else:
-    # Kompilieren der Dateien
+   
     
     with open("{0}.tex".format(DATEINAME), "w", encoding="utf-8") as f:
         # Latex-Preamble
@@ -93,12 +103,19 @@ else:
         # Dokumentende
         f.write("\\end{document}\n")
     
-    # Kompilieren und im Erfolgsfalle temporaere Dateien loeschen
+    # Kompilieren und im Erfolgsfall temporaere Dateien loeschen
     process = subprocess.Popen("pdflatex -interaction=nonstopmode {0}.tex".format(DATEINAME),
                                shell=True)
     process.wait()
     
     if process.returncode == 0:
-        process = subprocess.Popen("del {0}.aux {0}.log".format(DATEINAME), shell=True)
+        process = subprocess.Popen("del {0}.aux {0}.log {0}.tex".format(DATEINAME), shell=True)
     else:
         print("Fehler")
+    
+    # Neuen Ordner erstellen, falls dieser noch nicht existiert
+    if not os.path.isdir(specific_verzeichnis):
+        os.mkdir(specific_verzeichnis)
+    
+    # PDF Datei in Ordner verschieben
+    shutil.move(DATEINAME + ".pdf", specific_verzeichnis)
