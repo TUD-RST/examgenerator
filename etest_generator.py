@@ -103,8 +103,8 @@ def test_generator():
     template_verzeichnis = os.path.join(os.getcwd(), "Templates")
     
     # Ausgabeverzeichnis fuer die erstellten Tests (z.B. Tests-ET1-WS201920)
-    test_verzeichnis = os.path.join(os.getcwd(), "Tests-{}-{}".format(name_variante, semester)).replace(
-        " ", "").replace("/", "")
+    test_verzeichnis = os.path.join(os.getcwd(), "Tests-{}-{}".format(name_variante, semester).replace(
+        " ", "").replace("/", ""))
     
     # Verzeichnis mit dem LaTeX-Quellcode der Aufgaben und Loesungen
     poolA_verzeichnis = os.path.join(latex_verzeichnis, "poolA")
