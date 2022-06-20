@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Script zur Erstellung von Eingangstests fuer das Praktikum Regelungstechnik
 #
 # Aus einem Pool von Aufgaben werden Eingangstests fuer alle Versuche und alle Praktikumsgruppen
@@ -37,18 +39,21 @@ import glob
 import random
 from warnings import warn
 import json
+import argparse as ap
+from Module import make_specific
 
 
-def test_generator():
+def test_generator(einstellungen):
     # ================ Einstellungen =============================
     
     #%% click on the left to view options
     
     # Die Einstellungen werden ueber die einstellungen.json Datei festgelegt und dann in Python verarbeitet
     # Hier keine Veraenderung der Einstellungen!
+    path_einstellungen = os.path.join(os.getcwd(), "Einstellungen", einstellungen)
     
     # Laden der Einstellungen aus json Datei in ein Python Dictionary
-    with open('einstellungen.json', 'r') as json_datei:
+    with open(path_einstellungen, 'r') as json_datei:
         einstellungen_dictionary = json.load(json_datei)
     
     # Festlegung, wie viele Gruppenpaare erzeugt werden sollen
@@ -154,6 +159,25 @@ def test_generator():
     poolDV15 = Pool("DV15", dateinamen_tex)
     poolDV21 = Pool("DV21", dateinamen_tex)
     
+    """
+    # Custom Testtyp/ Testliste
+    use_custom_test = einstellungen_dictionary['tests']['test_typ']
+    
+    custom_test_typ_strings = []
+    custom_test_typ_strings = einstellungen_dictionary['tests']['test_typ']
+    
+    custom_test_name = custom_test_typ_strings[0]
+    custom_test_typ_strings = custom_test_typ_strings.pop(0)
+    
+    # converting the pool strings in list to actual pools
+    custom_test_typ = []
+    for i in range(len(custom_test_typ_strings)):
+        custom_test_typ.append(Pool(custom_test_typ_strings[i], dateinamen_tex))
+    
+        
+    custom_test = TestTyp(custom_test_name, custom_test_typ)
+    custom_test_liste = [custom_test]
+    """
     # Tests fuer RT1 sowie MT und RES-Praktikum
     testV1 = TestTyp("V01", poolA1, poolB1, poolCV01)
     testV7 = TestTyp("V07", poolA1, poolB1, poolCV07, poolDV07)
@@ -194,6 +218,10 @@ def test_generator():
         test_liste_variante = []
         titel_praktikum = ""
         quit()
+        
+    # Falls ein custom Test benutzt werden soll
+    #if use_custom_test:
+    # test_liste_variante = custom_test_liste
     #%%    
     
     # ================================
@@ -245,7 +273,26 @@ def test_generator():
         baue_sumo(test_verzeichnis, sumo_loesungen_name, namen_aufg_loesungen_pdf[1], sumo_seiten_pro_blatt_loesung,
                   sumo_kopien_pro_loesung)
     
-     
+
+    # ==================================
+    # --- Make-Specific ---
+    # ==================================
 
 if __name__ == "__main__":
-    test_generator()
+    
+    parser = ap.ArgumentParser()
+    
+    parser.add_argument('-ct', '--create_test', help=u'Erstellt einen fertigen Test, nach den Einstellungen aus der\
+                        angegeben json Datei')
+    parser.add_argument('-ma','--make_all', action = 'store_true', help=u'Erstellt eine Preview Datei fuer alle Aufgaben')
+    parser.add_argument('-mp','--make_pool', choices = ['A', 'B', 'C', 'D'], help=u'Erstellt eine Preview Datei mit den Aufgaben des angegeben Pools')
+    parser.add_argument('-ms','--make_specific', help=u'Erstellt eine Preview Datei fuer eine ausgewaehlte Aufgabe (ohne .tex)')
+    
+    args = parser.parse_args()    
+    
+    
+    if args.create_test is not None:
+        test_generator(args.create_test)
+    
+    if args.make_all or args.make_pool or args.make_specific:
+        make_specific(args.make_all, args.make_pool, args.make_specific)

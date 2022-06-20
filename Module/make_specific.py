@@ -2,6 +2,8 @@
 # Datei und kompiliert diese in eine pdf-Datei mit dem Namen, welcher über die json Datei festgelegt wird.
 # 
 #
+# -*- coding: utf-8 -*-
+
 # Die Einstellungen, welche Aufgaben/ Pools erstellt werden sollen erfolgen in einstellungen_make_specific.json
 # Der Aufgabenname wird ohne den Suffix .tex angegeben.
 #
@@ -9,58 +11,65 @@
 
 import glob
 import subprocess
-import json
 import os
 import shutil
+from pathlib import Path
 
 #-----------------Einstellungen--------------------#
-
-with open('einstellungen_make_specific.json', 'r') as json_datei:
-    einstellungen_dictionary = json.load(json_datei)
-
-make_PoolA = einstellungen_dictionary['make_PoolA']
-make_PoolB = einstellungen_dictionary['make_PoolB']
-make_PoolC = einstellungen_dictionary['make_PoolC']
-make_PoolD = einstellungen_dictionary['make_PoolD']
-
-make_einzel_datei = einstellungen_dictionary['make_einzel_datei']
-liste_einzel_dateien = einstellungen_dictionary['liste_namen_einzel_dateien']
-
-DATEINAME = einstellungen_dictionary['datei_name']
-
-specific_verzeichnis = os.path.join(os.getcwd(), "Previews")
-
-#---------------Einstellungen Ende-----------------#
-
-# Zusammensetzen der Liste mit den ausgewählten Aufgaben/ Pools
-filenames_aufgaben = []
-
-if make_PoolA:
-    filenames_aufgaben.extend(glob.glob("Aufgaben/PoolA/aufgabe*.tex"))
-
-if make_PoolB:
-    filenames_aufgaben.extend(glob.glob("Aufgaben/PoolB/aufgabe*.tex"))
-
-if make_PoolC:
-    filenames_aufgaben.extend(glob.glob("Aufgaben/PoolC/aufgabe*.tex"))
+def make_specific(make_all, pool, aufgabe):
     
-if make_PoolD:
-    filenames_aufgaben.extend(glob.glob("Aufgaben/PoolD/aufgabe*.tex"))
+    make_PoolA = False
+    make_PoolB = False
+    make_PoolC = False
+    make_PoolD = False
     
-if make_einzel_datei:
-    for aufgabe in liste_einzel_dateien:
-        name_einzel_datei = aufgabe
-        filenames_aufgaben.extend(glob.glob("Aufgaben/Pool*/" + name_einzel_datei + ".tex"))
-
-# Fehlermeldung, falls keine Aufgabe ausgewaehlt wurde
-if not (make_PoolA or make_PoolB or make_PoolC or make_einzel_datei):
-    print("You did not select any problem to  be made. Please revisit the settings " + 
-          "in einstellungen_make_specific.json and adjust them accordingly.")
-
-#-------------Erstellen der PDF Datei-------------#
-
-else:
-   
+    if pool is not None:
+        if pool == "A":
+           make_PoolA = True
+        elif pool == "B":
+            make_PoolB = True
+        elif pool == "C":
+            make_PoolC = True
+        elif pool == "D":
+            make_PoolD = True
+        DATEINAME = "Preview_Pool_" + pool
+    
+    # Zusammensetzen der Liste mit den ausgewählten Aufgaben/ Pools
+    filenames_aufgaben = []
+    
+    if make_PoolA:
+        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolA/aufgabe*.tex"))
+    
+    if make_PoolB:
+        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolB/aufgabe*.tex"))
+    
+    if make_PoolC:
+        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolC/aufgabe*.tex"))
+        
+    if make_PoolD:
+        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolD/aufgabe*.tex"))
+        
+    if aufgabe is not None:
+        filenames_aufgaben.extend(glob.glob("Aufgaben/Pool*/" + aufgabe + ".tex"))
+        DATEINAME = "Preview_" + aufgabe
+    
+    if make_all:
+        filenames_aufgaben = glob.glob("Aufgaben/Pool*/*.tex")
+        DATEINAME = "Preview_all"
+    
+    specific_verzeichnis = os.path.join(os.getcwd(), "Previews")
+    
+    # veraendert den Namen der Datei, falls bereits eine gleichbenannte vorhanden ist
+    i = 1
+    while Path(os.path.join(specific_verzeichnis, DATEINAME + ".pdf")).is_file():
+        DATEINAME = DATEINAME + "_" + str(i)
+        i += 1
+        
+        
+        
+    #---------------Einstellungen Ende-----------------#
+    
+    #-------------Erstellen der PDF Datei-------------#
     
     with open("{0}.tex".format(DATEINAME), "w", encoding="utf-8") as f:
         # Latex-Preamble

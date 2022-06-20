@@ -1,9 +1,0 @@
-{
- "datei_name": "ausgewaehlte_aufgaben",
- "make_PoolA": false,
- "make_PoolB": true,
- "make_PoolC": false,
- "make_PoolD": false,
- "make_einzel_datei": true,
- "liste_namen_einzel_dateien": ["aufgabe_DV07_1", "aufgabe_CV01_1"]
-}

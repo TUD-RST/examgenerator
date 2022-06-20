@@ -12,5 +12,9 @@
     "generiere_einzel_pdfs": true,
     "generiere_sumo_pdf": true,
     "temp_dateien_loeschen": true
+  },
+  "tests": {
+    "use_custom_test": false,
+    "test_typ": ["Test", "A1", "B1", "B2", "CV03"]
   }
 }
