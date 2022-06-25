@@ -3,7 +3,7 @@
 # Script zur Erstellung von Eingangstests fuer das Praktikum Regelungstechnik
 #
 # Aus einem Pool von Aufgaben werden Eingangstests fuer alle Versuche und alle Praktikumsgruppen
-# erstellt und zwar so, dass sich die Aufgaben für eine Gruppe nicht wiederholen.
+# erstellt und zwar so, dass sich die Aufgaben fÃ¼r eine Gruppe nicht wiederholen.
 #
 # Dazu gibt es im Verzeichnis Templates zwei LaTeX-Vorlagen: Eine fuer den Test, eine fuer
 # die Musterloesung und Bewertung. In den Vorlagen gibt es Platzhalter, die von diesem Script
@@ -13,7 +13,7 @@
 # Aufgaben, die in jedem Test vorkommen, und Aufgaben, die spezifisch fuer den jeweiligen Versuch
 # sind. Die Zusammenstellung der Tests aus diesen Aufgaben erfolgt ueber Instanzen der Klasse
 # TestTyp, die Verwaltung der Aufgaben ueber Instanzen vom Typ Pool. Die Loesungen sind in separaten
-# Dateien abgelegt. Aufgabendateien haben das Präfix "aufgabe_", Loesungen das Praefix "loesung_".
+# Dateien abgelegt. Aufgabendateien haben das PrÃ¤fix "aufgabe_", Loesungen das Praefix "loesung_".
 # Das Schema lautet dann z.B.: aufgabe_A1_2.tex -> 2. Aufgabe vom Typ A1
 #
 # Die Teilaufgaben einer Aufgabe sollten mit der enumerate-Umgebung gegliedert werden.
@@ -40,6 +40,7 @@ import random
 from warnings import warn
 import json
 import argparse as ap
+
 from Module import make_specific
 
 
@@ -69,7 +70,7 @@ def test_generator(einstellungen):
     semester = einstellungen_dictionary['semester']
     
     # SUMO-pdf:
-    # Datei, die saemtliche Tests des Semesters zum Ausdruck enthält
+    # Datei, die saemtliche Tests des Semesters zum Ausdruck enthÃ¤lt
     # Dann kann man zu Beginn des Semesters gleich alles auf einen
     # Schwung erzeugen und an die Betreuer verteilen
     sumo_seiten_pro_blatt_test = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_test']  # 4 = Ausdruck doppelseitig A5
@@ -118,7 +119,7 @@ def test_generator(einstellungen):
     poolD_verzeichnis = os.path.join(latex_verzeichnis, "poolD")
     
     
-    # Erstellt f�r jeden Pool Liste mit den Dateinamen der Aufgaben und L�sungen
+    # Erstellt für jeden Pool Liste mit den Dateinamen der Aufgaben und Lösungen
     dateinamen_poolA_tex = [os.path.basename(fn) for fn in
                       glob.iglob(os.path.join(poolA_verzeichnis, "*.tex"))]
     
@@ -131,7 +132,7 @@ def test_generator(einstellungen):
     dateinamen_poolD_tex = [os.path.basename(fn) for fn in
                       glob.iglob(os.path.join(poolD_verzeichnis, "*.tex"))]
     
-    # F�gt die Liste der einzelnen Pools zusammen
+    # Fügt die Liste der einzelnen Pools zusammen
     dateinamen_tex = (dateinamen_poolA_tex + dateinamen_poolB_tex + 
                       dateinamen_poolC_tex + dateinamen_poolD_tex)
                     
@@ -159,25 +160,33 @@ def test_generator(einstellungen):
     poolDV15 = Pool("DV15", dateinamen_tex)
     poolDV21 = Pool("DV21", dateinamen_tex)
     
-    """
-    # Custom Testtyp/ Testliste
-    use_custom_test = einstellungen_dictionary['tests']['test_typ']
     
-    custom_test_typ_strings = []
-    custom_test_typ_strings = einstellungen_dictionary['tests']['test_typ']
-    
-    custom_test_name = custom_test_typ_strings[0]
-    custom_test_typ_strings = custom_test_typ_strings.pop(0)
-    
-    # converting the pool strings in list to actual pools
-    custom_test_typ = []
-    for i in range(len(custom_test_typ_strings)):
-        custom_test_typ.append(Pool(custom_test_typ_strings[i], dateinamen_tex))
-    
+    #------------Custom Testtyp/ Testliste----------------#
+    use_custom_test = einstellungen_dictionary['tests']['use_custom_test']
+
+    #Loads the dictionary of custom tests
+    test_types_dictionary_strings = einstellungen_dictionary['tests']['test_types']
+
+    #will be final test list 
+    custom_test_list = []
+
+    #converts all test types (strings) to actual test types
+    #and adds them to custom test list
+    for i in range(test_types_dictionary_strings):
+        custom_test_pools = []
+        custom_test = []
+        test_typ = test_types_dictionary_strings.get('test_typ' + str(i))
+        custom_test_name = test_typ[0]
+        test_typ = test_typ.pop(0)
         
-    custom_test = TestTyp(custom_test_name, custom_test_typ)
-    custom_test_liste = [custom_test]
-    """
+        for a in range(len(test_typ)):
+            custom_test_pools.append(Pool(test_typ[a], dateinamen_tex))
+         
+        custom_test = TestTyp(custom_test_name, *custom_test_pools)
+        
+        custom_test_list.append(custom_test)
+    
+    
     # Tests fuer RT1 sowie MT und RES-Praktikum
     testV1 = TestTyp("V01", poolA1, poolB1, poolCV01)
     testV7 = TestTyp("V07", poolA1, poolB1, poolCV07, poolDV07)
@@ -220,8 +229,8 @@ def test_generator(einstellungen):
         quit()
         
     # Falls ein custom Test benutzt werden soll
-    #if use_custom_test:
-    # test_liste_variante = custom_test_liste
+    if use_custom_test:
+        test_liste_variante = custom_test_list
     #%%    
     
     # ================================
@@ -238,7 +247,7 @@ def test_generator(einstellungen):
     
     from Module import generieren_tex_dateien
     
-    # Erstellung des Tuples aus den Listen dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf f�r Verarbeitung in Sumo
+    # Erstellung des Tuples aus den Listen dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf für Verarbeitung in Sumo
     namen_aufg_loesungen_pdf = generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_gruppen, test_liste_variante,
                            name_variante, titel_praktikum, semester, test_saetze_pro_gruppe)
  
