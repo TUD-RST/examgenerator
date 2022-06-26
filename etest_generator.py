@@ -1,47 +1,140 @@
 # -*- coding: utf-8 -*-
+"""
+Script zur Erstellung von Eingangstests fuer Praktika
 
-# Script zur Erstellung von Eingangstests fuer das Praktikum Regelungstechnik
-#
-# Aus einem Pool von Aufgaben werden Eingangstests fuer alle Versuche und alle Praktikumsgruppen
-# erstellt und zwar so, dass sich die Aufgaben fuer eine Gruppe nicht wiederholen.
-#
-# Dazu gibt es im Verzeichnis Templates zwei LaTeX-Vorlagen: Eine fuer den Test, eine fuer
-# die Musterloesung und Bewertung. In den Vorlagen gibt es Platzhalter, die von diesem Script
-# mit dem entsprechenden Inhalt befuellt werden (Gruppennummer, Praktikumsname, Aufgaben, ...).
-#
-# Die Aufgaben finden sich im Verzeichnis Latex/Aufgaben. Diese ordnen sich nach allgemeinen
-# Aufgaben, die in jedem Test vorkommen, und Aufgaben, die spezifisch fuer den jeweiligen Versuch
-# sind. Die Zusammenstellung der Tests aus diesen Aufgaben erfolgt ueber Instanzen der Klasse
-# TestTyp, die Verwaltung der Aufgaben ueber Instanzen vom Typ Pool. Die Loesungen sind in separaten
-# Dateien abgelegt. Aufgabendateien haben das Praefix "aufgabe_", Loesungen das Praefix "loesung_".
-# Das Schema lautet dann z.B.: aufgabe_A1_2.tex -> 2. Aufgabe vom Typ A1
-#
-# Die Teilaufgaben einer Aufgabe sollten mit der enumerate-Umgebung gegliedert werden.
-#
-# In den Loesungsdateien muss der Loesungstext in der Umgebung \begin{Loesung} \end{Loesung}
-# liegen (anstelle von enumerate). Die Loesung einer jeden Teilaufgabe beginnt dann mit
-# Schluesselwort \lsgitem.
-# ToDo: Wenn man alles in eine LaTeX-Klasse packt koennte man das vereinfachen
-#
-# In den Aufgaben und Loesungen koennen mit dem Makro \Pkte{n} Punkte fuer die Teilaufgaben vergeben werden.
-# Bei der Kompilierung werden die Punkte automatisch fuer die Aufgaben und den gesamten Test
-# hochaddiert.
-#
-# Es besteht die Moeglichkeit, alle erstellten Tests und die Musterloesung in einer einzigen Datei
-# zusammenzufassen ("Sumo-Datei"). Dabei kann eingestellt werden, wie viele Kopien der Tests
-# pro Doppelgruppe eingebunden werden. Dann kann man zu Beginn des Semesters
-# gleich alles in einem Schwung ausdrucken. Dieses Vorgehen ist nur sinnvoll, wenn die Testaufgaben
-# stabil sind und nicht mehr korrigiert werden muessen.
-#
-# Das Script nutzt einige Betriebssystembefehle, die derzeit nur fuer Windows implementiert sind.
+Aus einem Pool von Aufgaben werden Eingangstests fuer alle Versuche und alle Praktikumsgruppen
+erstellt und zwar so, dass sich die Aufgaben fuer eine Gruppe nicht wiederholen.
+
+Dazu gibt es im Verzeichnis Templates zwei LaTeX-Vorlagen: Eine fuer den Test, eine fuer
+die Musterloesung und Bewertung. In den Vorlagen gibt es Platzhalter, die von diesem Script
+mit dem entsprechenden Inhalt befuellt werden (Gruppennummer, Praktikumsname, Aufgaben, ...).
+
+Die Aufgaben finden sich im Verzeichnis Aufgaben und sind in separaten Ordnern nach Ihren "Hauptpools" 
+eingeteilt(PoolA, PoolB, PoolC, PoolD). Die Aufgaben ordnen sich nach allgemeinen Aufgaben, die in jedem
+Test vorkommen, und Aufgaben, die spezifisch fuer den jeweiligen Versuch sind. 
+Die Zusammenstellung der Tests aus diesen Aufgaben erfolgt ueber Instanzen der Klasse
+TestTyp, die Verwaltung der Aufgaben ueber Instanzen vom Typ Pool. Die Loesungen sind in separaten
+Dateien abgelegt. Aufgabendateien haben das Praefix "aufgabe_", Loesungen das Praefix "loesung_".
+Das Schema lautet dann z.B.: aufgabe_A1_2.tex -> 2. Aufgabe vom Typ A1. 
+Bei der weiteren Bezeichnung der Aufgaben ist das Verwenden von Großbuchstaben zu vermeiden, da
+dies zu Fehlern beim Kompilieren fuehren koennte.
+
+Die Teilaufgaben einer Aufgabe sollten mit der enumerate-Umgebung gegliedert werden.
+
+In den Loesungsdateien muss der Loesungstext in der Umgebung \begin{Loesung} \end{Loesung}
+liegen (anstelle von enumerate). Die Loesung einer jeden Teilaufgabe beginnt dann mit
+Schluesselwort \lsgitem.
+
+In den Aufgaben und Loesungen koennen mit dem Makro \Pkte{n} Punkte fuer die Teilaufgaben vergeben werden.
+Bei der Kompilierung werden die Punkte automatisch fuer die Aufgaben und den gesamten Test
+hochaddiert.
+
+Es besteht die Moeglichkeit, alle erstellten Tests und die Musterloesung in einer einzigen Datei
+zusammenzufassen ("Sumo-Datei"). Dabei kann eingestellt werden, wie viele Kopien der Tests
+pro Doppelgruppe eingebunden werden. Dann kann man zu Beginn des Semesters
+gleich alles in einem Schwung ausdrucken. Dieses Vorgehen ist nur sinnvoll, wenn die Testaufgaben
+stabil sind und nicht mehr korrigiert werden muessen.
+
+Es gibt folgende Optionen fuer die Testerstellung, welche ueber eine Einstellungs-json Datei
+angepasst werden koennen:
+    
+    * anzahl_gruppen:
+        Festlegung wie viele Gruppenpaare erzeugt werden sollen
+        z.B. 6 => Gruppenpaare 01-12
+        
+    * name_variante:
+        Name der Testvariante/ Studiengang fuer den der Test erzeugt werden soll 
+        Für vorgefertigte Tests:
+            * ET1
+            * ET2
+            * MT
+            * RES
+        Falls ein custom Test erstellt werden soll, ist der Name frei waehlbar
+    
+    * semester:
+        Aktuelles Semester z.B. "WS 2021/22"
+    
+    * sumo_seiten_pro_blatt_test:
+        4 - doppelseitig A5
+    
+    * sumo_kopien_pro_test:
+        Gewünbschte Anzahl von Kopien pro Test
+    
+    * sumo_seiten_pro_blatt_loesung:
+        4 - doppelseitig A5
+    
+    * generiere_einzel_pdf:
+        Sollen einzelne pdf Dateien von Aufgaben/ Loesungen erstellt werden (true/ false)
+    
+    * generiere_sumo_pdf:
+        Soll eine Sumo Datei erstellt werden (true/ false)
+    
+    * temp_dateien_loeschen:
+        Sollen temporaere Dateien nach erstellen des Testes automatisch geloescht werden (true; false)
+    
+    * use_custom_test:
+        Soll ein Test mit selbst bestimmten Test Typen und Test Listen erstellt werden?
+        Wenn ein vorgefertigter Test benutzt werden soll, muss diese Einstellung auf
+        "false" gesetzt sein!
+        Falls ein custom Test erstellt werden soll, muessen die Test Typen als Listen 
+        angegeben werden, wobei das erste Argument der Name des Test Typs und die 
+        folgenden Argumente die Namen der zu verwendenen Pools sind. Beim Hinzufuegen
+        eines weiteren Test Typs ist die Bezeichnung der Liste zu beachten: Die Typen 
+        werden aufsteigend von 0 durchnummeriert. Als Grundlage hierfuer gilt das Format
+        des Einstellungstemplates in Einstellungen/einstellungen.json 
+
+
+Aufrufsyntax:
+-------------
+
+Das Skript kann entweder unter Verwendung eines Python-Interpreters
+aufgerufen oder -- für den Fall, dass kein Python auf dem Arbeitsplatzrechner
+vorhanden ist-- als Stand-Alone-Anwendung ausgeführt werden. Das
+letztgenannte Szenario funktioniert nur unter Windows.
+
+**Syntax bei Nutzung eines Python-Interpreters**::
+    
+    python etest_generator.py [-h] [-ct] EINSTELLUNGSDATEI [-ma] [-mp] POOL [-ms] AUFGABE
+   
+**Syntax für die Ausführung der Stand-Alone-Anwendung unter Windows**::
+    
+    etest_generator.exe [-h] [-ct] EINSTELLUNGSDATEI [-ma] [-mp] POOL [-ms] AUFGABE
+    
+    
+Auf Grundlage des Templates, koennen beliebig viele json-Einstellungsvorlagen erstellt werden,
+welche ebenfalls im Ordner Einstellungen zu speichern sind.
+Mit diesen Einstellungen können nun Tests problemlos erstellt werden:
+    
+    * -ct [Name der gewuenschten Einstellungsdatei.json] (--ct) erstellt einen Ordner, in welchem
+      der Test an Hand all Ihrer Voreinstellungen generiert wird.
+            
+
+Zusaetzlich kann dieses Skrip bei der Erstellung/ Ueberpruefung von Aufgaben/ Loesungen helfen:
+    
+    * Mit -ma (--make_all) wird eine ein Ordner mit dem Namen Previews erstellt, in welchem
+      eine Datei generiert wird, die eine Voransicht aller Aufgaben und Loesungen ermoeglicht.
+      
+    * Mit -mp [Pool] (--make_pool [Pool]) werden Previews aller Aufgaben/ Loesungen des gegebenen Pools in
+      einer Datei im Ordner Previews gespeichert.
+      
+    * Mit -ms [Aufgabenname] (--make_specific [Aufgabenname]) wird die Voransicht einer einzelnen Datei erstellt
+      und ebenfalls im Ordner Previews gespeichert.
+
+Um Hilfe zu erhalten:
+    
+    * -h (--help)
+
+Das Script nutzt einige Betriebssystembefehle, die derzeit nur fuer Windows implementiert sind.
+
+"""
+
 import os
 import glob
 import random
 from warnings import warn
 import json
 import argparse as ap
-
-from Module import make_specific
+import textwrap as tw
 
 
 def test_generator(args):
@@ -238,6 +331,7 @@ def test_generator(args):
             
         # Falls ein custom Test benutzt werden soll
         if use_custom_test:
+            titel_praktikum = f"Praktikum-{name_variante}"
             test_liste_variante = custom_test_list
         #%%    
         
@@ -294,6 +388,8 @@ def test_generator(args):
     # ==================================
     # --- Make-Specific ---
     # ==================================
+   
+    from Module import make_specific
     
     if args.make_all or args.make_pool or args.make_specific:
         make_specific(args.make_all, args.make_pool, args.make_specific)
@@ -305,8 +401,43 @@ def test_generator(args):
  # ==========================================================
  
 if __name__ == "__main__":
-    
-    parser = ap.ArgumentParser()
+    Descr = tw.dedent(u'''\
+                      Script zur Erstellung von Eingangstests fuer Praktika
+
+                      Aus einem Pool von Aufgaben werden Eingangstests fuer alle Versuche und alle Praktikumsgruppen
+                      erstellt und zwar so, dass sich die Aufgaben fuer eine Gruppe nicht wiederholen.
+
+                      Dazu gibt es im Verzeichnis Templates zwei LaTeX-Vorlagen: Eine fuer den Test, eine fuer
+                      die Musterloesung und Bewertung. In den Vorlagen gibt es Platzhalter, die von diesem Script
+                      mit dem entsprechenden Inhalt befuellt werden (Gruppennummer, Praktikumsname, Aufgaben, ...).
+
+                      Die Aufgaben finden sich im Verzeichnis Aufgaben und sind in separaten Ordnern nach Ihren "Hauptpools" 
+                      eingeteilt(PoolA, PoolB, PoolC, PoolD). Die Aufgaben ordnen sich nach allgemeinen Aufgaben, die in jedem
+                      Test vorkommen, und Aufgaben, die spezifisch fuer den jeweiligen Versuch sind. 
+                      Die Zusammenstellung der Tests aus diesen Aufgaben erfolgt ueber Instanzen der Klasse
+                      TestTyp, die Verwaltung der Aufgaben ueber Instanzen vom Typ Pool. Die Loesungen sind in separaten
+                      Dateien abgelegt. Aufgabendateien haben das Praefix "aufgabe_", Loesungen das Praefix "loesung_".
+                      Das Schema lautet dann z.B.: aufgabe_A1_2.tex -> 2. Aufgabe vom Typ A1. 
+                      Bei der weiteren Bezeichnung der Aufgaben ist das Verwenden von Großbuchstaben zu vermeiden, da
+                      dies zu Fehlern beim Kompilieren fuehren koennte.
+
+                      Die Teilaufgaben einer Aufgabe sollten mit der enumerate-Umgebung gegliedert werden.
+
+                      In den Loesungsdateien muss der Loesungstext in der Umgebung \begin{Loesung} \end{Loesung}
+                      liegen (anstelle von enumerate). Die Loesung einer jeden Teilaufgabe beginnt dann mit
+                      Schluesselwort \lsgitem.
+
+                      In den Aufgaben und Loesungen koennen mit dem Makro \Pkte{n} Punkte fuer die Teilaufgaben vergeben werden.
+                      Bei der Kompilierung werden die Punkte automatisch fuer die Aufgaben und den gesamten Test
+                      hochaddiert.
+
+                      Es besteht die Moeglichkeit, alle erstellten Tests und die Musterloesung in einer einzigen Datei
+                      zusammenzufassen ("Sumo-Datei"). Dabei kann eingestellt werden, wie viele Kopien der Tests
+                      pro Doppelgruppe eingebunden werden. Dann kann man zu Beginn des Semesters
+                      gleich alles in einem Schwung ausdrucken. Dieses Vorgehen ist nur sinnvoll, wenn die Testaufgaben
+                      stabil sind und nicht mehr korrigiert werden muessen.''')
+                      
+    parser = ap.ArgumentParser(description = Descr)
     
     parser.add_argument('-ct', '--create_test', help=u'Erstellt einen fertigen Test, nach den Einstellungen aus der\
                         angegeben json Datei')
