@@ -4,9 +4,20 @@ def kombination_aufgaben(anzahl_gruppen, test_liste_variante):
        problems and their according solutions from given pools
        depending on the test variant.
        
-      input: anzahl_gruppen, test_liste_variante
-      
-      output: test_saetze_pro_gruppe"""
+      Parameters: 
+          
+        * anzahl_gruppen:
+            Number of different groups
+            Defined in json settings file
+            
+        * test_liste_variante:
+            List of test variants belonging to chosen overall variant
+            Can be indirectly customized in json settings file by changing/ adding test types
+            
+      Returns:
+          
+        * test_saetze_pro_gruppe:
+            List of problems/ solutions for each group"""
     
    test_saetze_pro_gruppe = []
    

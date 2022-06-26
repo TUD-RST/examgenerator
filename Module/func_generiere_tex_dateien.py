@@ -6,12 +6,41 @@ def generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_grupp
                            name_variante, titel_praktikum, semester, test_saetze_pro_gruppe):
     
     """This function replaces the variables within the tex problem/ solution files with the information given
-    by the settings. Lastly, it returns a tuple of lists: [0] = problem pdf names, [1] = solution pdf names.
+    by the setting and returns the names of the according pdf files.
     
-    input: latex_verzeichnis, template_verzeichnis,anzahl_gruppen, test_liste_variante,
-            name_variante, titel_praktikum, semester, test_saetze_pro_gruppe 
+    Parameter: 
+        * latex_verzeichnis:
+            Directory for the latex compiler
+            
+        * template_verzeichnis:
+            Directory of the problem/ solution templates
+            
+        * anzahl_gruppen:
+            Number of different groups
+            Defined in json settings file
         
-    output: (dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf)"""
+        * test_liste_variante:
+            List of test variants belonging to chosen overall variant
+            Can be indirectly customized in json settings file by changing/ adding test types 
+            
+        * name_variante:
+            Name of the overall test variant
+            Defined in json settings file
+            
+        * titel_praktikum:
+            Title of the event. Dependent on name_variant
+            
+        * semester:
+            Given semester in json settings file
+            
+        * test_saetze_pro_gruppe:
+           List of problems/ solutions for each group
+        
+    Returns: 
+        * (dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf)
+            tuple of lists: 
+                [0] = problem pdf names, [1] = solution pdf names
+        """
     
     # Loescht alle Dateien im Aufgaben Ordner 
     for file in glob.glob(os.path.join(latex_verzeichnis, "*.*")):

@@ -3,9 +3,29 @@ from warnings import warn
 import re
 
 class Pool:
+    """Repraesentiert die einzelnen Pools mit den dazugehoerigen Aufgaben.
+    
+    Konstruktion:
+            
+            >>> Pool(name, dateinamen_tex)
+            
+            * name:
+                Der Name des Pools
+                
+            * dateinamen_tex:
+                Liste aller Latex Aufgaben-Loesung-Dateinamen"""
+            
+    
     def __init__(self, name, dateinamen_tex):
+        """Instanziert einen neuen Pool
+        
+        * name:
+            Der Name des Pools z.B. A1, CV21, DV07
+            
+        * dateinamen_tex:
+            Liste aller Latex Aufgaben-Loesung-Dateinamen"""
+               
         self.name = name
-        """Name des Pools, z.B. A1, CV21, DV07"""
 
         self.stapel_verfuegbar = []
         """
@@ -45,6 +65,7 @@ class Pool:
                 warn(f"{datei} besitzt keine passende Loesungsdatei {datei_loesung}")
 
     def ziehen(self):
+        """Zieht eine zufaellige Aufgabe + Loesung eines Pools"""
         if len(self.stapel_verfuegbar) == 0:
             # Stapel mit verfuegbaren Aufgaben ist leer,
             # Ablagestapel wird zum neuen verfuegbaren Stapel
@@ -62,6 +83,7 @@ class Pool:
         return aufg_loes
 
     def ablegen(self):
+        """Legt alle gezogen Aufgaben auf den Ablagestapel"""
         self.stapel_ablage.extend(self.stapel_gezogen)
         self.stapel_gezogen = []
 

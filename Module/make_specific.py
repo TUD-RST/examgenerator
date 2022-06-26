@@ -17,7 +17,21 @@ from pathlib import Path
 
 #-----------------Einstellungen--------------------#
 def make_specific(make_all, pool, aufgabe):
+    """
+    This Function creates previews for given pools/ problems or all.
     
+    Parameters:
+        
+        * make_all: 
+            Boolean: make a preview for all problems
+        
+        * pool:
+            Name of the pool to be created
+        
+        * aufgabe:
+            File name of the problem to be made"""
+
+    # Default
     make_PoolA = False
     make_PoolB = False
     make_PoolC = False

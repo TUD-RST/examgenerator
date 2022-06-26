@@ -9,7 +9,19 @@ def kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp
         This function compiles the tex files and turns them into pdf format and moves them to
         the test directory. Lastly, it deletes temporary data.
         
-        input: test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp_dateien_loeschen"""
+        Parameters: 
+            
+            * test_verzeichnis:
+                Directory where the generated tests are saved
+                
+            * latex_verzeichnis:
+                Working directory of latex compiler
+                
+            * generiere_einzel_pdf:
+                Boolean: should individual pdfs be created
+                
+            * temp_dateien_loeschen:
+                Boolean: should temporary data be deleted"""
         
     shutil.rmtree(test_verzeichnis, ignore_errors=True)
     os.mkdir(test_verzeichnis)
