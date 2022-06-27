@@ -16,8 +16,7 @@ def generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_grupp
             Directory of the problem/ solution templates
             
         * anzahl_gruppen:
-            Number of different groups
-            Defined in json settings file
+            Number of group pairs
         
         * test_liste_variante:
             List of test variants belonging to chosen overall variant

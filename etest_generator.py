@@ -1,130 +1,137 @@
 # -*- coding: utf-8 -*-
 """
-Script zur Erstellung von Eingangstests fuer Praktika
+This script creates tests based on given problems and settings
 
-Aus einem Pool von Aufgaben werden Eingangstests fuer alle Versuche und alle Praktikumsgruppen
-erstellt und zwar so, dass sich die Aufgaben fuer eine Gruppe nicht wiederholen.
+From a pool of problems, test will be created in  a way, that there will be no
+repetition for all experiments and groups.
 
-Dazu gibt es im Verzeichnis Templates zwei LaTeX-Vorlagen: Eine fuer den Test, eine fuer
-die Musterloesung und Bewertung. In den Vorlagen gibt es Platzhalter, die von diesem Script
-mit dem entsprechenden Inhalt befuellt werden (Gruppennummer, Praktikumsname, Aufgaben, ...).
+There is two LaTeX templates in the Templates Directory:
+One for the problems and one for the sample solution and evaluation.
+In these templates there is placeholders, which will be replaced by
+this script.
 
-Die Aufgaben finden sich im Verzeichnis Aufgaben und sind in separaten Ordnern nach Ihren "Hauptpools" 
-eingeteilt(PoolA, PoolB, PoolC, PoolD). Die Aufgaben ordnen sich nach allgemeinen Aufgaben, die in jedem
-Test vorkommen, und Aufgaben, die spezifisch fuer den jeweiligen Versuch sind. 
-Die Zusammenstellung der Tests aus diesen Aufgaben erfolgt ueber Instanzen der Klasse
-TestTyp, die Verwaltung der Aufgaben ueber Instanzen vom Typ Pool. Die Loesungen sind in separaten
-Dateien abgelegt. Aufgabendateien haben das Praefix "aufgabe_", Loesungen das Praefix "loesung_".
-Das Schema lautet dann z.B.: aufgabe_A1_2.tex -> 2. Aufgabe vom Typ A1. 
-Bei der weiteren Bezeichnung der Aufgaben ist das Verwenden von Großbuchstaben zu vermeiden, da
-dies zu Fehlern beim Kompilieren fuehren koennte.
+The problems are located in the Aufgaben directory which is furthermore separated into
+the main pools (PoolA, PoolB, PoolC, PoolD). They usually differ between general problems,
+that are used in every test, and problems, that are specific for the given experiment.
 
-Die Teilaufgaben einer Aufgabe sollten mit der enumerate-Umgebung gegliedert werden.
+Tests are combined via instances of the class TestTyp and managed via instances of the class Pool.
+Solutions are saved in separate files.
+Files for problems have the prefix "aufgabe_", solutions the prefix "loesung_".
+The scheme is the following: 
+    aufgabe_A1_2.tex -> 2. problem of type A1
+or for an experiment:
+    aufgabe_CV03_1.tex -> 2. problem from experiment (V) number 03 of type C
+for a more detailed breakdown of the nomenclature view the read.me file in the Aufgaben folder
+Please avoid using combinations of more than one capital letter describing your pools
+except for combinations with V (which stands for experiment) since this could lead to 
+problems during the compiling process.
 
-In den Loesungsdateien muss der Loesungstext in der Umgebung \begin{Loesung} \end{Loesung}
-liegen (anstelle von enumerate). Die Loesung einer jeden Teilaufgabe beginnt dann mit
-Schluesselwort \lsgitem.
+Subtasks of a problem should be structured in an enumerate-surrounding.
 
-In den Aufgaben und Loesungen koennen mit dem Makro \Pkte{n} Punkte fuer die Teilaufgaben vergeben werden.
-Bei der Kompilierung werden die Punkte automatisch fuer die Aufgaben und den gesamten Test
-hochaddiert.
+Within the solution files the solution text has to be written in between
+\begin{Loesung} \end{Loesung}. The solution of every subtask starts with the 
+key \lsgitem.
 
-Es besteht die Moeglichkeit, alle erstellten Tests und die Musterloesung in einer einzigen Datei
-zusammenzufassen ("Sumo-Datei"). Dabei kann eingestellt werden, wie viele Kopien der Tests
-pro Doppelgruppe eingebunden werden. Dann kann man zu Beginn des Semesters
-gleich alles in einem Schwung ausdrucken. Dieses Vorgehen ist nur sinnvoll, wenn die Testaufgaben
-stabil sind und nicht mehr korrigiert werden muessen.
+It is possible to assign points to problems and solutions with the macro \Pkte{n}.
+During the compiling process the given points will be added automatically for the entire test
 
-Es gibt folgende Optionen fuer die Testerstellung, welche ueber eine Einstellungs-json Datei
-angepasst werden koennen:
+Optionally, all tests and sample solutions can be combined into one "sumo-file". 
+This allows creating the tests for the entire semester in one go. However, this
+is only useful if the problems and solutions are final and will not have to be corrected
+afterwards.
+
+There is the following options for the test creation, which can be configured in a
+json settings file:
     
     * anzahl_gruppen:
-        Festlegung wie viele Gruppenpaare erzeugt werden sollen
-        z.B. 6 => Gruppenpaare 01-12
+        Determines the amount of group pairs
+        for example:  6 => group pairs 01-12
         
     * name_variante:
-        Name der Testvariante/ Studiengang fuer den der Test erzeugt werden soll 
-        Für vorgefertigte Tests:
+        Name of the variant/ degree the test is created for 
+        There already exists prefactored tests for:
             * ET1
             * ET2
             * MT
             * RES
-        Falls ein custom Test erstellt werden soll, ist der Name frei waehlbar
+        If you would like to create a custom test, you have a free choice with the name
     
     * semester:
-        Aktuelles Semester z.B. "WS 2021/22"
+        Current Semester
+        for example: WS 2021/22
     
     * sumo_seiten_pro_blatt_test:
-        4 - doppelseitig A5
+        4 - double paged A5
     
     * sumo_kopien_pro_test:
-        Gewünbschte Anzahl von Kopien pro Test
+       Number of copies per test
     
     * sumo_seiten_pro_blatt_loesung:
-        4 - doppelseitig A5
+        4 - double paged A5
     
     * generiere_einzel_pdf:
-        Sollen einzelne pdf Dateien von Aufgaben/ Loesungen erstellt werden (true/ false)
+        Should individual pdf files be created for each problem/ solution (true/ false)
     
     * generiere_sumo_pdf:
-        Soll eine Sumo Datei erstellt werden (true/ false)
+        Should a sumo-file be created (true/ false)
     
     * temp_dateien_loeschen:
-        Sollen temporaere Dateien nach erstellen des Testes automatisch geloescht werden (true; false)
+        Should temporary data be deleted (true; false)
+        true is recommendet unless there is issues with compiling
     
     * use_custom_test:
-        Soll ein Test mit selbst bestimmten Test Typen und Test Listen erstellt werden?
-        Wenn ein vorgefertigter Test benutzt werden soll, muss diese Einstellung auf
-        "false" gesetzt sein!
-        Falls ein custom Test erstellt werden soll, muessen die Test Typen als Listen 
-        angegeben werden, wobei das erste Argument der Name des Test Typs und die 
-        folgenden Argumente die Namen der zu verwendenen Pools sind. Beim Hinzufuegen
-        eines weiteren Test Typs ist die Bezeichnung der Liste zu beachten: Die Typen 
-        werden aufsteigend von 0 durchnummeriert. Als Grundlage hierfuer gilt das Format
-        des Einstellungstemplates in Einstellungen/einstellungen.json 
+        Should a custom test with self-defined test types and lists be created? (true/ false)
+        If you would like to use a prefactored test, this setting has to be on false!
+        
+        If you would like to create a custom test, you will have to provide the test types
+        as lists in the json settings file. If you only provide one test type, that one will
+        be used. If you provide multiple, the script will choose randomly from them.
+        The first argument of the list is the name of the test type and all following arguments
+        are the pools to be used for the test. When adding another test type it is important
+        to following the ascending nomenclature in the test_types dictionary. For more info
+        you can have a look at the settings template under Einstellungen/einstellungen.json
+        
 
-
-Aufrufsyntax:
+Calling Syntax:
 -------------
 
-Das Skript kann entweder unter Verwendung eines Python-Interpreters
-aufgerufen oder -- für den Fall, dass kein Python auf dem Arbeitsplatzrechner
-vorhanden ist-- als Stand-Alone-Anwendung ausgeführt werden. Das
-letztgenannte Szenario funktioniert nur unter Windows.
+This script can either be called with the help of a python interpreter
+or --in case python is not installed on the working computer-- as a
+stand-alone application. The second scenario only works on Windows.
 
-**Syntax bei Nutzung eines Python-Interpreters**::
+**Syntax when using a python interpreter**::
     
-    python etest_generator.py [-h] [-ct] EINSTELLUNGSDATEI [-ma] [-mp] POOL [-ms] AUFGABE
+    python etest_generator.py [-h] [-ct] SETTINGS_FILE [-ma] [-mp] POOL [-ms] PROBLEM
    
-**Syntax für die Ausführung der Stand-Alone-Anwendung unter Windows**::
+**Syntax for the stand-alone application**::
     
-    etest_generator.exe [-h] [-ct] EINSTELLUNGSDATEI [-ma] [-mp] POOL [-ms] AUFGABE
+    etest_generator.exe [-h] [-ct] SETTINGSFILE [-ma] [-mp] POOL [-ms] PROBLEM
     
+Based on the sample template it is possible to create as many settings templates to your
+liking. They have to be saved in the Einstellung directory.
+
+With these it is now possible to easily create tests:
     
-Auf Grundlage des Templates, koennen beliebig viele json-Einstellungsvorlagen erstellt werden,
-welche ebenfalls im Ordner Einstellungen zu speichern sind.
-Mit diesen Einstellungen können nun Tests problemlos erstellt werden:
-    
-    * -ct [Name der gewuenschten Einstellungsdatei.json] (--ct) erstellt einen Ordner, in welchem
-      der Test an Hand all Ihrer Voreinstellungen generiert wird.
+    * -ct [name of the chosen settings file.json] (--create_test [name of the chosen settings file.json])
+        creates a folder in which the created tests, based on the provided settings, are saved
             
-
-Zusaetzlich kann dieses Skrip bei der Erstellung/ Ueberpruefung von Aufgaben/ Loesungen helfen:
+Additionally, the script can help with the creation/ review of problems/ solutions:
     
-    * Mit -ma (--make_all) wird eine ein Ordner mit dem Namen Previews erstellt, in welchem
-      eine Datei generiert wird, die eine Voransicht aller Aufgaben und Loesungen ermoeglicht.
+    * -ma (--make_all) 
+        creates a folder Previews in which a file with a preview for every problem/ solution is displayed
       
-    * Mit -mp [Pool] (--make_pool [Pool]) werden Previews aller Aufgaben/ Loesungen des gegebenen Pools in
-      einer Datei im Ordner Previews gespeichert.
+    * -mp [Pool] (--make_pool [Pool]) 
+        creates a preview file for all problems/ solutions for the given pool
       
-    * Mit -ms [Aufgabenname] (--make_specific [Aufgabenname]) wird die Voransicht einer einzelnen Datei erstellt
-      und ebenfalls im Ordner Previews gespeichert.
+    * -ms [name of the problem] (--make_specific [name of the problem]) 
+        creates a preview file for the given problem
+        name of the problem without ".tex"
 
-Um Hilfe zu erhalten:
+In order to recieve help type:
     
     * -h (--help)
 
-Das Script nutzt einige Betriebssystembefehle, die derzeit nur fuer Windows implementiert sind.
+This script uses operating commands, which are currently only implemented on Windows.
 
 """
 
@@ -138,7 +145,23 @@ import textwrap as tw
 
 
 def test_generator(args):
+    """
+    Main function which combines all modules of this program.
     
+    Parameters:
+        
+        * args.create_test:
+            Would the user like to create a test
+        
+        * args.make_all:
+            Would the user like to create a preview for all problems
+        
+        * args.make_pool
+            Pool which the user would like to create a preview for
+        
+        * args.make_specific
+            Name of the problem the user would like to create a preview for
+    """
     if args.create_test is not None:
         # ================ Einstellungen =============================
         
@@ -402,54 +425,59 @@ def test_generator(args):
  
 if __name__ == "__main__":
     Descr = tw.dedent(u'''\
-                      Script zur Erstellung von Eingangstests fuer Praktika
+                      This script creates tests based on given problems and settings
 
-                      Aus einem Pool von Aufgaben werden Eingangstests fuer alle Versuche und alle Praktikumsgruppen
-                      erstellt und zwar so, dass sich die Aufgaben fuer eine Gruppe nicht wiederholen.
+                      From a pool of problems, test will be created in  a way, that there will be no
+                      repetition for all experiments and groups.
 
-                      Dazu gibt es im Verzeichnis Templates zwei LaTeX-Vorlagen: Eine fuer den Test, eine fuer
-                      die Musterloesung und Bewertung. In den Vorlagen gibt es Platzhalter, die von diesem Script
-                      mit dem entsprechenden Inhalt befuellt werden (Gruppennummer, Praktikumsname, Aufgaben, ...).
+                      There is two LaTeX templates in the Templates Directory:
+                      One for the problems and one for the sample solution and evaluation.
+                      In these templates there is placeholders, which will be replaced by
+                      this script.
 
-                      Die Aufgaben finden sich im Verzeichnis Aufgaben und sind in separaten Ordnern nach Ihren "Hauptpools" 
-                      eingeteilt(PoolA, PoolB, PoolC, PoolD). Die Aufgaben ordnen sich nach allgemeinen Aufgaben, die in jedem
-                      Test vorkommen, und Aufgaben, die spezifisch fuer den jeweiligen Versuch sind. 
-                      Die Zusammenstellung der Tests aus diesen Aufgaben erfolgt ueber Instanzen der Klasse
-                      TestTyp, die Verwaltung der Aufgaben ueber Instanzen vom Typ Pool. Die Loesungen sind in separaten
-                      Dateien abgelegt. Aufgabendateien haben das Praefix "aufgabe_", Loesungen das Praefix "loesung_".
-                      Das Schema lautet dann z.B.: aufgabe_A1_2.tex -> 2. Aufgabe vom Typ A1. 
-                      Bei der weiteren Bezeichnung der Aufgaben ist das Verwenden von Großbuchstaben zu vermeiden, da
-                      dies zu Fehlern beim Kompilieren fuehren koennte.
+                      The problems are located in the Aufgaben directory which is furthermore separated into
+                      the main pools (PoolA, PoolB, PoolC, PoolD). They usually differ between general problems,
+                      that are used in every test, and problems, that are specific for the given experiment.
 
-                      Die Teilaufgaben einer Aufgabe sollten mit der enumerate-Umgebung gegliedert werden.
+                      Tests are combined via instances of the class TestTyp and managed via instances of the class Pool.
+                      Solutions are saved in separate files.
+                      Files for problems have the prefix "aufgabe_", solutions the prefix "loesung_".
+                      The scheme is the following: 
+                          aufgabe_A1_2.tex -> 2. problem of type A1
+                      or for an experiment:
+                          aufgabe_CV03_1.tex -> 2. problem from experiment (V) number 03 of type C
+                      for a more detailed breakdown of the nomenclature view the read.me file in the Aufgaben folder
+                      Please avoid using combinations of more than one capital letter describing your pools
+                      except for combinations with V (which stands for experiment) since this could lead to 
+                      problems during the compiling process.
 
-                      In den Loesungsdateien muss der Loesungstext in der Umgebung \begin{Loesung} \end{Loesung}
-                      liegen (anstelle von enumerate). Die Loesung einer jeden Teilaufgabe beginnt dann mit
-                      Schluesselwort \lsgitem.
+                      Subtasks of a problem should be structured in an enumerate-surrounding.
 
-                      In den Aufgaben und Loesungen koennen mit dem Makro \Pkte{n} Punkte fuer die Teilaufgaben vergeben werden.
-                      Bei der Kompilierung werden die Punkte automatisch fuer die Aufgaben und den gesamten Test
-                      hochaddiert.
+                      Within the solution files the solution text has to be written in between
+                      \begin{Loesung} \end{Loesung}. The solution of every subtask starts with the 
+                      key \lsgitem.
 
-                      Es besteht die Moeglichkeit, alle erstellten Tests und die Musterloesung in einer einzigen Datei
-                      zusammenzufassen ("Sumo-Datei"). Dabei kann eingestellt werden, wie viele Kopien der Tests
-                      pro Doppelgruppe eingebunden werden. Dann kann man zu Beginn des Semesters
-                      gleich alles in einem Schwung ausdrucken. Dieses Vorgehen ist nur sinnvoll, wenn die Testaufgaben
-                      stabil sind und nicht mehr korrigiert werden muessen.''')
+                      It is possible to assign points to problems and solutions with the macro \Pkte{n}.
+                      During the compiling process the given points will be added automatically for the entire test
+
+                      Optionally, all tests and sample solutions can be combined into one "sumo-file". 
+                      This allows creating the tests for the entire semester in one go. However, this
+                      is only useful if the problems and solutions are final and will not have to be corrected
+                      afterwards.''')
                       
     parser = ap.ArgumentParser(description = Descr)
     
-    parser.add_argument('-ct', '--create_test', help=u'Erstellt einen fertigen Test, nach den Einstellungen aus der\
-                        angegeben json Datei')
-    parser.add_argument('-ma','--make_all', action = 'store_true', help=u'Erstellt eine Preview Datei fuer alle Aufgaben')
-    parser.add_argument('-mp','--make_pool', choices = ['A', 'B', 'C', 'D'], help=u'Erstellt eine Preview Datei mit den Aufgaben\
-                        des angegeben Pools')
-    parser.add_argument('-ms','--make_specific', help=u'Erstellt eine Preview Datei fuer eine ausgewaehlte Aufgabe (ohne .tex)')
+    parser.add_argument('-ct', '--create_test', help=u'Creates a test based on the provided json settings file')
+    parser.add_argument('-ma','--make_all', action = 'store_true', help=u'Creates a preview for all problems')
+    parser.add_argument('-mp','--make_pool', choices = ['A', 'B', 'C', 'D'], help=u'Creates a Preview for all problems\
+                        of the given pool')
+    parser.add_argument('-ms','--make_specific', help=u'Creates a Preview for only the given problem\
+                        you will need to provide them problem´s name (without .tex)')
     
     args = parser.parse_args()    
     
     if ((args.create_test is None) and (args.make_all == False) and (args.make_pool is None) and (args.make_specific is None)):
-        parser.error('Bitte geben Sie an, was generiert werden soll. Für Hilfe benutzen Sie: -h')
+        parser.error('Please choose at least one of the options. For help type: -h')
         
     else:
         test_generator(args)
