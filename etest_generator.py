@@ -469,8 +469,8 @@ if __name__ == "__main__":
     
     parser.add_argument('-ct', '--create_test', help=u'Creates a test based on the provided json settings file')
     parser.add_argument('-ma','--make_all', action = 'store_true', help=u'Creates a preview for all problems')
-    parser.add_argument('-mp','--make_pool', choices = ['A', 'B', 'C', 'D'], help=u'Creates a Preview for all problems\
-                        of the given pool')
+    parser.add_argument('-mp','--make_pool', choices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], 
+                        help=u'Creates a Preview for all problems of the given pool')
     parser.add_argument('-ms','--make_specific', help=u'Creates a Preview for only the given problem\
                         you will need to provide them problem´s name (without .tex)')
     

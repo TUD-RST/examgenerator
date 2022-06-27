@@ -90,6 +90,18 @@ def generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_grupp
                 
                 if "D" in aufg_loes[0]:
                     aufgaben_string += f"\\input{{poolD/{aufg_loes[0]}}}\n\n"
+                
+                if "E" in aufg_loes[0]:
+                    aufgaben_string += f"\\input{{poolE/{aufg_loes[0]}}}\n\n"
+                
+                if "F" in aufg_loes[0]:
+                    aufgaben_string += f"\\input{{poolF/{aufg_loes[0]}}}\n\n"
+                
+                if "G" in aufg_loes[0]:
+                    aufgaben_string += f"\\input{{poolG/{aufg_loes[0]}}}\n\n"
+                
+                if "H" in aufg_loes[0]:
+                    aufgaben_string += f"\\input{{poolH/{aufg_loes[0]}}}\n\n"
     
             datei_inhalt = datei_inhalt.replace("__AUFGABEN__", aufgaben_string)
     
@@ -129,6 +141,18 @@ def generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_grupp
                  
                 if "D" in aufg_loes[0]:
                     loesung_string += f"\\input{{poolD/{aufg_loes[1]}}}\n\n"
+                
+                if "E" in aufg_loes[0]:
+                    loesung_string += f"\\input{{poolE/{aufg_loes[1]}}}\n\n"
+                
+                if "F" in aufg_loes[0]:
+                    loesung_string += f"\\input{{poolF/{aufg_loes[1]}}}\n\n"
+                
+                if "G" in aufg_loes[0]:
+                    loesung_string += f"\\input{{poolG/{aufg_loes[1]}}}\n\n"
+                    
+                if "H" in aufg_loes[0]:
+                    loesung_string += f"\\input{{poolH/{aufg_loes[1]}}}\n\n"
     
             datei_inhalt = datei_inhalt.replace("__AUFGABEN__", loesung_string)
     
