@@ -41,7 +41,7 @@ def generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_grupp
                 [0] = problem pdf names, [1] = solution pdf names
         """
     
-    # Loescht alle Dateien im Aufgaben Ordner 
+    # Deletes all temporary files in the Aufgaben directory
     for file in glob.glob(os.path.join(latex_verzeichnis, "*.*")):
         os.remove(file)
         
@@ -60,22 +60,25 @@ def generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_grupp
         gruppe_name = f"{gruppe*2 + 1:02d}{gruppe*2+2:02d}"
     
         for test_index, test_typ in enumerate(test_liste_variante):
-            # Aufgabe
-            # Festlegung des Dateinamens und Pfades
+            # Problem
+            # Setting file name and path
             datei_name = f"ETest-{name_variante}-{test_typ.name}-{gruppe_name}.tex"
             datei_pfad = os.path.join(latex_verzeichnis, datei_name)
     
-            # Ersetzen der Dateiparameter in LaTeX mit Einstellungen
+            # Replacing the parameters in the LaTeX file
             datei_inhalt = template_aufgabe
             datei_inhalt = datei_inhalt.replace("__PRAKTIKUM__", titel_praktikum)
             datei_inhalt = datei_inhalt.replace("__SEMESTER__", semester)
             datei_inhalt = datei_inhalt.replace("__VERSUCH__", test_typ.name)
             datei_inhalt = datei_inhalt.replace("__GRUPPE__", gruppe_name)
-    
-            # Erstellen des Aufgabenstrings + Implementieren in LaTeX Datei
-            # Der String muss für jeden Pool angepasst werden, damit auf das
-            # richtige Verzeichnis zugegriffen wird, daher werden die Tuples abgefragt
+            
+            # Creation of the problem strings + implementation in the LaTeX file
+            # String has to  be adjusted for every pool, so that the correct
+            # directory for each file is given
+            # This could probably be solved more elegantly, but it works for now
+        
             aufgaben_string = ""
+            
             for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
                 aufgaben_string += f"\\item\n"
                     
@@ -108,24 +111,25 @@ def generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_grupp
             with open(datei_pfad, "w+") as d:
                 d.write(datei_inhalt)
     
-            # LaTeX Datei der Aufgaben in PDF umwandeln
+            # LaTeX file of the problem is converted to PDF
             dateinamen_aufgaben_pdf.append(datei_name.replace(".tex", ".pdf"))
     
-            # Loesung
-            # Festlegung des Dateinamens und Pfades
+            # Solution
+            # Setting file name and path
             datei_name = f"ETest-{name_variante}-{test_typ.name}-{gruppe_name}-Loesung.tex"
             datei_pfad = os.path.join(latex_verzeichnis, datei_name) 
     
-            # Ersetzen der Dateiparameter in LaTeX mit Einstellungen
+            # Replacing parameters in LaTeX file
             datei_inhalt = template_loesung
             datei_inhalt = datei_inhalt.replace("__PRAKTIKUM__", titel_praktikum)
             datei_inhalt = datei_inhalt.replace("__SEMESTER__", semester)
             datei_inhalt = datei_inhalt.replace("__VERSUCH__", test_typ.name)
             datei_inhalt = datei_inhalt.replace("__GRUPPE__", gruppe_name)
     
-            # Erstellen des Loesungsstrings + Implementieren in LaTeX Datei
-            # Der String muss für jeden Pool angepasst werden, damit auf das
-            # richtige Verzeichnis zugegriffen wird, daher werden die Tuples abgefragt
+            # Creation of the solution strings + implementation in the LaTeX file
+            # String has to  be adjusted for every pool, so that the correct
+            # directory for each file is given
+            # This could probably be solved more elegantly, but it works for now
             loesung_string = ""
             for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
                 loesung_string += f"\\item\n"
@@ -159,7 +163,7 @@ def generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_grupp
             with open(datei_pfad, "w+") as d:
                 d.write(datei_inhalt)
     
-            # LaTeX Datei der Loesungen in PDF umwandeln
+            # LaTeX file of the solution converted to pdf
             dateinamen_loesungen_pdf.append(datei_name.replace(".tex", ".pdf"))
             
     return dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf

@@ -1,13 +1,4 @@
-# Dieses Skript packt alle ausgewählten Aufgaben und Loesungen der ausgewählten Pools, bzw. Einzeldateien  in eine
-# Datei und kompiliert diese in eine pdf-Datei mit dem Namen, welcher über die json Datei festgelegt wird.
-# 
-#
 # -*- coding: utf-8 -*-
-
-# Die Einstellungen, welche Aufgaben/ Pools erstellt werden sollen erfolgen in einstellungen_make_specific.json
-# Der Aufgabenname wird ohne den Suffix .tex angegeben.
-#
-# Nuetzlich zur Korrekturlesung etc.
 
 import glob
 import subprocess
@@ -63,9 +54,10 @@ def make_specific(make_all, pool, aufgabe):
         DATEINAME = "Preview_Pool_" + pool
         """
     
-    # Zusammensetzen der Liste mit den ausgewählten Aufgaben/ Pools
+    # list of problems to be created
     filenames_aufgaben = []
     
+    # if a pool is selected, all its problems will be added to the creation list
     if pool is not None:
         DATEINAME = "Preview_Pool_" + pool
         filenames_aufgaben.extend(glob.glob("Aufgaben/Pool" + pool + "/aufgabe*.tex"))
@@ -94,11 +86,13 @@ def make_specific(make_all, pool, aufgabe):
         
     if make_PoolH:
         filenames_aufgaben.extend(glob.glob("Aufgaben/PoolH/aufgabe*.tex"))"""
-        
+    
+    # if problem is provided, it is added to the preview creation list
     if aufgabe is not None:
         filenames_aufgaben.extend(glob.glob("Aufgaben/Pool*/" + aufgabe + ".tex"))
         DATEINAME = "Preview_" + aufgabe
     
+    # if make_all is selected the preview creation list contains all problems
     if make_all:
         filenames_aufgaben = glob.glob("Aufgaben/Pool*/*.tex")
         DATEINAME = "Preview_all"
@@ -113,9 +107,9 @@ def make_specific(make_all, pool, aufgabe):
         
         
         
-    #---------------Einstellungen Ende-----------------#
+    #---------------Settings End-----------------#
     
-    #-------------Erstellen der PDF Datei-------------#
+    #-------------Creation of the PDF File-------------#
     
     with open("{0}.tex".format(DATEINAME), "w", encoding="utf-8") as f:
         # Latex-Preamble
@@ -146,7 +140,7 @@ def make_specific(make_all, pool, aufgabe):
         f.write("\\graphicspath{{Latex}}\n")
         f.write("\\begin{document}\n")
     
-        # Aufgaben und Loesungen
+        # problems and solutions
         for name in filenames_aufgaben:
             name = name.replace("\\", "/")
             f.write("\\textbf{{{0}}}\n\n".format(name.replace("_", "\\_")))
@@ -155,10 +149,10 @@ def make_specific(make_all, pool, aufgabe):
             f.write("\\input{{{0}}}\n\n".format(name.replace("aufgabe", "loesung")))
             f.write("\\hrulefill\n\n\n")
     
-        # Dokumentende
+        # Document end
         f.write("\\end{document}\n")
     
-    # Kompilieren und im Erfolgsfall temporaere Dateien loeschen
+    # compiling and if successful deleting temporary data
     process = subprocess.Popen("pdflatex -interaction=nonstopmode {0}.tex".format(DATEINAME),
                                shell=True)
     process.wait()
@@ -168,9 +162,9 @@ def make_specific(make_all, pool, aufgabe):
     else:
         print("Fehler")
     
-    # Neuen Ordner erstellen, falls dieser noch nicht existiert
+    # creating new folder if not already existend
     if not os.path.isdir(specific_verzeichnis):
         os.mkdir(specific_verzeichnis)
     
-    # PDF Datei in Ordner verschieben
+    # moving pdf file to Previews directory
     shutil.move(DATEINAME + ".pdf", specific_verzeichnis)

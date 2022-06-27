@@ -31,7 +31,7 @@ def kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp
         tex_dateien = [datei for datei in os.listdir(latex_verzeichnis) if datei.endswith(".tex")]
     
         for datei in tex_dateien:
-            # pdflatex 2 mal ausfuehren, um Referenzen aufzuloesen
+            # execute pdflatex twice to resolve references
             command = f"pdflatex -interaction=batchmode {datei} && " \
                       f"pdflatex -interaction=batchmode {datei}"
             print(command)
@@ -44,7 +44,8 @@ def kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp
                 temp_dateien_loeschen = False
             else:
                 shutil.move(datei.replace(".tex", ".pdf"), test_verzeichnis)
-    
+ 
+    # Delete temporary data
     # ToDo: mit python machen!
     if temp_dateien_loeschen:
         command = 'del /Q *.dvi *.ps *.aux *.log'

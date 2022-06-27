@@ -226,24 +226,30 @@ def test_generator(args):
         
         random.seed()
         
-        # Arbeitsverzeichnis fuer den LaTeX-Compiler
+        # Working directory for the LaTeX compiler
         latex_verzeichnis = os.path.join(os.getcwd(), "Aufgaben")
         
-        # Verzeichnis mit den Vorlagen
+        # Template directory
         template_verzeichnis = os.path.join(os.getcwd(), "Templates")
         
-        # Ausgabeverzeichnis fuer die erstellten Tests (z.B. Tests-ET1-WS201920)
+        # Directory where the tests will be saved in (for example: Tests-ET1-WS201920)
         test_verzeichnis = os.path.join(os.getcwd(), "Tests-{}-{}".format(name_variante, semester).replace(
             " ", "").replace("/", ""))
         
-        # Verzeichnis mit dem LaTeX-Quellcode der Aufgaben und Loesungen
+        # Directory with the LaTeX source code for the problems (prob. unnecessary, working on it)
         poolA_verzeichnis = os.path.join(latex_verzeichnis, "poolA")
         poolB_verzeichnis = os.path.join(latex_verzeichnis, "poolB")
         poolC_verzeichnis = os.path.join(latex_verzeichnis, "poolC")
         poolD_verzeichnis = os.path.join(latex_verzeichnis, "poolD")
+        poolE_verzeichnis = os.path.join(latex_verzeichnis, "poolE")
+        poolF_verzeichnis = os.path.join(latex_verzeichnis, "poolF")
+        poolG_verzeichnis = os.path.join(latex_verzeichnis, "poolG")
+        poolH_verzeichnis = os.path.join(latex_verzeichnis, "poolH")
         
         
-        # Erstellt für jeden Pool Liste mit den Dateinamen der Aufgaben und Lösungen
+        
+        
+        # Creates a list of problem names for every pool (probably unnecessary, working on it)
         dateinamen_poolA_tex = [os.path.basename(fn) for fn in
                           glob.iglob(os.path.join(poolA_verzeichnis, "*.tex"))]
         
@@ -256,21 +262,40 @@ def test_generator(args):
         dateinamen_poolD_tex = [os.path.basename(fn) for fn in
                           glob.iglob(os.path.join(poolD_verzeichnis, "*.tex"))]
         
-        # Fügt die Liste der einzelnen Pools zusammen
-        dateinamen_tex = (dateinamen_poolA_tex + dateinamen_poolB_tex + 
-                          dateinamen_poolC_tex + dateinamen_poolD_tex)
-                        
-                                     
+        dateinamen_poolE_tex = [os.path.basename(fn) for fn in
+                          glob.iglob(os.path.join(poolE_verzeichnis, "*.tex"))]
         
-        # Grundaufgaben, die in jedem Test vorkommen.
-        # A1, B1 -> fuer fuenftes Semester RT sowie sechstes Semester MT sowie RES
-        # A2, B2 -> fuer sechstes Semester RT (benoetigt Kenntnisse aus RT 2)
+        dateinamen_poolF_tex = [os.path.basename(fn) for fn in
+                          glob.iglob(os.path.join(poolF_verzeichnis, "*.tex"))]
+        
+        dateinamen_poolG_tex = [os.path.basename(fn) for fn in
+                          glob.iglob(os.path.join(poolG_verzeichnis, "*.tex"))]
+        
+        dateinamen_poolH_tex = [os.path.basename(fn) for fn in
+                          glob.iglob(os.path.join(poolH_verzeichnis, "*.tex"))]
+        
+        
+        # combines the list of pools
+        dateinamen_tex = (dateinamen_poolA_tex + dateinamen_poolB_tex + 
+                          dateinamen_poolC_tex + dateinamen_poolD_tex +
+                          dateinamen_poolE_tex + dateinamen_poolF_tex +
+                          dateinamen_poolG_tex + dateinamen_poolH_tex)
+                        
+     #   pool_verzeichnis =  os.path.join(latex_verzeichnis, "pool*")
+        
+     #   dateinamen_tex = [os.path.basename(fn) for fn in
+     #                     glob.iglob(os.path.join(pool_verzeichnis, "*.tex"))]
+                                   
+        
+        # General problems for each test
+        # A1, B1 -> for 5th Semester RT and 6th semester MT and RES
+        # A2, B2 -> for 6th Semester RT (knowledge from RT 2 required)
         poolA1 = Pool("A1", dateinamen_tex)
         poolB1 = Pool("B1", dateinamen_tex)
         poolA2 = Pool("A2", dateinamen_tex)
         poolB2 = Pool("B2", dateinamen_tex)
         
-        # Versuchsspezifische Aufgaben fuer V1, V3, V7, V8, V15 und V21
+        # Experiment specific problems for V1, V3, V7, V8, V15 und V21
         poolCV01 = Pool("CV01", dateinamen_tex)
         poolCV03 = Pool("CV03", dateinamen_tex)
         poolCV07 = Pool("CV07", dateinamen_tex)
@@ -278,24 +303,24 @@ def test_generator(args):
         poolCV15 = Pool("CV15", dateinamen_tex)
         poolCV21 = Pool("CV21", dateinamen_tex)
         
-        # Weitere versuchsspezifische Aufgaben, falls die aus C zu kurz sind
+        # More experiment specific problems, if there is not enough from C
         poolDV07 = Pool("DV07", dateinamen_tex)
         poolDV08 = Pool("DV08", dateinamen_tex)
         poolDV15 = Pool("DV15", dateinamen_tex)
         poolDV21 = Pool("DV21", dateinamen_tex)
         
         
-        #------------Custom Testtyp/ Testliste----------------#
+        #------------Custom Testtype/ Testlist----------------#
         use_custom_test = einstellungen_dictionary['tests']['use_custom_test']
     
-        #Loads the dictionary of custom tests
+        # Loads the dictionary of custom tests
         test_types_dictionary_strings = einstellungen_dictionary['tests']['test_types']
     
-        #will be final test list 
+        # will be final test list 
         custom_test_list = []
     
-        #converts all test types (strings) to actual test types
-        #and adds them to custom test list
+        # converts all test types (strings) to actual test types
+        # and adds them to custom test list
         for i in range(test_types_dictionary_strings):
             custom_test_pools = []
             custom_test = []
@@ -311,7 +336,7 @@ def test_generator(args):
             custom_test_list.append(custom_test)
         
         
-        # Tests fuer RT1 sowie MT und RES-Praktikum
+        # Tests for RT1, MT and RES courses
         testV1 = TestTyp("V01", poolA1, poolB1, poolCV01)
         testV7 = TestTyp("V07", poolA1, poolB1, poolCV07, poolDV07)
         testV8_MT_RES = TestTyp("V08", poolA1, poolB1, poolCV08)
@@ -321,19 +346,19 @@ def test_generator(args):
         test_liste_MT = [testV21, testV8_MT_RES]
         test_liste_RES = [testV21, testV8_MT_RES, testV15_MT_RES]
         
-        # Tests fuer RT2 (6. Semester)
+        # Tests for RT2 (6th Semester)
         testV3 = TestTyp("V03", poolA2, poolB2, poolCV03)
         testV8_ET = TestTyp("V08", poolA2, poolB2, poolCV08)
         testV15_ET = TestTyp("V15", poolA2, poolB2, poolCV15, poolDV15)
         test_liste_ET2 = [testV3, testV8_ET, testV15_ET]
         
-        # Zum debuggen
+        # for debugging
         pool_all = Pool(".*", dateinamen_tex)
         test_all = TestTyp("VX", *[pool_all for i in range(len(pool_all.stapel_verfuegbar))])
         test_liste_all = [test_all]
         # --------------
         
-        # Zuweisung der Testlisten zu den jeweiligen Praktika
+        # Assigning test lists to given variants
         if name_variante == "ET1":
             titel_praktikum = "Praktikum Regelungstechnik 1 (ET)"
             test_liste_variante = test_liste_ET1
@@ -352,7 +377,7 @@ def test_generator(args):
             titel_praktikum = ""
             quit()
             
-        # Falls ein custom Test benutzt werden soll
+        # If a custom test is used
         if use_custom_test:
             titel_praktikum = f"Praktikum-{name_variante}"
             test_liste_variante = custom_test_list
@@ -367,19 +392,20 @@ def test_generator(args):
         test_saetze_pro_gruppe = kombination_aufgaben(anzahl_gruppen, test_liste_variante)
         
         # ==================================
-        # --- Generieren der TeX-Dateien ---
+        # --- Generating the TeX-Files ---
         # ==================================
         
         from Module import generieren_tex_dateien
         
-        # Erstellung des Tuples aus den Listen dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf für Verarbeitung in Sumo
+        # Creating the the tuple which contains the pdf names of the problems and solutions
+        # for more info view the module
         namen_aufg_loesungen_pdf = generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_gruppen, test_liste_variante,
                                name_variante, titel_praktikum, semester, test_saetze_pro_gruppe)
      
         
         
         # ===================
-        # --- Kompilieren ---
+        # --- Compiling ---
         # ===================
         from Module import kompilieren
         

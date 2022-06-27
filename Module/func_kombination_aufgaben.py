@@ -23,8 +23,8 @@ def kombination_aufgaben(anzahl_gruppen, test_liste_variante):
    
    for i in range(anzahl_gruppen):
        test_satz = []
-   
-       # Fuer jeden Test aus jedem Pool Aufgaben ziehen
+       
+       # For each test from every pool a problem is pulled
        for test_typ in test_liste_variante:
            aufg_loes = []
    
@@ -32,8 +32,8 @@ def kombination_aufgaben(anzahl_gruppen, test_liste_variante):
                aufg_loes.append(pool.ziehen())
    
            test_satz.append(aufg_loes)
-   
-       # Fuer jeden genutzten Pool die gezogenen Aufgaben ablegen
+    
+       # Sets aside the used problems of each pool
        for test_typ in test_liste_variante:
            for pool in test_typ.pools:
                pool.ablegen()
