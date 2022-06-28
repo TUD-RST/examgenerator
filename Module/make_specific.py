@@ -21,38 +21,6 @@ def make_specific(make_all, pool, aufgabe):
         
         * aufgabe:
             File name of the problem to be made"""
-     
-    """        
-    # Default
-    make_PoolA = False
-    make_PoolB = False
-    make_PoolC = False
-    make_PoolD = False
-    make_PoolE = False
-    make_PoolF = False
-    make_PoolG = False
-    make_PoolH = False
-    
-    if pool is not None:
-        if pool == "A":
-           make_PoolA = True
-        elif pool == "B":
-            make_PoolB = True
-        elif pool == "C":
-            make_PoolC = True
-        elif pool == "D":
-            make_PoolD = True
-        elif pool == "E":
-            make_PoolE = True
-        elif pool == "F":
-            make_PoolF = True
-        elif pool == "G":
-            make_PoolG = True
-        elif pool == "H":
-            make_PoolH = True
-          
-        DATEINAME = "Preview_Pool_" + pool
-        """
     
     # list of problems to be created
     filenames_aufgaben = []
@@ -61,31 +29,6 @@ def make_specific(make_all, pool, aufgabe):
     if pool is not None:
         DATEINAME = "Preview_Pool_" + pool
         filenames_aufgaben.extend(glob.glob("Aufgaben/Pool" + pool + "/aufgabe*.tex"))
-        
-        """ 
-    if make_PoolA:
-        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolA/aufgabe*.tex"))
-    
-    if make_PoolB:
-        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolB/aufgabe*.tex"))
-    
-    if make_PoolC:
-        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolC/aufgabe*.tex"))
-        
-    if make_PoolD:
-        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolD/aufgabe*.tex"))
-        
-    if make_PoolE:
-        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolE/aufgabe*.tex"))
-        
-    if make_PoolF:
-        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolF/aufgabe*.tex"))
-        
-    if make_PoolG:
-        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolG/aufgabe*.tex"))
-        
-    if make_PoolH:
-        filenames_aufgaben.extend(glob.glob("Aufgaben/PoolH/aufgabe*.tex"))"""
     
     # if problem is provided, it is added to the preview creation list
     if aufgabe is not None:

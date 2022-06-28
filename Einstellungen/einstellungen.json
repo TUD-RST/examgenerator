@@ -8,13 +8,13 @@
     "sumo_seiten_pro_blatt_test": 4,
     "sumo_kopien_pro_test": 4,
     "sumo_seiten_pro_blatt_loesung": 4,
-    "sumo_kopien_pro_loesung": 1
+    "sumo_kopien_pro_loesung": 1,
   },
   
   "loeschen_daten": {
     "generiere_einzel_pdfs": true,
     "generiere_sumo_pdf": true,
-    "temp_dateien_loeschen": true
+    "temp_dateien_loeschen": true,
   },
   
   "tests": 
@@ -25,7 +25,7 @@
     {
         "test_typ0": ["Test", "A1", "B1", "B2", "CV03"],
         "test_typ1": ["Test2", "A1", "B1", "B1"],
-        "test_typ2": ["Test3", "B2", "B1", "CV03"]
+        "test_typ2": ["Test3", "B2", "B1", "CV03"],
     },
-  }
+  },
 }
