@@ -163,53 +163,52 @@ def test_generator(args):
             Name of the problem the user would like to create a preview for
     """
     if args.create_test is not None:
-        # ================ Einstellungen =============================
+        # ================ Settings =============================
         
         #%% click on the left to view options
         
-        # Die Einstellungen werden ueber die einstellungen.json Datei festgelegt und dann in Python verarbeitet
-        # Hier keine Veraenderung der Einstellungen!
-        einstellungen = args.creat_test
+        # Settings are adjusted in the settings json files in the Einstellungen directory and then loaded into Python
+        # No change of settings in this program!
+        einstellungen = args.create_test
         
-        path_einstellungen = os.path.join(os.getcwd(), "Einstellungen", einstellungen)
+        path_einstellungen = os.path.join(os.getcwd(), "Einstellungen", str(einstellungen))
         
-        # Laden der Einstellungen aus json Datei in ein Python Dictionary
+        # Loading the json settings into a Python dictionary
         with open(path_einstellungen, 'r') as json_datei:
             einstellungen_dictionary = json.load(json_datei)
         
-        # Festlegung, wie viele Gruppenpaare erzeugt werden sollen
-        # z.B. 6: Gruppen 01 bis 12
-        # 01+02, 03+04, etc. haben dann jeweils die gleichen Aufgaben
+        # Determines the amount of group pairs
+        # for example:  6 => group pairs 01-12
+        # 01+02, 03+04, ..., have the same problems
         anzahl_gruppen = einstellungen_dictionary['anzahl_gruppen']
         
-        # Studiengang, fuer den erzeugt werden soll.
-        # Moegliche Optionen: ET1, ET2, MT, RES
+        # Degree for which the test is created
+        # Prefactored options: ET1, ET2, MT, RES
         name_variante = einstellungen_dictionary['name_variante']
         
         # Semester
         semester = einstellungen_dictionary['semester']
         
         # SUMO-pdf:
-        # Datei, die saemtliche Tests des Semesters zum Ausdruck enthÃ¤lt
-        # Dann kann man zu Beginn des Semesters gleich alles auf einen
-        # Schwung erzeugen und an die Betreuer verteilen
+        # File contains all tests for the entire semester
+        # Creates the test for the whole smester in one go
         sumo_seiten_pro_blatt_test = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_test']  
-        # 4 = Ausdruck doppelseitig A5
+        # 4 = printing double paged A5
         
         sumo_kopien_pro_test = einstellungen_dictionary['sumo']['sumo_kopien_pro_test']  
-        # Muss der Anzahl der Mitglieder pro Doppelgruppe entsprechen
+        # Has to match the number of participants per groups
         
         sumo_seiten_pro_blatt_loesung = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_loesung']
         sumo_kopien_pro_loesung = einstellungen_dictionary['sumo']['sumo_kopien_pro_loesung']
         
-        # Einstellungen, was erzeugt und geloescht werden soll.
+        # Settings of what should be created and deleted
         generiere_einzel_pdfs = einstellungen_dictionary['loeschen_daten']['generiere_einzel_pdfs']
         generiere_sumo_pdf = einstellungen_dictionary['loeschen_daten']['generiere_sumo_pdf']
         temp_dateien_loeschen = einstellungen_dictionary['loeschen_daten']['temp_dateien_loeschen']
         #%%
         
         # ==================================
-        # --- Klassen ---
+        # --- Classes ---
         # ==================================
         
         
@@ -219,7 +218,7 @@ def test_generator(args):
       
         
         # ==================================
-        # --- Konfiguration ---
+        # --- Configuration ---
         # ==================================
         
         #%% click on the left to view configurations

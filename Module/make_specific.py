@@ -6,7 +6,7 @@ import os
 import shutil
 from pathlib import Path
 
-#-----------------Einstellungen--------------------#
+#-----------------Settings--------------------#
 def make_specific(make_all, pool, aufgabe):
     """
     This Function creates previews for given pools/ problems or all.
