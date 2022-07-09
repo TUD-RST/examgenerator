@@ -310,10 +310,10 @@ def test_generator(args):
         
         
         #------------Custom Testtype/ Testlist----------------#
-        use_custom_test = einstellungen_dictionary['tests']['use_custom_test']
+        use_custom_test = einstellungen_dictionary['use_custom_test']
     
         # Loads the dictionary of custom tests
-        test_types_dictionary_strings = einstellungen_dictionary['tests']['test_types']
+        test_types_dictionary_strings = einstellungen_dictionary['test_types']
     
         # will be final test list 
         custom_test_list = []
