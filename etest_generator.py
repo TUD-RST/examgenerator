@@ -320,12 +320,12 @@ def test_generator(args):
     
         # converts all test types (strings) to actual test types
         # and adds them to custom test list
-        for i in range(test_types_dictionary_strings):
+        for test_types in test_types_dictionary_strings:
             custom_test_pools = []
             custom_test = []
-            test_typ = test_types_dictionary_strings.get('test_typ' + str(i))
+            test_typ = test_types_dictionary_strings.get(str(test_types))
             custom_test_name = test_typ[0]
-            test_typ = test_typ.pop(0)
+            del test_typ[0]
             
             for a in range(len(test_typ)):
                 custom_test_pools.append(Pool(test_typ[a], dateinamen_tex))
