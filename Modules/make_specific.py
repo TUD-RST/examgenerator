@@ -28,16 +28,16 @@ def make_specific(make_all, pool, aufgabe):
     # if a pool is selected, all its problems will be added to the creation list
     if pool is not None:
         DATEINAME = "Preview_Pool_" + pool
-        filenames_aufgaben.extend(glob.glob("Aufgaben/Pool" + pool + "/aufgabe*.tex"))
+        filenames_aufgaben.extend(glob.glob("Problems/Pool" + pool + "/aufgabe*.tex"))
     
     # if problem is provided, it is added to the preview creation list
     if aufgabe is not None:
-        filenames_aufgaben.extend(glob.glob("Aufgaben/Pool*/" + aufgabe + ".tex"))
+        filenames_aufgaben.extend(glob.glob("Problems/Pool*/" + aufgabe + ".tex"))
         DATEINAME = "Preview_" + aufgabe
     
     # if make_all is selected the preview creation list contains all problems
     if make_all:
-        filenames_aufgaben = glob.glob("Aufgaben/Pool*/*.tex")
+        filenames_aufgaben = glob.glob("Problems/Pool*/*.tex")
         DATEINAME = "Preview_all"
     
     specific_verzeichnis = os.path.join(os.getcwd(), "Previews")
@@ -45,7 +45,7 @@ def make_specific(make_all, pool, aufgabe):
     # veraendert den Namen der Datei, falls bereits eine gleichbenannte vorhanden ist
     i = 1
     while Path(os.path.join(specific_verzeichnis, DATEINAME + ".pdf")).is_file():
-        DATEINAME = DATEINAME + "_" + str(i)
+        DATEINAME = DATEINAME[:-1] + str(i)
         i += 1
         
         
