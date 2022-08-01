@@ -43,11 +43,11 @@ afterwards.
 There is the following options for the test creation, which can be configured in a
 json settings file:
     
-    * anzahl_gruppen:
+    * group_pairs:
         Determines the amount of group pairs
         for example:  6 => group pairs 01-12
         
-    * name_variante:
+    * variant_name:
         Name of the variant/ degree the test is created for 
         There already exists prefactored tests for:
             * ET1
@@ -60,22 +60,25 @@ json settings file:
         Current Semester
         for example: WS 2021/22
     
-    * sumo_seiten_pro_blatt_test:
+    * pages_per_page_test:
         4 - double paged A5
     
-    * sumo_kopien_pro_test:
+    * sumo_number_copies:
        Number of copies per test
     
-    * sumo_seiten_pro_blatt_loesung:
+    * pages_per_page_solution:
         4 - double paged A5
     
-    * generiere_einzel_pdf:
+    * sumo_solution_copies:
+        Number of solution copies
+    
+    * generate_single_pdfs:
         Should individual pdf files be created for each problem/ solution (true/ false)
     
-    * generiere_sumo_pdf:
+    * generate_sumo_pdf:
         Should a sumo-file be created (true/ false)
     
-    * temp_dateien_loeschen:
+    * delete_temp_data:
         Should temporary data be deleted (true; false)
         true is recommendet unless there is issues with compiling
     
@@ -84,12 +87,10 @@ json settings file:
         If you would like to use a prefactored test, this setting has to be on false!
         
         If you would like to create a custom test, you will have to provide the test types
-        as lists in the json settings file. If you only provide one test type, that one will
-        be used. If you provide multiple, the script will choose randomly from them.
+        as lists in the json settings file. 
         The first argument of the list is the name of the test type and all following arguments
-        are the pools to be used for the test. When adding another test type it is important
-        to following the ascending nomenclature in the test_types dictionary. For more info
-        you can have a look at the settings template under Einstellungen/einstellungen.json
+        are the pools to be used for the test.
+        
         
 
 Calling Syntax:
@@ -171,7 +172,7 @@ def test_generator(args):
         # No change of settings in this program!
         einstellungen = args.create_test
         
-        path_einstellungen = os.path.join(os.getcwd(), "Einstellungen", str(einstellungen))
+        path_einstellungen = os.path.join(os.getcwd(), "Settings", str(einstellungen))
         
         # Loading the json settings into a Python dictionary
         with open(path_einstellungen, 'r') as json_datei:
@@ -180,11 +181,11 @@ def test_generator(args):
         # Determines the amount of group pairs
         # for example:  6 => group pairs 01-12
         # 01+02, 03+04, ..., have the same problems
-        anzahl_gruppen = einstellungen_dictionary['anzahl_gruppen']
+        anzahl_gruppen = einstellungen_dictionary['group_pairs']
         
         # Degree for which the test is created
         # Prefactored options: ET1, ET2, MT, RES
-        name_variante = einstellungen_dictionary['name_variante']
+        name_variante = einstellungen_dictionary['variant_name']
         
         # Semester
         semester = einstellungen_dictionary['semester']
@@ -192,19 +193,19 @@ def test_generator(args):
         # SUMO-pdf:
         # File contains all tests for the entire semester
         # Creates the test for the whole smester in one go
-        sumo_seiten_pro_blatt_test = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_test']  
+        sumo_seiten_pro_blatt_test = einstellungen_dictionary['sumo']['pages_per_page_test']  
         # 4 = printing double paged A5
         
-        sumo_kopien_pro_test = einstellungen_dictionary['sumo']['sumo_kopien_pro_test']  
+        sumo_kopien_pro_test = einstellungen_dictionary['sumo']['sumo_number_copies']  
         # Has to match the number of participants per groups
         
-        sumo_seiten_pro_blatt_loesung = einstellungen_dictionary['sumo']['sumo_seiten_pro_blatt_loesung']
-        sumo_kopien_pro_loesung = einstellungen_dictionary['sumo']['sumo_kopien_pro_loesung']
+        sumo_seiten_pro_blatt_loesung = einstellungen_dictionary['sumo']['pages_per_page_solution']
+        sumo_kopien_pro_loesung = einstellungen_dictionary['sumo']['sumo_solution_copies']
         
         # Settings of what should be created and deleted
-        generiere_einzel_pdfs = einstellungen_dictionary['loeschen_daten']['generiere_einzel_pdfs']
-        generiere_sumo_pdf = einstellungen_dictionary['loeschen_daten']['generiere_sumo_pdf']
-        temp_dateien_loeschen = einstellungen_dictionary['loeschen_daten']['temp_dateien_loeschen']
+        generiere_einzel_pdfs = einstellungen_dictionary['data']['generate_single_pdfs']
+        generiere_sumo_pdf = einstellungen_dictionary['data']['generate_sumo_pdf']
+        temp_dateien_loeschen = einstellungen_dictionary['data']['delete_temp_data']
         #%%
         
         # ==================================
@@ -212,9 +213,9 @@ def test_generator(args):
         # ==================================
         
         
-        from Module import Pool
+        from Modules import Pool
         
-        from Module import TestTyp
+        from Modules import TestTyp
       
         
         # ==================================
@@ -226,7 +227,7 @@ def test_generator(args):
         random.seed()
         
         # Working directory for the LaTeX compiler
-        latex_verzeichnis = os.path.join(os.getcwd(), "Aufgaben")
+        latex_verzeichnis = os.path.join(os.getcwd(), "Problems")
         
         # Template directory
         template_verzeichnis = os.path.join(os.getcwd(), "Templates")
@@ -386,7 +387,7 @@ def test_generator(args):
         # --- Kombination der Aufgaben ---
         # ================================
         
-        from Module import kombination_aufgaben
+        from Modules import kombination_aufgaben
         
         test_saetze_pro_gruppe = kombination_aufgaben(anzahl_gruppen, test_liste_variante)
         
@@ -394,7 +395,7 @@ def test_generator(args):
         # --- Generating the TeX-Files ---
         # ==================================
         
-        from Module import generieren_tex_dateien
+        from Modules import generieren_tex_dateien
         
         # Creating the the tuple which contains the pdf names of the problems and solutions
         # for more info view the module
@@ -406,7 +407,7 @@ def test_generator(args):
         # ===================
         # --- Compiling ---
         # ===================
-        from Module import kompilieren
+        from Modules import kompilieren
         
         kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp_dateien_loeschen)
     
@@ -416,7 +417,7 @@ def test_generator(args):
         # ==================================
         
         
-        from Module import baue_sumo
+        from Modules import baue_sumo
         
         if generiere_sumo_pdf:
             namen_aufg_loesungen_pdf[0].sort()
@@ -437,7 +438,7 @@ def test_generator(args):
     # --- Make-Specific ---
     # ==================================
    
-    from Module import make_specific
+    from Modules import make_specific
     
     if args.make_all or args.make_pool or args.make_specific:
         make_specific(args.make_all, args.make_pool, args.make_specific)

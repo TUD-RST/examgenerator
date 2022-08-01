@@ -9,11 +9,11 @@
 /Tests-ET1-SS2022
 /Tests-ET1-WS202223
 /Previews
-/Einstellungen/*.json
+/Settings/*.json
 
-!/Aufgaben/poolA
-!/Aufgaben/poolB
-!/Aufgaben/poolC
-!/Aufgaben/poolD
-!/Module
-!/Einstellungen/einstellungen.json
+!/Problems/poolA
+!/Problems/poolB
+!/Problems/poolC
+!/Problems/poolD
+!/Modules
+!/Settings/settings_template.json

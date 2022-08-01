@@ -3,45 +3,43 @@ from warnings import warn
 import re
 
 class Pool:
-    """Repraesentiert die einzelnen Pools mit den dazugehoerigen Aufgaben.
+    """Represents each pool with its corresponding problems.
     
-    Konstruktion:
+    Construction:
             
             >>> Pool(name, dateinamen_tex)
             
             * name:
-                Der Name des Pools
+                name of the pool
                 
             * dateinamen_tex:
-                Liste aller Latex Aufgaben-Loesung-Dateinamen"""
+                list of all Problem-Solution-file names"""
             
     
     def __init__(self, name, dateinamen_tex):
-        """Instanziert einen neuen Pool
+        """creates new pool instance
         
         * name:
-            Der Name des Pools z.B. A1, CV21, DV07
+            name of the pool for example: A1, CV21, DV07
             
         * dateinamen_tex:
-            Liste aller Latex Aufgaben-Loesung-Dateinamen"""
+            list of all Problem-Solution-file names"""
                
         self.name = name
 
         self.stapel_verfuegbar = []
         """
-        [(dateiname_aufgabe, dateiname_loesung)]; Zur Auswahl verfuegbare Aufgaben
+        [(dateiname_aufgabe, dateiname_loesung)]; problems that can be chosen from
         """
 
         self.stapel_gezogen = []
         """
-        [(dateiname_aufgabe, dateiname_loesung)]; Aufgaben, die fuer die aktuelle Gruppe gezogen 
-        wurden
+        [(dateiname_aufgabe, dateiname_loesung)]; selected problems for corresponding group
         """
 
         self.stapel_ablage = []
         """
-        [(dateiname_aufgabe, dateiname_loesung)]; Aufgaben, die von den letzten Gruppen gezogen 
-        wurden
+        [(dateiname_aufgabe, dateiname_loesung)]; problems which were pulled by last group
         """
         # Erstellt eine Liste mit allen Aufgaben aus gefragten Pool
         aufgaben_regex = re.compile(f"^aufgabe_{name}_\\d+\\.tex$")
@@ -50,7 +48,7 @@ class Pool:
         
         # Ueberpruefung, ob es im Pool Aufgaben mit dazugehörigen Loesungen gibt
         if len(dateinamen_pool_aufgaben) == 0:
-            warn(f"Keine Aufgaben im Pool {self.name} gefunden")
+            warn(f"The is no more problems available in Pool {self.name}")
 
         # Sucht nach der Loesung zur jeweiligen Aufgabe
         for datei in dateinamen_pool_aufgaben:
@@ -62,10 +60,10 @@ class Pool:
 
             # Warnung, falls keine passende Loesung gefunden
             else:
-                warn(f"{datei} besitzt keine passende Loesungsdatei {datei_loesung}")
+                warn(f"{datei} does not have a corresponding solution file {datei_loesung}")
 
     def ziehen(self):
-        """Zieht eine zufaellige Aufgabe + Loesung eines Pools"""
+        """Pulls a random problem + solution from the pool"""
         if len(self.stapel_verfuegbar) == 0:
             # Stapel mit verfuegbaren Aufgaben ist leer,
             # Ablagestapel wird zum neuen verfuegbaren Stapel
@@ -75,7 +73,7 @@ class Pool:
                 self.stapel_ablage = []
             else:
                 raise RuntimeError(
-                    f"Pool {self.name} ist erschoepft, Aufgaben wuerden sich in Gruppe wiederholen")
+                    f"Pool {self.name} ist echausted, problems might repeat within the group")
         # Zufaellige Auswahl einer Aufgabe+Loesung aus verfuegbaren Stapel
         aufg_loes = self.stapel_verfuegbar.pop(random.randint(0, len(self.stapel_verfuegbar) - 1))
         self.stapel_gezogen.append(aufg_loes)
@@ -83,7 +81,7 @@ class Pool:
         return aufg_loes
 
     def ablegen(self):
-        """Legt alle gezogen Aufgaben auf den Ablagestapel"""
+        """Discards all pulled problems to the discard pile"""
         self.stapel_ablage.extend(self.stapel_gezogen)
         self.stapel_gezogen = []
 
