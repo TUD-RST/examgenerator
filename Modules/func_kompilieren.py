@@ -48,7 +48,7 @@ def kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp
     # Delete temporary data
     # ToDo: mit python machen!
     if temp_dateien_loeschen:
-        command = 'del /Q *.dvi *.ps *.aux *.log'
+        command = 'del /Q *.dvi *.ps *.aux *.log *.tex'
         print(command)
         process = subprocess.Popen(command, shell=True)
         process.wait()
