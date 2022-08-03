@@ -5,6 +5,7 @@ import subprocess
 import os
 import shutil
 from pathlib import Path
+from warnings import warn
 
 #-----------------Settings--------------------#
 def make_specific(make_all, pool, aufgabe):
@@ -45,7 +46,13 @@ def make_specific(make_all, pool, aufgabe):
     # veraendert den Namen der Datei, falls bereits eine gleichbenannte vorhanden ist
     i = 1
     while Path(os.path.join(specific_verzeichnis, DATEINAME + ".pdf")).is_file():
-        DATEINAME = DATEINAME[:-1] + str(i)
+        if i > 10:
+            DATEINAME = DATEINAME[:-2] + str(i)
+        if i > 100:
+            warn("Maximum amount of previews for a single file is reached. Please delete unnecessary files.")
+            quit()
+        if i < 11:
+            DATEINAME = DATEINAME[:-1] + str(i)
         i += 1
         
         
