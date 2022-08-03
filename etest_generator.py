@@ -148,94 +148,102 @@ import textwrap as tw
 def test_generator(args):
     """
     Main function which combines all modules of this program.
-    
+
     Parameters:
-        
+
         * args.create_test:
             Would the user like to create a test
-        
+
         * args.make_all:
             Would the user like to create a preview for all problems
-        
+
         * args.make_pool
             Pool which the user would like to create a preview for
-        
+
         * args.make_specific
             Name of the problem the user would like to create a preview for
     """
     if args.create_test is not None:
         # ================ Settings =============================
-        
+
         #%% click on the left to view options
-        
+
         # Settings are adjusted in the settings json files in the Einstellungen directory and then loaded into Python
         # No change of settings in this program!
         einstellungen = args.create_test
-        
+
         path_einstellungen = os.path.join(os.getcwd(), "Settings", str(einstellungen))
-        
+
         # Loading the json settings into a Python dictionary
-        with open(path_einstellungen, 'r') as json_datei:
+        with open(path_einstellungen, "r") as json_datei:
             einstellungen_dictionary = json.load(json_datei)
-        
+
         # Determines the amount of group pairs
         # for example:  6 => group pairs 01-12
         # 01+02, 03+04, ..., have the same problems
-        anzahl_gruppen = einstellungen_dictionary['group_pairs']
-        
+        anzahl_gruppen = einstellungen_dictionary["group_pairs"]
+
         # Degree for which the test is created
         # Prefactored options: ET1, ET2, MT, RES
-        name_variante = einstellungen_dictionary['variant_name']
-        
+        name_variante = einstellungen_dictionary["variant_name"]
+
         # Semester
-        semester = einstellungen_dictionary['semester']
-        
+        semester = einstellungen_dictionary["semester"]
+
         # SUMO-pdf:
         # File contains all tests for the entire semester
         # Creates the test for the whole smester in one go
-        sumo_seiten_pro_blatt_test = einstellungen_dictionary['sumo']['pages_per_page_test']  
+        sumo_seiten_pro_blatt_test = einstellungen_dictionary["sumo"][
+            "pages_per_page_test"
+        ]
         # 4 = printing double paged A5
-        
-        sumo_kopien_pro_test = einstellungen_dictionary['sumo']['sumo_number_copies']  
+
+        sumo_kopien_pro_test = einstellungen_dictionary["sumo"]["sumo_number_copies"]
         # Has to match the number of participants per groups
-        
-        sumo_seiten_pro_blatt_loesung = einstellungen_dictionary['sumo']['pages_per_page_solution']
-        sumo_kopien_pro_loesung = einstellungen_dictionary['sumo']['sumo_solution_copies']
-        
+
+        sumo_seiten_pro_blatt_loesung = einstellungen_dictionary["sumo"][
+            "pages_per_page_solution"
+        ]
+        sumo_kopien_pro_loesung = einstellungen_dictionary["sumo"][
+            "sumo_solution_copies"
+        ]
+
         # Settings of what should be created and deleted
-        generiere_einzel_pdfs = einstellungen_dictionary['data']['generate_single_pdfs']
-        generiere_sumo_pdf = einstellungen_dictionary['data']['generate_sumo_pdf']
-        temp_dateien_loeschen = einstellungen_dictionary['data']['delete_temp_data']
+        generiere_einzel_pdfs = einstellungen_dictionary["data"]["generate_single_pdfs"]
+        generiere_sumo_pdf = einstellungen_dictionary["data"]["generate_sumo_pdf"]
+        temp_dateien_loeschen = einstellungen_dictionary["data"]["delete_temp_data"]
         #%%
-        
+
         # ==================================
         # --- Classes ---
         # ==================================
-        
-        
+
         from Modules import Pool
-        
+
         from Modules import TestTyp
-      
-        
+
         # ==================================
         # --- Configuration ---
         # ==================================
-        
+
         #%% click on the left to view configurations
-        
+
         random.seed()
-        
+
         # Working directory for the LaTeX compiler
         latex_verzeichnis = os.path.join(os.getcwd(), "Problems")
-        
+
         # Template directory
         template_verzeichnis = os.path.join(os.getcwd(), "Templates")
-        
+
         # Directory where the tests will be saved in (for example: Tests-ET1-WS201920)
-        test_verzeichnis = os.path.join(os.getcwd(), "Tests-{}-{}".format(name_variante, semester).replace(
-            " ", "").replace("/", ""))
-        
+        test_verzeichnis = os.path.join(
+            os.getcwd(),
+            "Tests-{}-{}".format(name_variante, semester)
+            .replace(" ", "")
+            .replace("/", ""),
+        )
+
         # Directory with the LaTeX source code for the problems (prob. unnecessary, working on it)
         poolA_verzeichnis = os.path.join(latex_verzeichnis, "poolA")
         poolB_verzeichnis = os.path.join(latex_verzeichnis, "poolB")
@@ -245,48 +253,65 @@ def test_generator(args):
         poolF_verzeichnis = os.path.join(latex_verzeichnis, "poolF")
         poolG_verzeichnis = os.path.join(latex_verzeichnis, "poolG")
         poolH_verzeichnis = os.path.join(latex_verzeichnis, "poolH")
-        
-        
-        
-        
+
         # Creates a list of problem names for every pool (probably unnecessary, working on it)
-        dateinamen_poolA_tex = [os.path.basename(fn) for fn in
-                          glob.iglob(os.path.join(poolA_verzeichnis, "*.tex"))]
-        
-        dateinamen_poolB_tex = [os.path.basename(fn) for fn in
-                          glob.iglob(os.path.join(poolB_verzeichnis, "*.tex"))]
-        
-        dateinamen_poolC_tex = [os.path.basename(fn) for fn in
-                          glob.iglob(os.path.join(poolC_verzeichnis, "*.tex"))]
-        
-        dateinamen_poolD_tex = [os.path.basename(fn) for fn in
-                          glob.iglob(os.path.join(poolD_verzeichnis, "*.tex"))]
-        
-        dateinamen_poolE_tex = [os.path.basename(fn) for fn in
-                          glob.iglob(os.path.join(poolE_verzeichnis, "*.tex"))]
-        
-        dateinamen_poolF_tex = [os.path.basename(fn) for fn in
-                          glob.iglob(os.path.join(poolF_verzeichnis, "*.tex"))]
-        
-        dateinamen_poolG_tex = [os.path.basename(fn) for fn in
-                          glob.iglob(os.path.join(poolG_verzeichnis, "*.tex"))]
-        
-        dateinamen_poolH_tex = [os.path.basename(fn) for fn in
-                          glob.iglob(os.path.join(poolH_verzeichnis, "*.tex"))]
-        
-        
+        dateinamen_poolA_tex = [
+            os.path.basename(fn)
+            for fn in glob.iglob(os.path.join(poolA_verzeichnis, "*.tex"))
+        ]
+
+        dateinamen_poolB_tex = [
+            os.path.basename(fn)
+            for fn in glob.iglob(os.path.join(poolB_verzeichnis, "*.tex"))
+        ]
+
+        dateinamen_poolC_tex = [
+            os.path.basename(fn)
+            for fn in glob.iglob(os.path.join(poolC_verzeichnis, "*.tex"))
+        ]
+
+        dateinamen_poolD_tex = [
+            os.path.basename(fn)
+            for fn in glob.iglob(os.path.join(poolD_verzeichnis, "*.tex"))
+        ]
+
+        dateinamen_poolE_tex = [
+            os.path.basename(fn)
+            for fn in glob.iglob(os.path.join(poolE_verzeichnis, "*.tex"))
+        ]
+
+        dateinamen_poolF_tex = [
+            os.path.basename(fn)
+            for fn in glob.iglob(os.path.join(poolF_verzeichnis, "*.tex"))
+        ]
+
+        dateinamen_poolG_tex = [
+            os.path.basename(fn)
+            for fn in glob.iglob(os.path.join(poolG_verzeichnis, "*.tex"))
+        ]
+
+        dateinamen_poolH_tex = [
+            os.path.basename(fn)
+            for fn in glob.iglob(os.path.join(poolH_verzeichnis, "*.tex"))
+        ]
+
         # combines the list of pools
-        dateinamen_tex = (dateinamen_poolA_tex + dateinamen_poolB_tex + 
-                          dateinamen_poolC_tex + dateinamen_poolD_tex +
-                          dateinamen_poolE_tex + dateinamen_poolF_tex +
-                          dateinamen_poolG_tex + dateinamen_poolH_tex)
-                        
-     #   pool_verzeichnis =  os.path.join(latex_verzeichnis, "pool*")
-        
-     #   dateinamen_tex = [os.path.basename(fn) for fn in
-     #                     glob.iglob(os.path.join(pool_verzeichnis, "*.tex"))]
-                                   
-        
+        dateinamen_tex = (
+            dateinamen_poolA_tex
+            + dateinamen_poolB_tex
+            + dateinamen_poolC_tex
+            + dateinamen_poolD_tex
+            + dateinamen_poolE_tex
+            + dateinamen_poolF_tex
+            + dateinamen_poolG_tex
+            + dateinamen_poolH_tex
+        )
+
+        #   pool_verzeichnis =  os.path.join(latex_verzeichnis, "pool*")
+
+        #   dateinamen_tex = [os.path.basename(fn) for fn in
+        #                     glob.iglob(os.path.join(pool_verzeichnis, "*.tex"))]
+
         # General problems for each test
         # A1, B1 -> for 5th Semester RT and 6th semester MT and RES
         # A2, B2 -> for 6th Semester RT (knowledge from RT 2 required)
@@ -294,7 +319,7 @@ def test_generator(args):
         poolB1 = Pool("B1", dateinamen_tex)
         poolA2 = Pool("A2", dateinamen_tex)
         poolB2 = Pool("B2", dateinamen_tex)
-        
+
         # Experiment specific problems for V1, V3, V7, V8, V15 und V21
         poolCV01 = Pool("CV01", dateinamen_tex)
         poolCV03 = Pool("CV03", dateinamen_tex)
@@ -302,23 +327,22 @@ def test_generator(args):
         poolCV08 = Pool("CV08", dateinamen_tex)
         poolCV15 = Pool("CV15", dateinamen_tex)
         poolCV21 = Pool("CV21", dateinamen_tex)
-        
+
         # More experiment specific problems, if there is not enough from C
         poolDV07 = Pool("DV07", dateinamen_tex)
         poolDV08 = Pool("DV08", dateinamen_tex)
         poolDV15 = Pool("DV15", dateinamen_tex)
         poolDV21 = Pool("DV21", dateinamen_tex)
-        
-        
-        #------------Custom Testtype/ Testlist----------------#
-        use_custom_test = einstellungen_dictionary['use_custom_test']
-    
+
+        # ------------Custom Testtype/ Testlist----------------#
+        use_custom_test = einstellungen_dictionary["use_custom_test"]
+
         # Loads the dictionary of custom tests
-        test_types_dictionary_strings = einstellungen_dictionary['test_types']
-    
-        # will be final test list 
+        test_types_dictionary_strings = einstellungen_dictionary["test_types"]
+
+        # will be final test list
         custom_test_list = []
-    
+
         # converts all test types (strings) to actual test types
         # and adds them to custom test list
         for test_types in test_types_dictionary_strings:
@@ -327,15 +351,14 @@ def test_generator(args):
             test_typ = test_types_dictionary_strings.get(str(test_types))
             custom_test_name = test_typ[0]
             del test_typ[0]
-            
+
             for a in range(len(test_typ)):
                 custom_test_pools.append(Pool(test_typ[a], dateinamen_tex))
-             
+
             custom_test = TestTyp(custom_test_name, *custom_test_pools)
-            
+
             custom_test_list.append(custom_test)
-        
-        
+
         # Tests for RT1, MT and RES courses
         testV1 = TestTyp("V01", poolA1, poolB1, poolCV01)
         testV7 = TestTyp("V07", poolA1, poolB1, poolCV07, poolDV07)
@@ -345,19 +368,21 @@ def test_generator(args):
         test_liste_ET1 = [testV1, testV7, testV21]
         test_liste_MT = [testV21, testV8_MT_RES]
         test_liste_RES = [testV21, testV8_MT_RES, testV15_MT_RES]
-        
+
         # Tests for RT2 (6th Semester)
         testV3 = TestTyp("V03", poolA2, poolB2, poolCV03)
         testV8_ET = TestTyp("V08", poolA2, poolB2, poolCV08)
         testV15_ET = TestTyp("V15", poolA2, poolB2, poolCV15, poolDV15)
         test_liste_ET2 = [testV3, testV8_ET, testV15_ET]
-        
+
         # for debugging
         pool_all = Pool(".*", dateinamen_tex)
-        test_all = TestTyp("VX", *[pool_all for i in range(len(pool_all.stapel_verfuegbar))])
+        test_all = TestTyp(
+            "VX", *[pool_all for i in range(len(pool_all.stapel_verfuegbar))]
+        )
         test_liste_all = [test_all]
         # --------------
-        
+
         # Assigning test lists to given variants
         if name_variante == "ET1":
             titel_praktikum = "Praktikum Regelungstechnik 1 (ET)"
@@ -376,81 +401,99 @@ def test_generator(args):
             test_liste_variante = []
             titel_praktikum = ""
             quit()
-            
+
         # If a custom test is used
         if use_custom_test:
             titel_praktikum = f"Praktikum-{name_variante}"
             test_liste_variante = custom_test_list
-        #%%    
-        
+        #%%
+
         # ================================
         # --- Kombination der Aufgaben ---
         # ================================
-        
+
         from Modules import kombination_aufgaben
-        
-        test_saetze_pro_gruppe = kombination_aufgaben(anzahl_gruppen, test_liste_variante)
-        
+
+        test_saetze_pro_gruppe = kombination_aufgaben(
+            anzahl_gruppen, test_liste_variante
+        )
+
         # ==================================
         # --- Generating the TeX-Files ---
         # ==================================
-        
+
         from Modules import generieren_tex_dateien
-        
+
         # Creating the the tuple which contains the pdf names of the problems and solutions
         # for more info view the module
-        namen_aufg_loesungen_pdf = generieren_tex_dateien(latex_verzeichnis, template_verzeichnis, anzahl_gruppen, test_liste_variante,
-                               name_variante, titel_praktikum, semester, test_saetze_pro_gruppe)
-     
-        
-        
+        namen_aufg_loesungen_pdf = generieren_tex_dateien(
+            latex_verzeichnis,
+            template_verzeichnis,
+            anzahl_gruppen,
+            test_liste_variante,
+            name_variante,
+            titel_praktikum,
+            semester,
+            test_saetze_pro_gruppe,
+        )
+
         # ===================
         # --- Compiling ---
         # ===================
         from Modules import kompilieren
-        
-        kompilieren(test_verzeichnis, latex_verzeichnis, generiere_einzel_pdfs, temp_dateien_loeschen)
-    
-        
+
+        kompilieren(
+            test_verzeichnis,
+            latex_verzeichnis,
+            generiere_einzel_pdfs,
+            temp_dateien_loeschen,
+        )
+
         # ==================================
         # --- Sumo-Files ---
         # ==================================
-        
-        
+
         from Modules import baue_sumo
-        
+
         if generiere_sumo_pdf:
             namen_aufg_loesungen_pdf[0].sort()
             sumo_aufgaben_name = f"Sumo-{name_variante}-Aufgaben.pdf"
-            baue_sumo(test_verzeichnis, sumo_aufgaben_name, namen_aufg_loesungen_pdf[0], sumo_seiten_pro_blatt_test,
-                      sumo_kopien_pro_test)
-        
+            baue_sumo(
+                test_verzeichnis,
+                sumo_aufgaben_name,
+                namen_aufg_loesungen_pdf[0],
+                sumo_seiten_pro_blatt_test,
+                sumo_kopien_pro_test,
+            )
+
             namen_aufg_loesungen_pdf[1].sort()
-    
-    
-    
+
             sumo_loesungen_name = f"Sumo-{name_variante}-Loesungen.pdf"
-            baue_sumo(test_verzeichnis, sumo_loesungen_name, namen_aufg_loesungen_pdf[1], sumo_seiten_pro_blatt_loesung,
-                      sumo_kopien_pro_loesung)
-    
+            baue_sumo(
+                test_verzeichnis,
+                sumo_loesungen_name,
+                namen_aufg_loesungen_pdf[1],
+                sumo_seiten_pro_blatt_loesung,
+                sumo_kopien_pro_loesung,
+            )
 
     # ==================================
     # --- Make-Specific ---
     # ==================================
-   
+
     from Modules import make_specific
-    
+
     if args.make_all or args.make_pool or args.make_specific:
         make_specific(args.make_all, args.make_pool, args.make_specific)
-        
-        
 
- # ==========================================================
- 
- # ==========================================================
- 
+
+# ==========================================================
+
+# ==========================================================
+
 if __name__ == "__main__":
-    Descr = tw.dedent(u'''\
+    Descr = tw.dedent(
+        """\
                       This script creates tests based on given problems and settings
 
                       From a pool of problems, test will be created in  a way, that there will be no
@@ -489,21 +532,44 @@ if __name__ == "__main__":
                       Optionally, all tests and sample solutions can be combined into one "sumo-file". 
                       This allows creating the tests for the entire semester in one go. However, this
                       is only useful if the problems and solutions are final and will not have to be corrected
-                      afterwards.''')
-                      
-    parser = ap.ArgumentParser(description = Descr)
-    
-    parser.add_argument('-ct', '--create_test', help=u'Creates a test based on the provided json settings file')
-    parser.add_argument('-ma','--make_all', action = 'store_true', help=u'Creates a preview for all problems')
-    parser.add_argument('-mp','--make_pool', choices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], 
-                        help=u'Creates a Preview for all problems of the given pool')
-    parser.add_argument('-ms','--make_specific', help=u'Creates a Preview for only the given problem\
-                        you will need to provide them problem´s name (without .tex)')
-    
-    args = parser.parse_args()    
-    
-    if ((args.create_test is None) and (args.make_all == False) and (args.make_pool is None) and (args.make_specific is None)):
-        parser.error('Please choose at least one of the options. For help type: -h')
-        
+                      afterwards."""
+    )
+
+    parser = ap.ArgumentParser(description=Descr)
+
+    parser.add_argument(
+        "-ct",
+        "--create_test",
+        help="Creates a test based on the provided json settings file",
+    )
+    parser.add_argument(
+        "-ma",
+        "--make_all",
+        action="store_true",
+        help="Creates a preview for all problems",
+    )
+    parser.add_argument(
+        "-mp",
+        "--make_pool",
+        choices=["A", "B", "C", "D", "E", "F", "G", "H"],
+        help="Creates a Preview for all problems of the given pool",
+    )
+    parser.add_argument(
+        "-ms",
+        "--make_specific",
+        help="Creates a Preview for only the given problem\
+                        you will need to provide them problem´s name (without .tex)",
+    )
+
+    args = parser.parse_args()
+
+    if (
+        (args.create_test is None)
+        and (args.make_all == False)
+        and (args.make_pool is None)
+        and (args.make_specific is None)
+    ):
+        parser.error("Please choose at least one of the options. For help type: -h")
+
     else:
         test_generator(args)

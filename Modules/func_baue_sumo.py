@@ -1,35 +1,38 @@
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 
-def baue_sumo(test_verzeichnis, sumo_name, pdf_liste, seiten_pro_blatt, kopien_pro_datei):
-    
+
+def baue_sumo(
+    test_verzeichnis, sumo_name, pdf_liste, seiten_pro_blatt, kopien_pro_datei
+):
+
     """This function creates the sumo file which contains all problems/ solutions for all groups.
-    
-    Parameter: 
-        
+
+    Parameter:
+
         * test_verzeichnis:
             Directory in which the created tests are saved
-        
+
         * sumo_name
             Name of the Sumo file either for the problems or solutions
-        
-        * pdf_liste 
+
+        * pdf_liste
             List of the names of the created PDF problem/ solution files
             (created in function generieren_tex_datei())
-        
+
         * seiten_pro_blatt
             How many different pages there should be displayed on one page/ sheet
             Defined in json settings files
-            
+
         * kopien_pro_datei
             How many copies you would like for each problem/ solution
             Defined in json settings files:
                 sumo_kopien_pro_loesung
-            
-    Creates: 
-        
+
+    Creates:
+
         * pdf file sumo_name.pdf"""
-    
+
     os.chdir(test_verzeichnis)
     writer = PdfFileWriter()
 
@@ -57,4 +60,3 @@ def baue_sumo(test_verzeichnis, sumo_name, pdf_liste, seiten_pro_blatt, kopien_p
 
     for d in open_files:
         d.close()
-
