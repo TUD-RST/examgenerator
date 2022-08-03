@@ -1,19 +1,13 @@
-/Aufgaben/*.fdb_latexmk
-/Aufgaben/*.fls
-/Aufgaben/*.tex
-/Tests-ET1-WS201920
-/Tests-ET1-SS2020
-/Tests-ET1-WS202021
-/Tests-ET1-SS2021
-/Tests-ET1-WS202122
-/Tests-ET1-SS2022
-/Tests-ET1-WS202223
+/Problems/*.fdb_latexmk
+/Problems/*.fls
+/Problems/*.tex
+/Tests*
 /Previews
 /Settings/*.json
+/Modules/__pycache__
 
 !/Problems/poolA
 !/Problems/poolB
 !/Problems/poolC
 !/Problems/poolD
-!/Modules
 !/Settings/settings_template.json
