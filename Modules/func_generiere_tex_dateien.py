@@ -11,6 +11,7 @@ def generieren_tex_dateien(
     titel_praktikum,
     semester,
     test_saetze_pro_gruppe,
+    pool_dateien,
 ):
 
     """This function replaces the variables within the tex problem/ solution files with the information given
@@ -42,6 +43,11 @@ def generieren_tex_dateien(
 
         * test_saetze_pro_gruppe:
            List of problems/ solutions for each group
+
+        * pool_dateien:
+            List tuples:
+                [0] list of names of problems for each pool
+                [1] name of pool
 
     Returns:
         * (dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf)
@@ -90,29 +96,12 @@ def generieren_tex_dateien(
             for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
                 aufgaben_string += f"\\item\n"
 
-                if "A" in aufg_loes[0]:
-                    aufgaben_string += f"\\input{{poolA/{aufg_loes[0]}}}\n\n"
-
-                if "B" in aufg_loes[0]:
-                    aufgaben_string += f"\\input{{poolB/{aufg_loes[0]}}}\n\n"
-
-                if "C" in aufg_loes[0]:
-                    aufgaben_string += f"\\input{{poolC/{aufg_loes[0]}}}\n\n"
-
-                if "D" in aufg_loes[0]:
-                    aufgaben_string += f"\\input{{poolD/{aufg_loes[0]}}}\n\n"
-
-                if "E" in aufg_loes[0]:
-                    aufgaben_string += f"\\input{{poolE/{aufg_loes[0]}}}\n\n"
-
-                if "F" in aufg_loes[0]:
-                    aufgaben_string += f"\\input{{poolF/{aufg_loes[0]}}}\n\n"
-
-                if "G" in aufg_loes[0]:
-                    aufgaben_string += f"\\input{{poolG/{aufg_loes[0]}}}\n\n"
-
-                if "H" in aufg_loes[0]:
-                    aufgaben_string += f"\\input{{poolH/{aufg_loes[0]}}}\n\n"
+                for pool_tuple in pool_dateien:
+                    if aufg_loes[0] in pool_tuple[0]:
+                        pool_name = str(pool_tuple[1])
+                        aufgaben_string += (
+                            f"\\input{{pool{pool_name}/{aufg_loes[0]}}}\n\n"
+                        )
 
             datei_inhalt = datei_inhalt.replace("__AUFGABEN__", aufgaben_string)
 
@@ -141,32 +130,16 @@ def generieren_tex_dateien(
             # directory for each file is given
             # This could probably be solved more elegantly, but it works for now
             loesung_string = ""
+
             for aufg_loes in test_saetze_pro_gruppe[gruppe][test_index]:
                 loesung_string += f"\\item\n"
 
-                if "A" in aufg_loes[0]:
-                    loesung_string += f"\\input{{poolA/{aufg_loes[1]}}}\n\n"
-
-                if "B" in aufg_loes[0]:
-                    loesung_string += f"\\input{{poolB/{aufg_loes[1]}}}\n\n"
-
-                if "C" in aufg_loes[0]:
-                    loesung_string += f"\\input{{poolC/{aufg_loes[1]}}}\n\n"
-
-                if "D" in aufg_loes[0]:
-                    loesung_string += f"\\input{{poolD/{aufg_loes[1]}}}\n\n"
-
-                if "E" in aufg_loes[0]:
-                    loesung_string += f"\\input{{poolE/{aufg_loes[1]}}}\n\n"
-
-                if "F" in aufg_loes[0]:
-                    loesung_string += f"\\input{{poolF/{aufg_loes[1]}}}\n\n"
-
-                if "G" in aufg_loes[0]:
-                    loesung_string += f"\\input{{poolG/{aufg_loes[1]}}}\n\n"
-
-                if "H" in aufg_loes[0]:
-                    loesung_string += f"\\input{{poolH/{aufg_loes[1]}}}\n\n"
+                for pool_tuple in pool_dateien:
+                    if aufg_loes[0] in pool_tuple[0]:
+                        pool_name = pool_tuple[1]
+                        loesung_string += (
+                            f"\\input{{pool{pool_name}/{aufg_loes[1]}}}\n\n"
+                        )
 
             datei_inhalt = datei_inhalt.replace("__AUFGABEN__", loesung_string)
 

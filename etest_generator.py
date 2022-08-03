@@ -295,22 +295,22 @@ def test_generator(args):
             for fn in glob.iglob(os.path.join(poolH_verzeichnis, "*.tex"))
         ]
 
-        # combines the list of pools
-        dateinamen_tex = (
-            dateinamen_poolA_tex
-            + dateinamen_poolB_tex
-            + dateinamen_poolC_tex
-            + dateinamen_poolD_tex
-            + dateinamen_poolE_tex
-            + dateinamen_poolF_tex
-            + dateinamen_poolG_tex
-            + dateinamen_poolH_tex
-        )
+        # list of tuples: list of all problems belonging to each pool, name of pool
+        pool_dateien = [
+            (dateinamen_poolA_tex, "A"),
+            (dateinamen_poolB_tex, "B"),
+            (dateinamen_poolC_tex, "C"),
+            (dateinamen_poolD_tex, "D"),
+            (dateinamen_poolE_tex, "E"),
+            (dateinamen_poolF_tex, "F"),
+            (dateinamen_poolG_tex, "G"),
+            (dateinamen_poolH_tex, "H"),
+        ]
 
-        #   pool_verzeichnis =  os.path.join(latex_verzeichnis, "pool*")
-
-        #   dateinamen_tex = [os.path.basename(fn) for fn in
-        #                     glob.iglob(os.path.join(pool_verzeichnis, "*.tex"))]
+        # combines the list of all problem names from all pools
+        dateinamen_tex = []
+        for pool in pool_dateien:
+            dateinamen_tex += pool[0]
 
         # General problems for each test
         # A1, B1 -> for 5th Semester RT and 6th semester MT and RES
@@ -435,6 +435,7 @@ def test_generator(args):
             titel_praktikum,
             semester,
             test_saetze_pro_gruppe,
+            pool_dateien,
         )
 
         # ===================
