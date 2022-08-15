@@ -12,19 +12,18 @@ def kompilieren(
     This function compiles the tex files and turns them into pdf format and moves them to
     the test directory. Lastly, it deletes temporary data.
 
-    Parameters:
+    :param test_verzeichnis: Directory where the generated tests are saved
+    :type test_verzeichnis: str
 
-        * test_verzeichnis:
-            Directory where the generated tests are saved
+    :param latex_verzeichnis: Working directory of latex compiler
+    :type latex_verzeichnis: str
 
-        * latex_verzeichnis:
-            Working directory of latex compiler
+    :param generiere_einzel_pdf: Should individual PDFs be created
+    :type generiere_einzel_pdf: bool
 
-        * generiere_einzel_pdf:
-            Boolean: should individual pdfs be created
-
-        * temp_dateien_loeschen:
-            Boolean: should temporary data be deleted"""
+    :param temp_dateien_loeschen: Should temporary data be deleted
+    :type temp_dateien_loeschen: bool
+    """
 
     shutil.rmtree(test_verzeichnis, ignore_errors=True)
     os.mkdir(test_verzeichnis)

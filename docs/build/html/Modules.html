@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modules &mdash; exam-generator 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Main" href="Main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> exam-generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Main.html">Main</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-Modules.classPool">Pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-Modules.classTestTyp">TestTyp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-Modules.func_baue_sumo">baue_sumo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-Modules.func_generiere_tex_dateien">generiere_tex_dateien</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-Modules.func_kombination_aufgaben">kombination_aufgaben</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-Modules.func_kompilieren">kompilieren</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-Modules.make_specific">make_specific</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">exam-generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Modules</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-Modules">
+<span id="modules"></span><h1>Modules<a class="headerlink" href="#module-Modules" title="Permalink to this heading"></a></h1>
+<section id="module-Modules.classPool">
+<span id="pool"></span><h2>Pool<a class="headerlink" href="#module-Modules.classPool" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="Modules.classPool.Pool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Modules.classPool.</span></span><span class="sig-name descname"><span class="pre">Pool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dateinamen_tex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Modules/classPool.html#Pool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Modules.classPool.Pool" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents each pool with its corresponding problems.</p>
+<p>Construction:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Pool</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dateinamen_tex</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the pool for example: A1, CV21, DV07</p></li>
+<li><p><strong>dateinamen_tex</strong> – All Problem-Solution-file names</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="Modules.classPool.Pool.ablegen">
+<span class="sig-name descname"><span class="pre">ablegen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Modules/classPool.html#Pool.ablegen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Modules.classPool.Pool.ablegen" title="Permalink to this definition"></a></dt>
+<dd><p>Discards all pulled problems to the discard pile</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Modules.classPool.Pool.ziehen">
+<span class="sig-name descname"><span class="pre">ziehen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Modules/classPool.html#Pool.ziehen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Modules.classPool.Pool.ziehen" title="Permalink to this definition"></a></dt>
+<dd><p>Pulls a random problem + solution from the pool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>aufg_loes</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-Modules.classTestTyp">
+<span id="testtyp"></span><h2>TestTyp<a class="headerlink" href="#module-Modules.classTestTyp" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="Modules.classTestTyp.TestTyp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Modules.classTestTyp.</span></span><span class="sig-name descname"><span class="pre">TestTyp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pools</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Modules/classTestTyp.html#TestTyp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Modules.classTestTyp.TestTyp" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents all different test types</p>
+<p>Construction:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TestTyp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">pools</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the test type, for example the name of Experiment</p></li>
+<li><p><strong>pools</strong> (<em>list</em><em>[</em><em>pool</em><em>]</em>) – Pools belonging to the test type, mind the “*”</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-Modules.func_baue_sumo">
+<span id="baue-sumo"></span><h2>baue_sumo<a class="headerlink" href="#module-Modules.func_baue_sumo" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Modules.func_baue_sumo.baue_sumo">
+<span class="sig-prename descclassname"><span class="pre">Modules.func_baue_sumo.</span></span><span class="sig-name descname"><span class="pre">baue_sumo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_verzeichnis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sumo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdf_liste</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seiten_pro_blatt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kopien_pro_datei</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Modules/func_baue_sumo.html#baue_sumo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Modules.func_baue_sumo.baue_sumo" title="Permalink to this definition"></a></dt>
+<dd><p>This function creates the sumo file which contains all problems/ solutions for all groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_verzeichnis</strong> (<em>str</em>) – Directory in which the created tests are saved</p></li>
+<li><p><strong>sumo_name</strong> (<em>str</em>) – Name of the Sumo file either for the problems or solutions</p></li>
+<li><p><strong>pdf_liste</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of the names of the created PDF problem/ solution files</p></li>
+<li><p><strong>seiten_pro_blatt</strong> (<em>int</em>) – How many different pages there should be displayed on one page/ sheet</p></li>
+<li><p><strong>kopien_pro_blatt</strong> (<em>int</em>) – How many copies you would like for each problem/ solution</p></li>
+</ul>
+</dd>
+</dl>
+<p>Creates:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>pdf file sumo_name.pdf</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="module-Modules.func_generiere_tex_dateien">
+<span id="generiere-tex-dateien"></span><h2>generiere_tex_dateien<a class="headerlink" href="#module-Modules.func_generiere_tex_dateien" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Modules.func_generiere_tex_dateien.generieren_tex_dateien">
+<span class="sig-prename descclassname"><span class="pre">Modules.func_generiere_tex_dateien.</span></span><span class="sig-name descname"><span class="pre">generieren_tex_dateien</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_verzeichnis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_verzeichnis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anzahl_gruppen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_liste_variante</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_variante</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titel_praktikum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semester</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_saetze_pro_gruppe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_dateien</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Modules/func_generiere_tex_dateien.html#generieren_tex_dateien"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Modules.func_generiere_tex_dateien.generieren_tex_dateien" title="Permalink to this definition"></a></dt>
+<dd><p>This function replaces the variables within the tex problem/ solution files with the information given
+by the setting and returns the names of the according pdf files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latex_verzeichnis</strong> (<em>str</em>) – Directory for the latex compiler</p></li>
+<li><p><strong>template_verzeichnis</strong> (<em>int</em>) – Directory of the problem/ solution templates</p></li>
+<li><p><strong>anzahl_gruppe</strong> (<em>int</em>) – Number of group pairs</p></li>
+<li><p><strong>test_liste_variante</strong> (<em>list</em><em>[</em><em>testtyp</em><em>]</em>) – List of test variants belonging to chosen variant</p></li>
+<li><p><strong>name_variante</strong> (<em>str</em>) – Name of the test variant</p></li>
+<li><p><strong>titel_praktikum</strong> (<em>str</em>) – Title of the event. Dependent on name_variant</p></li>
+<li><p><strong>semester</strong> (<em>str</em>) – Given semester in json settings file</p></li>
+<li><p><strong>test_saetze_pro_gruppe</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of problems/ solutions for each group</p></li>
+<li><p><strong>pool_dateien</strong> (<em>list</em><em>[</em><em>tuple</em><em>]</em>) – [0] list of names of problems for each pool, [1] name of pool</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[0] problem pdf names, [1] solution pdf names</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[tuple]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-Modules.func_kombination_aufgaben">
+<span id="kombination-aufgaben"></span><h2>kombination_aufgaben<a class="headerlink" href="#module-Modules.func_kombination_aufgaben" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Modules.func_kombination_aufgaben.kombination_aufgaben">
+<span class="sig-prename descclassname"><span class="pre">Modules.func_kombination_aufgaben.</span></span><span class="sig-name descname"><span class="pre">kombination_aufgaben</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anzahl_gruppen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_liste_variante</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Modules/func_kombination_aufgaben.html#kombination_aufgaben"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Modules.func_kombination_aufgaben.kombination_aufgaben" title="Permalink to this definition"></a></dt>
+<dd><p>For each group this function adds to a list which contains
+problems and their according solutions from given pools
+depending on the test variant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anzahl_gruppe</strong> (<em>int</em>) – Number of group pairs</p></li>
+<li><p><strong>test_liste_variante</strong> (<em>list</em><em>[</em><em>testtyp</em><em>]</em>) – List of test variants belonging to chosen variant</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>test_saetze_pro_gruppe - problems/ solutions for each group</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-Modules.func_kompilieren">
+<span id="kompilieren"></span><h2>kompilieren<a class="headerlink" href="#module-Modules.func_kompilieren" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Modules.func_kompilieren.kompilieren">
+<span class="sig-prename descclassname"><span class="pre">Modules.func_kompilieren.</span></span><span class="sig-name descname"><span class="pre">kompilieren</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_verzeichnis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_verzeichnis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generiere_einzel_pdfs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_dateien_loeschen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Modules/func_kompilieren.html#kompilieren"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Modules.func_kompilieren.kompilieren" title="Permalink to this definition"></a></dt>
+<dd><p>This function compiles the tex files and turns them into pdf format and moves them to
+the test directory. Lastly, it deletes temporary data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_verzeichnis</strong> (<em>str</em>) – Directory where the generated tests are saved</p></li>
+<li><p><strong>latex_verzeichnis</strong> (<em>str</em>) – Working directory of latex compiler</p></li>
+<li><p><strong>generiere_einzel_pdf</strong> (<em>bool</em>) – Should individual PDFs be created</p></li>
+<li><p><strong>temp_dateien_loeschen</strong> (<em>bool</em>) – Should temporary data be deleted</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-Modules.make_specific">
+<span id="make-specific"></span><h2>make_specific<a class="headerlink" href="#module-Modules.make_specific" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Modules.make_specific.make_specific">
+<span class="sig-prename descclassname"><span class="pre">Modules.make_specific.</span></span><span class="sig-name descname"><span class="pre">make_specific</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">make_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aufgabe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Modules/make_specific.html#make_specific"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Modules.make_specific.make_specific" title="Permalink to this definition"></a></dt>
+<dd><p>This Function creates previews for given pools/ problems or all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>make_all</strong> (<em>bool</em>) – Make a preview for all problems</p></li>
+<li><p><strong>pool</strong> (<em>str</em>) – Name of the pool to be created</p></li>
+</ul>
+</dd>
+<dt class="field-even">Aufgabe</dt>
+<dd class="field-even"><p>File name of the problem to be created</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Main.html" class="btn btn-neutral float-left" title="Main" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Niklas Weber.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

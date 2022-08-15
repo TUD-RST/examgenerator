@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modules.func_generiere_tex_dateien &mdash; exam-generator 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> exam-generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Main.html">Main</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Modules.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">exam-generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>Modules.func_generiere_tex_dateien</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for Modules.func_generiere_tex_dateien</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+
+<div class="viewcode-block" id="generieren_tex_dateien"><a class="viewcode-back" href="../../Modules.html#Modules.func_generiere_tex_dateien.generieren_tex_dateien">[docs]</a><span class="k">def</span> <span class="nf">generieren_tex_dateien</span><span class="p">(</span>
+    <span class="n">latex_verzeichnis</span><span class="p">,</span>
+    <span class="n">template_verzeichnis</span><span class="p">,</span>
+    <span class="n">anzahl_gruppen</span><span class="p">,</span>
+    <span class="n">test_liste_variante</span><span class="p">,</span>
+    <span class="n">name_variante</span><span class="p">,</span>
+    <span class="n">titel_praktikum</span><span class="p">,</span>
+    <span class="n">semester</span><span class="p">,</span>
+    <span class="n">test_saetze_pro_gruppe</span><span class="p">,</span>
+    <span class="n">pool_dateien</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    This function replaces the variables within the tex problem/ solution files with the information given</span>
+<span class="sd">    by the setting and returns the names of the according pdf files.</span>
+
+<span class="sd">    :param latex_verzeichnis: Directory for the latex compiler</span>
+<span class="sd">    :type latex_verzeichnis: str</span>
+
+<span class="sd">    :param template_verzeichnis: Directory of the problem/ solution templates</span>
+<span class="sd">    :type template_verzeichnis: int</span>
+
+<span class="sd">    :param anzahl_gruppe: Number of group pairs</span>
+<span class="sd">    :type anzahl_gruppe: int</span>
+
+<span class="sd">    :param test_liste_variante: List of test variants belonging to chosen variant</span>
+<span class="sd">    :type test_liste_variante: list[testtyp]</span>
+
+<span class="sd">    :param name_variante: Name of the test variant</span>
+<span class="sd">    :type name_variante: str</span>
+
+<span class="sd">    :param titel_praktikum: Title of the event. Dependent on name_variant</span>
+<span class="sd">    :type titel_praktikum: str</span>
+
+<span class="sd">    :param semester: Given semester in json settings file</span>
+<span class="sd">    :type semester: str</span>
+
+<span class="sd">    :param test_saetze_pro_gruppe: List of problems/ solutions for each group</span>
+<span class="sd">    :type test_saetze_pro_gruppe: list[str]</span>
+
+<span class="sd">    :param pool_dateien: [0] list of names of problems for each pool, [1] name of pool</span>
+<span class="sd">    :type pool_dateien: list[tuple]</span>
+
+<span class="sd">    :return: [0] problem pdf names, [1] solution pdf names       </span>
+<span class="sd">    :rtype: list[tuple]  </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Deletes all temporary files in the Aufgaben directory</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">,</span> <span class="s2">&quot;*.*&quot;</span><span class="p">)):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="n">template_aufgabe_pfad</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">template_verzeichnis</span><span class="p">,</span> <span class="s2">&quot;template_aufgabe.tex&quot;</span><span class="p">)</span>
+    <span class="n">template_loesung_pfad</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">template_verzeichnis</span><span class="p">,</span> <span class="s2">&quot;template_loesung.tex&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_aufgabe_pfad</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+        <span class="n">template_aufgabe</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_loesung_pfad</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+        <span class="n">template_loesung</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">dateinamen_aufgaben_pdf</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dateinamen_loesungen_pdf</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">gruppe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">anzahl_gruppen</span><span class="p">):</span>
+        <span class="n">gruppe_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">gruppe</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="si">:</span><span class="s2">02d</span><span class="si">}{</span><span class="n">gruppe</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">for</span> <span class="n">test_index</span><span class="p">,</span> <span class="n">test_typ</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">test_liste_variante</span><span class="p">):</span>
+            <span class="c1"># Problem</span>
+            <span class="c1"># Setting file name and path</span>
+            <span class="n">datei_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ETest-</span><span class="si">{</span><span class="n">name_variante</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">gruppe_name</span><span class="si">}</span><span class="s2">.tex&quot;</span>
+            <span class="n">datei_pfad</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">,</span> <span class="n">datei_name</span><span class="p">)</span>
+
+            <span class="c1"># Replacing the parameters in the LaTeX file</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">template_aufgabe</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__PRAKTIKUM__&quot;</span><span class="p">,</span> <span class="n">titel_praktikum</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__SEMESTER__&quot;</span><span class="p">,</span> <span class="n">semester</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__VERSUCH__&quot;</span><span class="p">,</span> <span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__GRUPPE__&quot;</span><span class="p">,</span> <span class="n">gruppe_name</span><span class="p">)</span>
+
+            <span class="c1"># Creation of the problem strings + implementation in the LaTeX file</span>
+            <span class="c1"># String has to  be adjusted for every pool, so that the correct</span>
+            <span class="c1"># directory for each file is given</span>
+            <span class="c1"># This could probably be solved more elegantly, but it works for now</span>
+
+            <span class="n">aufgaben_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="k">for</span> <span class="n">aufg_loes</span> <span class="ow">in</span> <span class="n">test_saetze_pro_gruppe</span><span class="p">[</span><span class="n">gruppe</span><span class="p">][</span><span class="n">test_index</span><span class="p">]:</span>
+                <span class="n">aufgaben_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">item</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+                <span class="k">for</span> <span class="n">pool_tuple</span> <span class="ow">in</span> <span class="n">pool_dateien</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">aufg_loes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">pool_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">pool_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pool_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="n">aufgaben_string</span> <span class="o">+=</span> <span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="s2">pool</span><span class="si">{</span><span class="n">pool_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">aufg_loes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="se">}}\n\n</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__AUFGABEN__&quot;</span><span class="p">,</span> <span class="n">aufgaben_string</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datei_pfad</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">datei_inhalt</span><span class="p">)</span>
+
+            <span class="c1"># LaTeX file of the problem is converted to PDF</span>
+            <span class="n">dateinamen_aufgaben_pdf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datei_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">))</span>
+
+            <span class="c1"># Solution</span>
+            <span class="c1"># Setting file name and path</span>
+            <span class="n">datei_name</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;ETest-</span><span class="si">{</span><span class="n">name_variante</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">gruppe_name</span><span class="si">}</span><span class="s2">-Loesung.tex&quot;</span>
+            <span class="p">)</span>
+            <span class="n">datei_pfad</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">,</span> <span class="n">datei_name</span><span class="p">)</span>
+
+            <span class="c1"># Replacing parameters in LaTeX file</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">template_loesung</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__PRAKTIKUM__&quot;</span><span class="p">,</span> <span class="n">titel_praktikum</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__SEMESTER__&quot;</span><span class="p">,</span> <span class="n">semester</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__VERSUCH__&quot;</span><span class="p">,</span> <span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__GRUPPE__&quot;</span><span class="p">,</span> <span class="n">gruppe_name</span><span class="p">)</span>
+
+            <span class="c1"># Creation of the solution strings + implementation in the LaTeX file</span>
+            <span class="c1"># String has to  be adjusted for every pool, so that the correct</span>
+            <span class="c1"># directory for each file is given</span>
+            <span class="c1"># This could probably be solved more elegantly, but it works for now</span>
+            <span class="n">loesung_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="k">for</span> <span class="n">aufg_loes</span> <span class="ow">in</span> <span class="n">test_saetze_pro_gruppe</span><span class="p">[</span><span class="n">gruppe</span><span class="p">][</span><span class="n">test_index</span><span class="p">]:</span>
+                <span class="n">loesung_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">item</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+                <span class="k">for</span> <span class="n">pool_tuple</span> <span class="ow">in</span> <span class="n">pool_dateien</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">aufg_loes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">pool_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">pool_name</span> <span class="o">=</span> <span class="n">pool_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="n">loesung_string</span> <span class="o">+=</span> <span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="s2">pool</span><span class="si">{</span><span class="n">pool_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">aufg_loes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="se">}}\n\n</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__AUFGABEN__&quot;</span><span class="p">,</span> <span class="n">loesung_string</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datei_pfad</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">datei_inhalt</span><span class="p">)</span>
+
+            <span class="c1"># LaTeX file of the solution converted to pdf</span>
+            <span class="n">dateinamen_loesungen_pdf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datei_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">dateinamen_aufgaben_pdf</span><span class="p">,</span> <span class="n">dateinamen_loesungen_pdf</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Niklas Weber.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

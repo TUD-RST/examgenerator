@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modules.func_kompilieren &mdash; exam-generator 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> exam-generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Main.html">Main</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Modules.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">exam-generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>Modules.func_kompilieren</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for Modules.func_kompilieren</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+
+<div class="viewcode-block" id="kompilieren"><a class="viewcode-back" href="../../Modules.html#Modules.func_kompilieren.kompilieren">[docs]</a><span class="k">def</span> <span class="nf">kompilieren</span><span class="p">(</span>
+    <span class="n">test_verzeichnis</span><span class="p">,</span> <span class="n">latex_verzeichnis</span><span class="p">,</span> <span class="n">generiere_einzel_pdfs</span><span class="p">,</span> <span class="n">temp_dateien_loeschen</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function compiles the tex files and turns them into pdf format and moves them to</span>
+<span class="sd">    the test directory. Lastly, it deletes temporary data.</span>
+
+<span class="sd">    :param test_verzeichnis: Directory where the generated tests are saved</span>
+<span class="sd">    :type test_verzeichnis: str</span>
+
+<span class="sd">    :param latex_verzeichnis: Working directory of latex compiler</span>
+<span class="sd">    :type latex_verzeichnis: str</span>
+
+<span class="sd">    :param generiere_einzel_pdf: Should individual PDFs be created</span>
+<span class="sd">    :type generiere_einzel_pdf: bool</span>
+
+<span class="sd">    :param temp_dateien_loeschen: Should temporary data be deleted</span>
+<span class="sd">    :type temp_dateien_loeschen: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">test_verzeichnis</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">test_verzeichnis</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">generiere_einzel_pdfs</span><span class="p">:</span>
+        <span class="n">tex_dateien</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">datei</span> <span class="k">for</span> <span class="n">datei</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">)</span> <span class="k">if</span> <span class="n">datei</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">datei</span> <span class="ow">in</span> <span class="n">tex_dateien</span><span class="p">:</span>
+            <span class="c1"># execute pdflatex twice to resolve references</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;pdflatex -interaction=batchmode </span><span class="si">{</span><span class="n">datei</span><span class="si">}</span><span class="s2"> &amp;&amp; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;pdflatex -interaction=batchmode </span><span class="si">{</span><span class="n">datei</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+            <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+                <span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span>
+            <span class="p">)</span>
+            <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Problem beim Kompilieren von </span><span class="si">{</span><span class="n">datei</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Temporaere Dateien werden nicht geloescht zur Fehlersuche.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">temp_dateien_loeschen</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">datei</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">),</span> <span class="n">test_verzeichnis</span><span class="p">)</span>
+
+    <span class="c1"># Delete temporary data</span>
+    <span class="c1"># ToDo: mit python machen!</span>
+    <span class="k">if</span> <span class="n">temp_dateien_loeschen</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;del /Q *.dvi *.ps *.aux *.log *.tex&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Temporaere Dateien konnten nicht geloescht werden&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Niklas Weber.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

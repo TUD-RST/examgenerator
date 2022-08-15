@@ -14,45 +14,41 @@ def generieren_tex_dateien(
     pool_dateien,
 ):
 
-    """This function replaces the variables within the tex problem/ solution files with the information given
+    """
+    
+    This function replaces the variables within the tex problem/ solution files with the information given
     by the setting and returns the names of the according pdf files.
 
-    Parameter:
-        * latex_verzeichnis:
-            Directory for the latex compiler
+    :param latex_verzeichnis: Directory for the latex compiler
+    :type latex_verzeichnis: str
 
-        * template_verzeichnis:
-            Directory of the problem/ solution templates
+    :param template_verzeichnis: Directory of the problem/ solution templates
+    :type template_verzeichnis: int
 
-        * anzahl_gruppen:
-            Number of group pairs
+    :param anzahl_gruppe: Number of group pairs
+    :type anzahl_gruppe: int
 
-        * test_liste_variante:
-            List of test variants belonging to chosen overall variant
-            Can be indirectly customized in json settings file by changing/ adding test types
+    :param test_liste_variante: List of test variants belonging to chosen variant
+    :type test_liste_variante: list[testtyp]
 
-        * name_variante:
-            Name of the overall test variant
-            Defined in json settings file
+    :param name_variante: Name of the test variant
+    :type name_variante: str
 
-        * titel_praktikum:
-            Title of the event. Dependent on name_variant
+    :param titel_praktikum: Title of the event. Dependent on name_variant
+    :type titel_praktikum: str
 
-        * semester:
-            Given semester in json settings file
+    :param semester: Given semester in json settings file
+    :type semester: str
 
-        * test_saetze_pro_gruppe:
-           List of problems/ solutions for each group
+    :param test_saetze_pro_gruppe: List of problems/ solutions for each group
+    :type test_saetze_pro_gruppe: list[str]
 
-        * pool_dateien:
-            List tuples:
-                [0] list of names of problems for each pool
-                [1] name of pool
+    :param pool_dateien: [0] list of names of problems for each pool, [1] name of pool
+    :type pool_dateien: list[tuple]
 
-    Returns:
-        * (dateinamen_aufgaben_pdf, dateinamen_loesungen_pdf)
-            tuple of lists:
-                [0] = problem pdf names, [1] = solution pdf names
+    :return: [0] problem pdf names, [1] solution pdf names       
+    :rtype: list[tuple]  
+
     """
 
     # Deletes all temporary files in the Aufgaben directory

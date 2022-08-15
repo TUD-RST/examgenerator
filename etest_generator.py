@@ -151,16 +151,16 @@ def test_generator(args):
 
     Parameters:
 
-        * args.create_test:
+        args.create_test:
             Would the user like to create a test
 
-        * args.make_all:
+        args.make_all:
             Would the user like to create a preview for all problems
 
-        * args.make_pool
+        args.make_pool
             Pool which the user would like to create a preview for
 
-        * args.make_specific
+        args.make_specific
             Name of the problem the user would like to create a preview for
     """
     if args.create_test is not None:

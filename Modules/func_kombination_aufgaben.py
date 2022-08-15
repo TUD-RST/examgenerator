@@ -1,23 +1,20 @@
 def kombination_aufgaben(anzahl_gruppen, test_liste_variante):
 
-    """For each group this function adds to a list which contains
-     problems and their according solutions from given pools
-     depending on the test variant.
+    """
+    For each group this function adds to a list which contains
+    problems and their according solutions from given pools
+    depending on the test variant.
 
-    Parameters:
+    :param anzahl_gruppe: Number of group pairs
+    :type anzahl_gruppe: int
 
-      * anzahl_gruppen:
-          Number of different groups
-          Defined in json settings file
+    :param test_liste_variante: List of test variants belonging to chosen variant
+    :type test_liste_variante: list[testtyp]
 
-      * test_liste_variante:
-          List of test variants belonging to chosen overall variant
-          Can be indirectly customized in json settings file by changing/ adding test types
-
-    Returns:
-
-      * test_saetze_pro_gruppe:
-          List of problems/ solutions for each group"""
+    :return: test_saetze_pro_gruppe - problems/ solutions for each group
+    :rtype: list[str]
+    
+    """
 
     test_saetze_pro_gruppe = []
 

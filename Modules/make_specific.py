@@ -12,16 +12,15 @@ def make_specific(make_all, pool, aufgabe):
     """
     This Function creates previews for given pools/ problems or all.
 
-    Parameters:
+    :param make_all: Make a preview for all problems
+    :type make_all: bool
 
-        * make_all:
-            Boolean: make a preview for all problems
+    :param pool: Name of the pool to be created
+    :type pool: str
 
-        * pool:
-            Name of the pool to be created
-
-        * aufgabe:
-            File name of the problem to be made"""
+    :aufgabe: File name of the problem to be created
+    :type aufgabe: str
+    """
 
     # list of problems to be created
     filenames_aufgaben = []
