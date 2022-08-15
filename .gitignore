@@ -6,6 +6,7 @@
 /Settings/*.json
 /Modules/__pycache__
 /__pycache__
+/.vscode
 
 !/Problems/poolA
 !/Problems/poolB

@@ -47,8 +47,8 @@ def kompilieren(
             process.wait()
             if process.returncode != 0:
                 warn(
-                    f"Problem beim Kompilieren von {datei}. "
-                    f"Temporaere Dateien werden nicht geloescht zur Fehlersuche."
+                    f"Problem while compiling {datei}. "
+                    f"Temporary data will not be deleted."
                 )
                 temp_dateien_loeschen = False
             else:
@@ -62,4 +62,4 @@ def kompilieren(
         process = subprocess.Popen(command, shell=True)
         process.wait()
         if process.returncode != 0:
-            warn("Temporaere Dateien konnten nicht geloescht werden")
+            warn("Temporary data could not be deleted")
