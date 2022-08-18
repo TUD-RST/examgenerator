@@ -144,6 +144,9 @@ import json
 import argparse as ap
 import textwrap as tw
 
+from classes import *
+from funcs import *
+
 
 def test_generator(args):
     """
@@ -163,6 +166,10 @@ def test_generator(args):
         args.make_specific
             Name of the problem the user would like to create a preview for
     """
+
+    # main directory
+    root_directory = os.path.abspath(os.path.join(os.getcwd(), os.path.pardir, os.path.pardir))
+
     if args.create_test is not None:
         # ================ Settings =============================
 
@@ -172,7 +179,7 @@ def test_generator(args):
         # No change of settings in this program!
         einstellungen = args.create_test
 
-        path_einstellungen = os.path.join(os.getcwd(), "Settings", str(einstellungen))
+        path_einstellungen = os.path.join(root_directory, "Settings", str(einstellungen))
 
         # Loading the json settings into a Python dictionary
         with open(path_einstellungen, "r") as json_datei:
@@ -214,13 +221,6 @@ def test_generator(args):
         temp_dateien_loeschen = einstellungen_dictionary["data"]["delete_temp_data"]
         #%%
 
-        # ==================================
-        # --- Classes ---
-        # ==================================
-
-        from Modules import Pool
-
-        from Modules import TestTyp
 
         # ==================================
         # --- Configuration ---
@@ -231,14 +231,14 @@ def test_generator(args):
         random.seed()
 
         # Working directory for the LaTeX compiler
-        latex_verzeichnis = os.path.join(os.getcwd(), "Problems")
+        latex_verzeichnis = os.path.join(root_directory, "Problems")
 
         # Template directory
-        template_verzeichnis = os.path.join(os.getcwd(), "Templates")
+        template_verzeichnis = os.path.join(root_directory, "Templates")
 
         # Directory where the tests will be saved in (for example: Tests-ET1-WS201920)
         test_verzeichnis = os.path.join(
-            os.getcwd(),
+            root_directory,
             "Tests-{}-{}".format(name_variante, semester)
             .replace(" ", "")
             .replace("/", ""),
@@ -412,8 +412,6 @@ def test_generator(args):
         # --- Kombination der Aufgaben ---
         # ================================
 
-        from Modules import kombination_aufgaben
-
         test_saetze_pro_gruppe = kombination_aufgaben(
             anzahl_gruppen, test_liste_variante
         )
@@ -421,8 +419,6 @@ def test_generator(args):
         # ==================================
         # --- Generating the TeX-Files ---
         # ==================================
-
-        from Modules import generieren_tex_dateien
 
         # Creating the the tuple which contains the pdf names of the problems and solutions
         # for more info view the module
@@ -441,7 +437,6 @@ def test_generator(args):
         # ===================
         # --- Compiling ---
         # ===================
-        from Modules import kompilieren
 
         kompilieren(
             test_verzeichnis,
@@ -453,8 +448,6 @@ def test_generator(args):
         # ==================================
         # --- Sumo-Files ---
         # ==================================
-
-        from Modules import baue_sumo
 
         if generiere_sumo_pdf:
             namen_aufg_loesungen_pdf[0].sort()
@@ -482,95 +475,95 @@ def test_generator(args):
     # --- Make-Specific ---
     # ==================================
 
-    from Modules import make_specific
 
     if args.make_all or args.make_pool or args.make_specific:
-        make_specific(args.make_all, args.make_pool, args.make_specific)
+        make_specific(args.make_all, args.make_pool, args.make_specific, root_directory)
 
 
 # ==========================================================
 
 # ==========================================================
 
-if __name__ == "__main__":
-    Descr = tw.dedent(
-        """\
-                      This script creates tests based on given problems and settings
+def main():
+    if __name__ == "__main__":
+        Descr = tw.dedent(
+            """\
+                        This script creates tests based on given problems and settings
 
-                      From a pool of problems, test will be created in  a way, that there will be no
-                      repetition for all experiments and groups.
+                        From a pool of problems, test will be created in  a way, that there will be no
+                        repetition for all experiments and groups.
 
-                      There is two LaTeX templates in the Templates Directory:
-                      One for the problems and one for the sample solution and evaluation.
-                      In these templates there is placeholders, which will be replaced by
-                      this script.
+                        There is two LaTeX templates in the Templates Directory:
+                        One for the problems and one for the sample solution and evaluation.
+                        In these templates there is placeholders, which will be replaced by
+                        this script.
 
-                      The problems are located in the Aufgaben directory which is furthermore separated into
-                      the main pools (PoolA, PoolB, PoolC, PoolD). They usually differ between general problems,
-                      that are used in every test, and problems, that are specific for the given experiment.
+                        The problems are located in the Aufgaben directory which is furthermore separated into
+                        the main pools (PoolA, PoolB, PoolC, PoolD). They usually differ between general problems,
+                        that are used in every test, and problems, that are specific for the given experiment.
 
-                      Tests are combined via instances of the class TestTyp and managed via instances of the class Pool.
-                      Solutions are saved in separate files.
-                      Files for problems have the prefix "aufgabe_", solutions the prefix "loesung_".
-                      The scheme is the following: 
-                          aufgabe_A1_2.tex -> 2. problem of type A1
-                      or for an experiment:
-                          aufgabe_CV03_1.tex -> 2. problem from experiment (V) number 03 of type C
-                      for a more detailed breakdown of the nomenclature view the read.me file in the Aufgaben folder
-                      Please avoid using combinations of more than one capital letter describing your pools
-                      except for combinations with V (which stands for experiment) since this could lead to 
-                      problems during the compiling process.
+                        Tests are combined via instances of the class TestTyp and managed via instances of the class Pool.
+                        Solutions are saved in separate files.
+                        Files for problems have the prefix "aufgabe_", solutions the prefix "loesung_".
+                        The scheme is the following: 
+                            aufgabe_A1_2.tex -> 2. problem of type A1
+                        or for an experiment:
+                            aufgabe_CV03_1.tex -> 2. problem from experiment (V) number 03 of type C
+                        for a more detailed breakdown of the nomenclature view the read.me file in the Aufgaben folder
+                        Please avoid using combinations of more than one capital letter describing your pools
+                        except for combinations with V (which stands for experiment) since this could lead to 
+                        problems during the compiling process.
 
-                      Subtasks of a problem should be structured in an enumerate-surrounding.
+                        Subtasks of a problem should be structured in an enumerate-surrounding.
 
-                      Within the solution files the solution text has to be written in between
-                      \begin{Loesung} \end{Loesung}. The solution of every subtask starts with the 
-                      key \lsgitem.
+                        Within the solution files the solution text has to be written in between
+                        \begin{Loesung} \end{Loesung}. The solution of every subtask starts with the 
+                        key \lsgitem.
 
-                      It is possible to assign points to problems and solutions with the macro \Pkte{n}.
-                      During the compiling process the given points will be added automatically for the entire test
+                        It is possible to assign points to problems and solutions with the macro \Pkte{n}.
+                        During the compiling process the given points will be added automatically for the entire test
 
-                      Optionally, all tests and sample solutions can be combined into one "sumo-file". 
-                      This allows creating the tests for the entire semester in one go. However, this
-                      is only useful if the problems and solutions are final and will not have to be corrected
-                      afterwards."""
-    )
+                        Optionally, all tests and sample solutions can be combined into one "sumo-file". 
+                        This allows creating the tests for the entire semester in one go. However, this
+                        is only useful if the problems and solutions are final and will not have to be corrected
+                        afterwards."""
+        )
 
-    parser = ap.ArgumentParser(description=Descr)
+        parser = ap.ArgumentParser(description=Descr)
 
-    parser.add_argument(
-        "-ct",
-        "--create_test",
-        help="Creates a test based on the provided json settings file",
-    )
-    parser.add_argument(
-        "-ma",
-        "--make_all",
-        action="store_true",
-        help="Creates a preview for all problems",
-    )
-    parser.add_argument(
-        "-mp",
-        "--make_pool",
-        choices=["A", "B", "C", "D", "E", "F", "G", "H"],
-        help="Creates a Preview for all problems of the given pool",
-    )
-    parser.add_argument(
-        "-ms",
-        "--make_specific",
-        help="Creates a Preview for only the given problem\
-                        you will need to provide them problem´s name (without .tex)",
-    )
+        parser.add_argument(
+            "-ct",
+            "--create_test",
+            help="Creates a test based on the provided json settings file",
+        )
+        parser.add_argument(
+            "-ma",
+            "--make_all",
+            action="store_true",
+            help="Creates a preview for all problems",
+        )
+        parser.add_argument(
+            "-mp",
+            "--make_pool",
+            choices=["A", "B", "C", "D", "E", "F", "G", "H"],
+            help="Creates a Preview for all problems of the given pool",
+        )
+        parser.add_argument(
+            "-ms",
+            "--make_specific",
+            help="Creates a Preview for only the given problem\
+                            you will need to provide them problem´s name (without .tex)",
+        )
 
-    args = parser.parse_args()
+        args = parser.parse_args()
 
-    if (
-        (args.create_test is None)
-        and (args.make_all == False)
-        and (args.make_pool is None)
-        and (args.make_specific is None)
-    ):
-        parser.error("Please choose at least one of the options. For help type: -h")
+        if (
+            (args.create_test is None)
+            and (args.make_all == False)
+            and (args.make_pool is None)
+            and (args.make_specific is None)
+        ):
+            parser.error("Please choose at least one of the options. For help type: -h")
 
-    else:
-        test_generator(args)
+        else:
+            test_generator(args)
