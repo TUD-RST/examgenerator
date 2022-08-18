@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.exam_generator.funcs &mdash; exam-generator 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> exam-generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">exam-generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>src.exam_generator.funcs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.exam_generator.funcs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains all functions relevant for the exam-generator.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">PyPDF2</span> <span class="kn">import</span> <span class="n">PdfFileReader</span><span class="p">,</span> <span class="n">PdfFileWriter</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
+<div class="viewcode-block" id="baue_sumo"><a class="viewcode-back" href="../../../exam_generator.html#src.exam_generator.funcs.baue_sumo">[docs]</a><span class="k">def</span> <span class="nf">baue_sumo</span><span class="p">(</span>
+    <span class="n">test_verzeichnis</span><span class="p">,</span> <span class="n">sumo_name</span><span class="p">,</span> <span class="n">pdf_liste</span><span class="p">,</span> <span class="n">seiten_pro_blatt</span><span class="p">,</span> <span class="n">kopien_pro_datei</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function creates the sumo file which contains all problems/ solutions for all groups.</span>
+
+<span class="sd">    :param test_verzeichnis: Directory in which the created tests are saved</span>
+<span class="sd">    :type test_verzeichnis: str</span>
+
+<span class="sd">    :param sumo_name: Name of the Sumo file either for the problems or solutions</span>
+<span class="sd">    :type sumo_name: str</span>
+
+<span class="sd">    :param pdf_liste: List of the names of the created PDF problem/ solution files</span>
+<span class="sd">    :type pdf_liste: list[str]</span>
+
+<span class="sd">    :param seiten_pro_blatt: How many different pages there should be displayed on one page/ sheet</span>
+<span class="sd">    :type seiten_pro_blatt: int</span>
+
+<span class="sd">    :param kopien_pro_blatt: How many copies you would like for each problem/ solution</span>
+<span class="sd">    :type kopien_pro_blatt: int</span>
+
+<span class="sd">    Creates:</span>
+
+<span class="sd">        * pdf file sumo_name.pdf</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">test_verzeichnis</span><span class="p">)</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">PdfFileWriter</span><span class="p">()</span>
+
+    <span class="n">open_files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pdf</span> <span class="ow">in</span> <span class="n">pdf_liste</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+        <span class="n">open_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">PdfFileReader</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">num_pages</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">getNumPages</span><span class="p">()</span>
+        <span class="n">mehr_als_vielfaches</span> <span class="o">=</span> <span class="n">num_pages</span> <span class="o">%</span> <span class="n">seiten_pro_blatt</span>
+        <span class="k">if</span> <span class="n">mehr_als_vielfaches</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">blank_pages</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">blank_pages</span> <span class="o">=</span> <span class="n">seiten_pro_blatt</span> <span class="o">-</span> <span class="n">mehr_als_vielfaches</span>
+
+        <span class="k">for</span> <span class="n">kopie</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">kopien_pro_datei</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_pages</span><span class="p">):</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">addPage</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">getPage</span><span class="p">(</span><span class="n">page</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">blank_page</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">blank_pages</span><span class="p">):</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">addBlankPage</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sumo_name</span><span class="p">,</span> <span class="s2">&quot;wb+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">open_files</span><span class="p">:</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="generieren_tex_dateien"><a class="viewcode-back" href="../../../exam_generator.html#src.exam_generator.funcs.generieren_tex_dateien">[docs]</a><span class="k">def</span> <span class="nf">generieren_tex_dateien</span><span class="p">(</span>
+    <span class="n">latex_verzeichnis</span><span class="p">,</span>
+    <span class="n">template_verzeichnis</span><span class="p">,</span>
+    <span class="n">anzahl_gruppen</span><span class="p">,</span>
+    <span class="n">test_liste_variante</span><span class="p">,</span>
+    <span class="n">name_variante</span><span class="p">,</span>
+    <span class="n">titel_praktikum</span><span class="p">,</span>
+    <span class="n">semester</span><span class="p">,</span>
+    <span class="n">test_saetze_pro_gruppe</span><span class="p">,</span>
+    <span class="n">pool_dateien</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    This function replaces the variables within the tex problem/ solution files with the information given</span>
+<span class="sd">    by the setting and returns the names of the according pdf files.</span>
+
+<span class="sd">    :param latex_verzeichnis: Directory for the latex compiler</span>
+<span class="sd">    :type latex_verzeichnis: str</span>
+
+<span class="sd">    :param template_verzeichnis: Directory of the problem/ solution templates</span>
+<span class="sd">    :type template_verzeichnis: int</span>
+
+<span class="sd">    :param anzahl_gruppe: Number of group pairs</span>
+<span class="sd">    :type anzahl_gruppe: int</span>
+
+<span class="sd">    :param test_liste_variante: List of test variants belonging to chosen variant</span>
+<span class="sd">    :type test_liste_variante: list[testtyp]</span>
+
+<span class="sd">    :param name_variante: Name of the test variant</span>
+<span class="sd">    :type name_variante: str</span>
+
+<span class="sd">    :param titel_praktikum: Title of the event. Dependent on name_variant</span>
+<span class="sd">    :type titel_praktikum: str</span>
+
+<span class="sd">    :param semester: Given semester in json settings file</span>
+<span class="sd">    :type semester: str</span>
+
+<span class="sd">    :param test_saetze_pro_gruppe: List of problems/ solutions for each group</span>
+<span class="sd">    :type test_saetze_pro_gruppe: list[str]</span>
+
+<span class="sd">    :param pool_dateien: [0] list of names of problems for each pool, [1] name of pool</span>
+<span class="sd">    :type pool_dateien: list[tuple]</span>
+
+<span class="sd">    :return: [0] problem pdf names, [1] solution pdf names       </span>
+<span class="sd">    :rtype: list[tuple]  </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Deletes all temporary files in the Aufgaben directory</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">,</span> <span class="s2">&quot;*.*&quot;</span><span class="p">)):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="n">template_aufgabe_pfad</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">template_verzeichnis</span><span class="p">,</span> <span class="s2">&quot;template_aufgabe.tex&quot;</span><span class="p">)</span>
+    <span class="n">template_loesung_pfad</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">template_verzeichnis</span><span class="p">,</span> <span class="s2">&quot;template_loesung.tex&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_aufgabe_pfad</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+        <span class="n">template_aufgabe</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_loesung_pfad</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+        <span class="n">template_loesung</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">dateinamen_aufgaben_pdf</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dateinamen_loesungen_pdf</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">gruppe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">anzahl_gruppen</span><span class="p">):</span>
+        <span class="n">gruppe_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">gruppe</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="si">:</span><span class="s2">02d</span><span class="si">}{</span><span class="n">gruppe</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">for</span> <span class="n">test_index</span><span class="p">,</span> <span class="n">test_typ</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">test_liste_variante</span><span class="p">):</span>
+            <span class="c1"># Problem</span>
+            <span class="c1"># Setting file name and path</span>
+            <span class="n">datei_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ETest-</span><span class="si">{</span><span class="n">name_variante</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">gruppe_name</span><span class="si">}</span><span class="s2">.tex&quot;</span>
+            <span class="n">datei_pfad</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">,</span> <span class="n">datei_name</span><span class="p">)</span>
+
+            <span class="c1"># Replacing the parameters in the LaTeX file</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">template_aufgabe</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__PRAKTIKUM__&quot;</span><span class="p">,</span> <span class="n">titel_praktikum</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__SEMESTER__&quot;</span><span class="p">,</span> <span class="n">semester</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__VERSUCH__&quot;</span><span class="p">,</span> <span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__GRUPPE__&quot;</span><span class="p">,</span> <span class="n">gruppe_name</span><span class="p">)</span>
+
+            <span class="c1"># Creation of the problem strings + implementation in the LaTeX file</span>
+            <span class="c1"># String has to  be adjusted for every pool, so that the correct</span>
+            <span class="c1"># directory for each file is given</span>
+            <span class="c1"># This could probably be solved more elegantly, but it works for now</span>
+
+            <span class="n">aufgaben_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="k">for</span> <span class="n">aufg_loes</span> <span class="ow">in</span> <span class="n">test_saetze_pro_gruppe</span><span class="p">[</span><span class="n">gruppe</span><span class="p">][</span><span class="n">test_index</span><span class="p">]:</span>
+                <span class="n">aufgaben_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">item</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+                <span class="k">for</span> <span class="n">pool_tuple</span> <span class="ow">in</span> <span class="n">pool_dateien</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">aufg_loes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">pool_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">pool_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pool_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="n">aufgaben_string</span> <span class="o">+=</span> <span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="s2">pool</span><span class="si">{</span><span class="n">pool_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">aufg_loes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="se">}}\n\n</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__AUFGABEN__&quot;</span><span class="p">,</span> <span class="n">aufgaben_string</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datei_pfad</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">datei_inhalt</span><span class="p">)</span>
+
+            <span class="c1"># LaTeX file of the problem is converted to PDF</span>
+            <span class="n">dateinamen_aufgaben_pdf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datei_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">))</span>
+
+            <span class="c1"># Solution</span>
+            <span class="c1"># Setting file name and path</span>
+            <span class="n">datei_name</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;ETest-</span><span class="si">{</span><span class="n">name_variante</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">gruppe_name</span><span class="si">}</span><span class="s2">-Loesung.tex&quot;</span>
+            <span class="p">)</span>
+            <span class="n">datei_pfad</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">,</span> <span class="n">datei_name</span><span class="p">)</span>
+
+            <span class="c1"># Replacing parameters in LaTeX file</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">template_loesung</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__PRAKTIKUM__&quot;</span><span class="p">,</span> <span class="n">titel_praktikum</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__SEMESTER__&quot;</span><span class="p">,</span> <span class="n">semester</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__VERSUCH__&quot;</span><span class="p">,</span> <span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__GRUPPE__&quot;</span><span class="p">,</span> <span class="n">gruppe_name</span><span class="p">)</span>
+
+            <span class="c1"># Creation of the solution strings + implementation in the LaTeX file</span>
+            <span class="c1"># String has to  be adjusted for every pool, so that the correct</span>
+            <span class="c1"># directory for each file is given</span>
+            <span class="c1"># This could probably be solved more elegantly, but it works for now</span>
+            <span class="n">loesung_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="k">for</span> <span class="n">aufg_loes</span> <span class="ow">in</span> <span class="n">test_saetze_pro_gruppe</span><span class="p">[</span><span class="n">gruppe</span><span class="p">][</span><span class="n">test_index</span><span class="p">]:</span>
+                <span class="n">loesung_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">item</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+                <span class="k">for</span> <span class="n">pool_tuple</span> <span class="ow">in</span> <span class="n">pool_dateien</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">aufg_loes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">pool_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">pool_name</span> <span class="o">=</span> <span class="n">pool_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="n">loesung_string</span> <span class="o">+=</span> <span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="s2">pool</span><span class="si">{</span><span class="n">pool_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">aufg_loes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="se">}}\n\n</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+
+            <span class="n">datei_inhalt</span> <span class="o">=</span> <span class="n">datei_inhalt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__AUFGABEN__&quot;</span><span class="p">,</span> <span class="n">loesung_string</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datei_pfad</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">datei_inhalt</span><span class="p">)</span>
+
+            <span class="c1"># LaTeX file of the solution converted to pdf</span>
+            <span class="n">dateinamen_loesungen_pdf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datei_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">dateinamen_aufgaben_pdf</span><span class="p">,</span> <span class="n">dateinamen_loesungen_pdf</span></div>
+
+
+<div class="viewcode-block" id="kombination_aufgaben"><a class="viewcode-back" href="../../../exam_generator.html#src.exam_generator.funcs.kombination_aufgaben">[docs]</a><span class="k">def</span> <span class="nf">kombination_aufgaben</span><span class="p">(</span><span class="n">anzahl_gruppen</span><span class="p">,</span> <span class="n">test_liste_variante</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For each group this function adds to a list which contains</span>
+<span class="sd">    problems and their according solutions from given pools</span>
+<span class="sd">    depending on the test variant.</span>
+
+<span class="sd">    :param anzahl_gruppe: Number of group pairs</span>
+<span class="sd">    :type anzahl_gruppe: int</span>
+
+<span class="sd">    :param test_liste_variante: List of test variants belonging to chosen variant</span>
+<span class="sd">    :type test_liste_variante: list[testtyp]</span>
+
+<span class="sd">    :return: test_saetze_pro_gruppe - problems/ solutions for each group</span>
+<span class="sd">    :rtype: list[str]</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">test_saetze_pro_gruppe</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">anzahl_gruppen</span><span class="p">):</span>
+        <span class="n">test_satz</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># For each test from every pool a problem is pulled</span>
+        <span class="k">for</span> <span class="n">test_typ</span> <span class="ow">in</span> <span class="n">test_liste_variante</span><span class="p">:</span>
+            <span class="n">aufg_loes</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">test_typ</span><span class="o">.</span><span class="n">pools</span><span class="p">:</span>
+                <span class="n">aufg_loes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">ziehen</span><span class="p">())</span>
+
+            <span class="n">test_satz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aufg_loes</span><span class="p">)</span>
+
+        <span class="c1"># Sets aside the used problems of each pool</span>
+        <span class="k">for</span> <span class="n">test_typ</span> <span class="ow">in</span> <span class="n">test_liste_variante</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">test_typ</span><span class="o">.</span><span class="n">pools</span><span class="p">:</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">ablegen</span><span class="p">()</span>
+
+        <span class="n">test_saetze_pro_gruppe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_satz</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">test_saetze_pro_gruppe</span></div>
+
+
+<div class="viewcode-block" id="kompilieren"><a class="viewcode-back" href="../../../exam_generator.html#src.exam_generator.funcs.kompilieren">[docs]</a><span class="k">def</span> <span class="nf">kompilieren</span><span class="p">(</span>
+    <span class="n">test_verzeichnis</span><span class="p">,</span> <span class="n">latex_verzeichnis</span><span class="p">,</span> <span class="n">generiere_einzel_pdfs</span><span class="p">,</span> <span class="n">temp_dateien_loeschen</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function compiles the tex files and turns them into pdf format and moves them to</span>
+<span class="sd">    the test directory. Lastly, it deletes temporary data.</span>
+
+<span class="sd">    :param test_verzeichnis: Directory where the generated tests are saved</span>
+<span class="sd">    :type test_verzeichnis: str</span>
+
+<span class="sd">    :param latex_verzeichnis: Working directory of latex compiler</span>
+<span class="sd">    :type latex_verzeichnis: str</span>
+
+<span class="sd">    :param generiere_einzel_pdf: Should individual PDFs be created</span>
+<span class="sd">    :type generiere_einzel_pdf: bool</span>
+
+<span class="sd">    :param temp_dateien_loeschen: Should temporary data be deleted</span>
+<span class="sd">    :type temp_dateien_loeschen: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">test_verzeichnis</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">test_verzeichnis</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">generiere_einzel_pdfs</span><span class="p">:</span>
+        <span class="n">tex_dateien</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">datei</span> <span class="k">for</span> <span class="n">datei</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">latex_verzeichnis</span><span class="p">)</span> <span class="k">if</span> <span class="n">datei</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">datei</span> <span class="ow">in</span> <span class="n">tex_dateien</span><span class="p">:</span>
+            <span class="c1"># execute pdflatex twice to resolve references</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;pdflatex -interaction=batchmode </span><span class="si">{</span><span class="n">datei</span><span class="si">}</span><span class="s2"> &amp;&amp; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;pdflatex -interaction=batchmode </span><span class="si">{</span><span class="n">datei</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+            <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+                <span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span>
+            <span class="p">)</span>
+            <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Problem while compiling </span><span class="si">{</span><span class="n">datei</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Temporary data will not be deleted.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">temp_dateien_loeschen</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">datei</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">),</span> <span class="n">test_verzeichnis</span><span class="p">)</span>
+
+    <span class="c1"># Delete temporary data</span>
+    <span class="c1"># ToDo: mit python machen!</span>
+    <span class="k">if</span> <span class="n">temp_dateien_loeschen</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;del /Q *.dvi *.ps *.aux *.log *.tex&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Temporary data could not be deleted&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="make_specific"><a class="viewcode-back" href="../../../exam_generator.html#src.exam_generator.funcs.make_specific">[docs]</a><span class="k">def</span> <span class="nf">make_specific</span><span class="p">(</span><span class="n">make_all</span><span class="p">,</span> <span class="n">pool</span><span class="p">,</span> <span class="n">aufgabe</span><span class="p">,</span> <span class="n">root_directory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This Function creates previews for given pools/ problems or all.</span>
+
+<span class="sd">    :param make_all: Make a preview for all problems</span>
+<span class="sd">    :type make_all: bool</span>
+
+<span class="sd">    :param pool: Name of the pool to be created</span>
+<span class="sd">    :type pool: str</span>
+
+<span class="sd">    :aufgabe: File name of the problem to be created</span>
+<span class="sd">    :type aufgabe: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># list of problems to be created</span>
+    <span class="n">filenames_aufgaben</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># if a pool is selected, all its problems will be added to the creation list</span>
+    <span class="k">if</span> <span class="n">pool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">DATEINAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_Pool_&quot;</span> <span class="o">+</span> <span class="n">pool</span>
+        <span class="n">filenames_aufgaben</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems/Pool&quot;</span> <span class="o">+</span> <span class="n">pool</span> <span class="o">+</span> <span class="s2">&quot;/aufgabe*.tex&quot;</span><span class="p">)))</span>
+
+    <span class="c1"># if problem is provided, it is added to the preview creation list</span>
+    <span class="k">if</span> <span class="n">aufgabe</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">filenames_aufgaben</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems/Pool*/&quot;</span> <span class="o">+</span> <span class="n">aufgabe</span> <span class="o">+</span> <span class="s2">&quot;.tex&quot;</span><span class="p">)))</span>
+        <span class="n">DATEINAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_&quot;</span> <span class="o">+</span> <span class="n">aufgabe</span>
+
+    <span class="c1"># if make_all is selected the preview creation list contains all problems</span>
+    <span class="k">if</span> <span class="n">make_all</span><span class="p">:</span>
+        <span class="n">filenames_aufgaben</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems/Pool*/*.tex&quot;</span><span class="p">))</span>
+        <span class="n">DATEINAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_all&quot;</span>
+
+    <span class="n">specific_verzeichnis</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Previews&quot;</span><span class="p">)</span>
+
+    <span class="c1"># veraendert den Namen der Datei, falls bereits eine gleichbenannte vorhanden ist</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">specific_verzeichnis</span><span class="p">,</span> <span class="n">DATEINAME</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">DATEINAME</span> <span class="o">=</span> <span class="n">DATEINAME</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Maximum amount of previews for a single file is reached. Please delete unnecessary files.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">quit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">11</span><span class="p">:</span>
+            <span class="n">DATEINAME</span> <span class="o">=</span> <span class="n">DATEINAME</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># ---------------Settings End-----------------#</span>
+
+    <span class="c1"># -------------Creation of the PDF File-------------#</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">DATEINAME</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="c1"># Latex-Preamble</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">documentclass[a4paper,10pt]</span><span class="si">{article}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage[utf8]</span><span class="si">{inputenc}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage[T1]</span><span class="si">{fontenc}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{german}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{amsmath}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{amssymb}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{epsfig}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{graphicx}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{color}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{subfigure}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{tabularx}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{cancel}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{enumitem}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage</span><span class="si">{units}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]</span><span class="si">{geometry}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">setlength{</span><span class="se">\\</span><span class="s2">parskip}</span><span class="si">{2ex}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">setlength{</span><span class="se">\\</span><span class="s2">parindent}</span><span class="si">{0ex}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcolumntype</span><span class="si">{C}</span><span class="s2">[1]{&gt;{</span><span class="se">\\</span><span class="s2">centering</span><span class="se">\\</span><span class="s2">arraybackslash}m{#1}}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">diff}[3][]{</span><span class="se">\\</span><span class="s2">frac{</span><span class="se">\\</span><span class="s2">mathrm</span><span class="si">{d}</span><span class="s2">^{#1}#2}{</span><span class="se">\\</span><span class="s2">mathrm</span><span class="si">{d}</span><span class="s2">{#3}^{#1}}}&quot;</span>
+        <span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">Pkte}[2][-999]{</span><span class="se">\\</span><span class="s2">fbox{</span><span class="se">\\</span><span class="s2">textcolor</span><span class="si">{red}</span><span class="s2">{</span><span class="se">\\</span><span class="s2">textbf{#2</span><span class="se">\\</span><span class="s2">,P.}}}}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newenvironment</span><span class="si">{Loesung}</span><span class="s2">{</span><span class="se">\\</span><span class="s2">begin</span><span class="si">{enumerate}</span><span class="s2">}{</span><span class="se">\\</span><span class="s2">end</span><span class="si">{enumerate}</span><span class="s2">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">lsgitem}{</span><span class="se">\\</span><span class="s2">item}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">abb}{</span><span class="se">\\\\</span><span class="s2">[0,5cm]}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">ds}{</span><span class="se">\\</span><span class="s2">displaystyle}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">graphicspath{{Latex}}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">begin</span><span class="si">{document}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># problems and solutions</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">filenames_aufgaben</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">textbf{{</span><span class="si">{0}</span><span class="s2">}}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">_&quot;</span><span class="p">)))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input{{</span><span class="si">{0}</span><span class="s2">}}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">textbf</span><span class="si">{Loesung:}</span><span class="se">\\\\\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input{{</span><span class="si">{0}</span><span class="s2">}}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;aufgabe&quot;</span><span class="p">,</span> <span class="s2">&quot;loesung&quot;</span><span class="p">)))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">hrulefill</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Document end</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">end</span><span class="si">{document}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># compiling and if successful deleting temporary data</span>
+    <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+        <span class="s2">&quot;pdflatex -interaction=nonstopmode </span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">DATEINAME</span><span class="p">),</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+            <span class="s2">&quot;del </span><span class="si">{0}</span><span class="s2">.aux </span><span class="si">{0}</span><span class="s2">.log </span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">DATEINAME</span><span class="p">),</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fehler&quot;</span><span class="p">)</span>
+
+    <span class="c1"># creating new folder if not already existend</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">specific_verzeichnis</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">specific_verzeichnis</span><span class="p">)</span>
+
+    <span class="c1"># moving pdf file to Previews directory</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">DATEINAME</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="n">specific_verzeichnis</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Niklas Weber.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,1 +1,0 @@
-from .exam-generator import main

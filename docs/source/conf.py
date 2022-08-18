@@ -9,6 +9,8 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
+import src.exam_generator
+
 
 project = 'exam-generator'
 copyright = '2022, Niklas Weber'
