@@ -1,4 +1,4 @@
-exam\_generator package
+API Reference
 =======================
 
 .. automodule:: exam_generator
