@@ -392,7 +392,7 @@ def make_specific(make_all, pool, aufgabe, root_directory):
             "\\newcommand{\\diff}[3][]{\\frac{\\mathrm{d}^{#1}#2}{\\mathrm{d}{#3}^{#1}}}"
         )
         f.write(
-            "\\newcommand{\\Pkte}[2][-999]{\\fbox{\\textcolor{red}{\\textbf{#2\\,P.}}}}\n"
+            "\\newcommand{\\Pkte}[2][-999]{\\fbox{\\textcolor{black}{\\textbf{#2\\,P.}}}}\n"
         )
         f.write("\\newenvironment{Loesung}{\\begin{enumerate}}{\\end{enumerate}}\n")
         f.write("\\newcommand{\\lsgitem}{\\item}\n")
