@@ -6,7 +6,7 @@
 /Settings/*.json
 /Modules/__pycache__
 /.vscode
-/src/exam-generator/__pycache__
+/src/exam_generator/__pycache__
 
 
 !/Problems/poolA
@@ -14,6 +14,7 @@
 !/Problems/poolC
 !/Problems/poolD
 !/Settings/settings_template.json
+!/src
 !/docs
 !/test 
 !/examples
