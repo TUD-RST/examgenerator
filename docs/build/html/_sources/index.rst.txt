@@ -7,6 +7,7 @@ Welcome to exam-generator's documentation!
 ==========================================
 
 .. toctree::
+   .. mdinclude:: User_Doc.md
    exam_generator
 
 

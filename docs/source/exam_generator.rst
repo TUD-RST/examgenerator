@@ -1,7 +1,7 @@
 exam\_generator package
 =======================
 
-.. automodule:: src.exam_generator
+.. automodule:: exam_generator
    :members:
    :undoc-members:
    :show-inheritance:
@@ -9,7 +9,7 @@ exam\_generator package
 Main
 --------------------------------------
 
-.. automodule:: src.exam_generator.main
+.. automodule:: exam_generator.main
    :members:
    :undoc-members:
    :show-inheritance:
@@ -17,7 +17,7 @@ Main
 Classes
 ------------------------------
 
-.. automodule:: src.exam_generator.classes
+.. automodule:: exam_generator.classes
    :members:
    :undoc-members:
    :show-inheritance:
@@ -26,7 +26,7 @@ Classes
 Functions
 ----------------------------
 
-.. automodule:: src.exam_generator.funcs
+.. automodule:: exam_generator.funcs
    :members:
    :undoc-members:
    :show-inheritance:

@@ -8,8 +8,8 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
-import src.exam_generator
+sys.path.insert(0, os.path.join(os.path.abspath('../..'), "src"))
+import exam_generator
 
 
 project = 'exam-generator'
