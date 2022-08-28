@@ -168,7 +168,9 @@ def test_generator(args):
     """
 
     # main directory
-    root_directory = os.path.abspath(os.path.join(os.getcwd(), os.path.pardir, os.path.pardir))
+    root_directory = os.path.abspath(
+        os.path.join(os.getcwd(), os.path.pardir, os.path.pardir)
+    )
 
     if args.create_test is not None:
         # ================ Settings =============================
@@ -179,7 +181,9 @@ def test_generator(args):
         # No change of settings in this program!
         einstellungen = args.create_test
 
-        path_einstellungen = os.path.join(root_directory, "Settings", str(einstellungen))
+        path_einstellungen = os.path.join(
+            root_directory, "Settings", str(einstellungen)
+        )
 
         # Loading the json settings into a Python dictionary
         with open(path_einstellungen, "r") as json_datei:
@@ -220,7 +224,6 @@ def test_generator(args):
         generiere_sumo_pdf = einstellungen_dictionary["data"]["generate_sumo_pdf"]
         temp_dateien_loeschen = einstellungen_dictionary["data"]["delete_temp_data"]
         #%%
-
 
         # ==================================
         # --- Configuration ---
@@ -475,7 +478,6 @@ def test_generator(args):
     # --- Make-Specific ---
     # ==================================
 
-
     if args.make_all or args.make_pool or args.make_specific:
         make_specific(args.make_all, args.make_pool, args.make_specific, root_directory)
 
@@ -484,10 +486,10 @@ def test_generator(args):
 
 # ==========================================================
 
+
 def main():
-    if __name__ == "__main__":
-        Descr = tw.dedent(
-            """\
+    Descr = tw.dedent(
+        """\
                         This script creates tests based on given problems and settings
 
                         From a pool of problems, test will be created in  a way, that there will be no
@@ -527,43 +529,43 @@ def main():
                         This allows creating the tests for the entire semester in one go. However, this
                         is only useful if the problems and solutions are final and will not have to be corrected
                         afterwards."""
-        )
+    )
 
-        parser = ap.ArgumentParser(description=Descr)
+    parser = ap.ArgumentParser(description=Descr)
 
-        parser.add_argument(
-            "-ct",
-            "--create_test",
-            help="Creates a test based on the provided json settings file",
-        )
-        parser.add_argument(
-            "-ma",
-            "--make_all",
-            action="store_true",
-            help="Creates a preview for all problems",
-        )
-        parser.add_argument(
-            "-mp",
-            "--make_pool",
-            choices=["A", "B", "C", "D", "E", "F", "G", "H"],
-            help="Creates a Preview for all problems of the given pool",
-        )
-        parser.add_argument(
-            "-ms",
-            "--make_specific",
-            help="Creates a Preview for only the given problem\
+    parser.add_argument(
+        "-ct",
+        "--create_test",
+        help="Creates a test based on the provided json settings file",
+    )
+    parser.add_argument(
+        "-ma",
+        "--make_all",
+        action="store_true",
+        help="Creates a preview for all problems",
+    )
+    parser.add_argument(
+        "-mp",
+        "--make_pool",
+        choices=["A", "B", "C", "D", "E", "F", "G", "H"],
+        help="Creates a Preview for all problems of the given pool",
+    )
+    parser.add_argument(
+        "-ms",
+        "--make_specific",
+        help="Creates a Preview for only the given problem\
                             you will need to provide them problem´s name (without .tex)",
-        )
+    )
 
-        args = parser.parse_args()
+    args = parser.parse_args()
 
-        if (
-            (args.create_test is None)
-            and (args.make_all == False)
-            and (args.make_pool is None)
-            and (args.make_specific is None)
-        ):
-            parser.error("Please choose at least one of the options. For help type: -h")
+    if (
+        (args.create_test is None)
+        and (args.make_all == False)
+        and (args.make_pool is None)
+        and (args.make_specific is None)
+    ):
+        parser.error("Please choose at least one of the options. For help type: -h")
 
-        else:
-            test_generator(args)
+    else:
+        test_generator(args)

@@ -11,7 +11,6 @@ Welcome to exam-generator's documentation!
 
 
 
-
 Indices and tables
 ==================
 
