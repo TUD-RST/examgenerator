@@ -36,7 +36,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../exam_generator.html">exam_generator package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_doc.html">User Doc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../exam_generator.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -78,103 +80,102 @@
 
 <span class="sd">    Construction:</span>
 
-<span class="sd">    &gt;&gt;&gt; Pool(name, dateinamen_tex)</span>
+<span class="sd">    &gt;&gt;&gt; Pool(name, file_names_tex)</span>
 
 <span class="sd">    :param name: Name of the pool for example: A1, CV21, DV07</span>
 <span class="sd">    :type name: str</span>
 
-<span class="sd">    :param dateinamen_tex: All Problem-Solution-file names</span>
-<span class="sd">    :type dateinamen: list[str]</span>
+<span class="sd">    :param file_names_tex: All Problem-Solution-file names</span>
+<span class="sd">    :type file_names_tex: list[str]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dateinamen_tex</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">file_names_tex</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates new pool instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">stapel_verfuegbar</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span> <span class="o">=</span> <span class="p">[]</span>
         
-        <span class="c1"># [(dateiname_aufgabe, dateiname_loesung)]; problems that can be chosen from</span>
-        
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">stapel_gezogen</span> <span class="o">=</span> <span class="p">[]</span>
-        
-        <span class="c1"># [(dateiname_aufgabe, dateiname_loesung)]; selected problems for corresponding group</span>
+        <span class="c1"># [(filename_problem, filename_solution)]; problems that can be chosen from</span>
         
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">stapel_ablage</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack_pulled</span> <span class="o">=</span> <span class="p">[]</span>
         
-        <span class="c1"># [(dateiname_aufgabe, dateiname_loesung)]; problems which were pulled by last group</span>
+        <span class="c1"># [(filename_problem, filename_solution)]; selected problems for corresponding group</span>
+        
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack_storage</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># [(filename_problem, dateiname_solution)]; problems which were pulled by last group</span>
        
-        <span class="c1"># Erstellt eine Liste mit allen Aufgaben aus gefragten Pool</span>
-        <span class="n">aufgaben_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;^aufgabe_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="se">\\</span><span class="s2">d+</span><span class="se">\\</span><span class="s2">.tex$&quot;</span><span class="p">)</span>
-        <span class="n">dateinamen_pool_aufgaben</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">datei</span>
-            <span class="k">for</span> <span class="n">datei</span> <span class="ow">in</span> <span class="n">dateinamen_tex</span>
-            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">aufgaben_regex</span><span class="p">,</span> <span class="n">datei</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="c1"># Creates a list with all problems of required pool</span>
+        <span class="n">problem_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;^problem_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="se">\\</span><span class="s2">d+</span><span class="se">\\</span><span class="s2">.tex$&quot;</span><span class="p">)</span>
+        <span class="n">file_names_pool_problems</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">file</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_names_tex</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">problem_regex</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="p">]</span>
 
-        <span class="c1"># Ueberpruefung, ob es im Pool Aufgaben mit dazugehörigen Loesungen gibt</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dateinamen_pool_aufgaben</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Checks if problem + solution exists</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_names_pool_problems</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There is no more problems available in Pool </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Sucht nach der Loesung zur jeweiligen Aufgabe</span>
-        <span class="k">for</span> <span class="n">datei</span> <span class="ow">in</span> <span class="n">dateinamen_pool_aufgaben</span><span class="p">:</span>
-            <span class="n">datei_loesung</span> <span class="o">=</span> <span class="n">datei</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;aufgabe&quot;</span><span class="p">,</span> <span class="s2">&quot;loesung&quot;</span><span class="p">)</span>
+        <span class="c1"># Searches solution for problem</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_names_pool_problems</span><span class="p">:</span>
+            <span class="n">file_solution</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;aufgabe&quot;</span><span class="p">,</span> <span class="s2">&quot;loesung&quot;</span><span class="p">)</span>
 
-            <span class="c1"># Hinzufuegen der Aufgabe und Loesung zum Stapel falls Lösung vorhanden</span>
-            <span class="k">if</span> <span class="n">datei_loesung</span> <span class="ow">in</span> <span class="n">dateinamen_tex</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">stapel_verfuegbar</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">datei</span><span class="p">,</span> <span class="n">datei_loesung</span><span class="p">))</span>
+            <span class="c1"># Adds problem and solution to stack</span>
+            <span class="k">if</span> <span class="n">file_solution</span> <span class="ow">in</span> <span class="n">file_names_tex</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">file</span><span class="p">,</span> <span class="n">file_solution</span><span class="p">))</span>
 
-            <span class="c1"># Warnung, falls keine passende Loesung gefunden</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datei</span><span class="si">}</span><span class="s2"> does not have a corresponding solution file </span><span class="si">{</span><span class="n">datei_loesung</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> does not have a corresponding solution file </span><span class="si">{</span><span class="n">file_solution</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
 
-<div class="viewcode-block" id="Pool.ziehen"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.Pool.ziehen">[docs]</a>    <span class="k">def</span> <span class="nf">ziehen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pool.pull"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.Pool.pull">[docs]</a>    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Pulls a random problem + solution from the pool</span>
 <span class="sd">        </span>
-<span class="sd">        :return: aufg_loes</span>
+<span class="sd">        :return: prob_sol</span>
 <span class="sd">        :rtype: list[]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stapel_verfuegbar</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># Stapel mit verfuegbaren Aufgaben ist leer,</span>
-            <span class="c1"># Ablagestapel wird zum neuen verfuegbaren Stapel</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Stack with available problems is exhausted</span>
+            <span class="c1"># Storage stack is new available stack</span>
 
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stapel_ablage</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">stapel_verfuegbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stapel_ablage</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">stapel_ablage</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stack_storage</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack_storage</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stack_storage</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Pool </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is exhausted, problems might repeat within the group&quot;</span>
                 <span class="p">)</span>
-        <span class="c1"># Zufaellige Auswahl einer Aufgabe+Loesung aus verfuegbaren Stapel</span>
-        <span class="n">aufg_loes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stapel_verfuegbar</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stapel_verfuegbar</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Random selection of problems/solution pairs</span>
+        <span class="n">prob_sol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stapel_gezogen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aufg_loes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack_pulled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prob_sol</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">aufg_loes</span></div>
+        <span class="k">return</span> <span class="n">prob_sol</span></div>
 
 <div class="viewcode-block" id="Pool.ablegen"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.Pool.ablegen">[docs]</a>    <span class="k">def</span> <span class="nf">ablegen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Discards all pulled problems to the discard pile</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stapel_ablage</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stapel_gezogen</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stapel_gezogen</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack_storage</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stack_pulled</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack_pulled</span> <span class="o">=</span> <span class="p">[]</span></div></div>
 
 
-<div class="viewcode-block" id="TestTyp"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.TestTyp">[docs]</a><span class="k">class</span> <span class="nc">TestTyp</span><span class="p">:</span>
+<div class="viewcode-block" id="TestType"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.TestType">[docs]</a><span class="k">class</span> <span class="nc">TestType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents all different test types</span>
 
 <span class="sd">    Construction:</span>
 
-<span class="sd">    &gt;&gt;&gt; TestTyp(name, *pools)</span>
+<span class="sd">    &gt;&gt;&gt; TestType(name, *pools)</span>
 
 <span class="sd">    :param name: Name of the test type, for example the name of Experiment</span>
 <span class="sd">    :type name: str</span>
@@ -186,7 +187,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">pools</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Creates instance of TestTyp</span>
+<span class="sd">        Creates instance of TestType</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>

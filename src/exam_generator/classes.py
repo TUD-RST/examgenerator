@@ -12,103 +12,102 @@ class Pool:
 
     Construction:
 
-    >>> Pool(name, dateinamen_tex)
+    >>> Pool(name, file_names_tex)
 
     :param name: Name of the pool for example: A1, CV21, DV07
     :type name: str
 
-    :param dateinamen_tex: All Problem-Solution-file names
-    :type dateinamen: list[str]
+    :param file_names_tex: All Problem-Solution-file names
+    :type file_names_tex: list[str]
     """
 
-    def __init__(self, name, dateinamen_tex):
+    def __init__(self, name, file_names_tex):
         """
         Creates new pool instance
         """
 
         self.name = name
 
-        self.stapel_verfuegbar = []
+        self.stack_available = []
         
-        # [(dateiname_aufgabe, dateiname_loesung)]; problems that can be chosen from
-        
-
-        self.stapel_gezogen = []
-        
-        # [(dateiname_aufgabe, dateiname_loesung)]; selected problems for corresponding group
+        # [(filename_problem, filename_solution)]; problems that can be chosen from
         
 
-        self.stapel_ablage = []
+        self.stack_pulled = []
         
-        # [(dateiname_aufgabe, dateiname_loesung)]; problems which were pulled by last group
+        # [(filename_problem, filename_solution)]; selected problems for corresponding group
+        
+
+        self.stack_storage = []
+        
+        # [(filename_problem, dateiname_solution)]; problems which were pulled by last group
        
-        # Erstellt eine Liste mit allen Aufgaben aus gefragten Pool
-        aufgaben_regex = re.compile(f"^aufgabe_{name}_\\d+\\.tex$")
-        dateinamen_pool_aufgaben = [
-            datei
-            for datei in dateinamen_tex
-            if re.match(aufgaben_regex, datei) is not None
+        # Creates a list with all problems of required pool
+        problem_regex = re.compile(f"^problem_{name}_\\d+\\.tex$")
+        file_names_pool_problems = [
+            file
+            for file in file_names_tex
+            if re.match(problem_regex, file) is not None
         ]
 
-        # Ueberpruefung, ob es im Pool Aufgaben mit dazugehörigen Loesungen gibt
-        if len(dateinamen_pool_aufgaben) == 0:
+        # Checks if problem + solution exists
+        if len(file_names_pool_problems) == 0:
             warn(f"There is no more problems available in Pool {self.name}")
 
-        # Sucht nach der Loesung zur jeweiligen Aufgabe
-        for datei in dateinamen_pool_aufgaben:
-            datei_loesung = datei.replace("aufgabe", "loesung")
+        # Searches solution for problem
+        for file in file_names_pool_problems:
+            file_solution = file.replace("aufgabe", "loesung")
 
-            # Hinzufuegen der Aufgabe und Loesung zum Stapel falls Lösung vorhanden
-            if datei_loesung in dateinamen_tex:
-                self.stapel_verfuegbar.append((datei, datei_loesung))
+            # Adds problem and solution to stack
+            if file_solution in file_names_tex:
+                self.stack_available.append((file, file_solution))
 
-            # Warnung, falls keine passende Loesung gefunden
             else:
                 warn(
-                    f"{datei} does not have a corresponding solution file {datei_loesung}"
+                    f"{file} does not have a corresponding solution file {file_solution}"
                 )
 
-    def ziehen(self):
+    def pull(self):
         """
         Pulls a random problem + solution from the pool
         
-        :return: aufg_loes
+        :return: prob_sol
         :rtype: list[]
         """
-        if len(self.stapel_verfuegbar) == 0:
-            # Stapel mit verfuegbaren Aufgaben ist leer,
-            # Ablagestapel wird zum neuen verfuegbaren Stapel
+        if len(self.stack_available) == 0:
+            # Stack with available problems is exhausted
+            # Storage stack is new available stack
 
-            if len(self.stapel_ablage) > 0:
-                self.stapel_verfuegbar = self.stapel_ablage
-                self.stapel_ablage = []
+            if len(self.stack_storage) > 0:
+                self.stack_available = self.stack_storage
+                self.stack_storage = []
             else:
                 raise RuntimeError(
                     f"Pool {self.name} is exhausted, problems might repeat within the group"
                 )
-        # Zufaellige Auswahl einer Aufgabe+Loesung aus verfuegbaren Stapel
-        aufg_loes = self.stapel_verfuegbar.pop(
-            random.randint(0, len(self.stapel_verfuegbar) - 1)
+        # Random selection of problems/solution pairs
+        prob_sol = self.stack_available.pop(
+            random.randint(0, len(self.stack_available) - 1)
         )
-        self.stapel_gezogen.append(aufg_loes)
+        self.stack_pulled.append(prob_sol)
 
-        return aufg_loes
+        return prob_sol
 
     def ablegen(self):
         """
         Discards all pulled problems to the discard pile
         """
-        self.stapel_ablage.extend(self.stapel_gezogen)
-        self.stapel_gezogen = []
+        self.stack_storage.extend(self.stack_pulled)
+        self.stack_pulled = []
 
 
-class TestTyp:
+class TestType:
     """
     Represents all different test types
 
     Construction:
 
-    >>> TestTyp(name, *pools)
+    >>> TestType(name, *pools)
 
     :param name: Name of the test type, for example the name of Experiment
     :type name: str
@@ -120,7 +119,7 @@ class TestTyp:
 
     def __init__(self, name, *pools):
         """
-        Creates instance of TestTyp
+        Creates instance of TestType
 
         """
         self.name = name

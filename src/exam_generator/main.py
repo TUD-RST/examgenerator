@@ -43,52 +43,52 @@ def exam_generator(args):
 
         #%% click on the left to view options
 
-        # Settings are adjusted in the settings json files in the Einstellungen directory and then loaded into Python
+        # Settings are adjusted in the settings json files in the settings directory and then loaded into Python
         # No change of settings in this program!
-        einstellungen = args.create_test
+        settings = args.create_test
 
-        path_einstellungen = os.path.join(
-            root_directory, "Settings", str(einstellungen)
+        path_settings = os.path.join(
+            root_directory, "Settings", str(settings)
         )
 
         # Loading the json settings into a Python dictionary
-        with open(path_einstellungen, "r") as json_datei:
-            einstellungen_dictionary = json.load(json_datei)
+        with open(path_settings, "r") as json_datei:
+            settings_dictionary = json.load(json_datei)
 
         # Determines the amount of group pairs
         # for example:  6 => group pairs 01-12
         # 01+02, 03+04, ..., have the same problems
-        anzahl_gruppen = einstellungen_dictionary["group_pairs"]
+        number_group_pairs = settings_dictionary["group_pairs"]
 
         # Degree for which the test is created
         # Prefactored options: ET1, ET2, MT, RES
-        name_variante = einstellungen_dictionary["variant_name"]
+        variant_name = settings_dictionary["variant_name"]
 
         # Semester
-        semester = einstellungen_dictionary["semester"]
+        semester = settings_dictionary["semester"]
 
         # SUMO-pdf:
         # File contains all tests for the entire semester
         # Creates the test for the whole smester in one go
-        sumo_seiten_pro_blatt_test = einstellungen_dictionary["sumo"][
+        sumo_pages_per_sheet_test = settings_dictionary["sumo"][
             "pages_per_page_test"
         ]
         # 4 = printing double paged A5
 
-        sumo_kopien_pro_test = einstellungen_dictionary["sumo"]["sumo_number_copies"]
+        sumo_copies_per_test = settings_dictionary["sumo"]["sumo_number_copies"]
         # Has to match the number of participants per groups
 
-        sumo_seiten_pro_blatt_loesung = einstellungen_dictionary["sumo"][
+        sumo_pages_per_sheet_solution = settings_dictionary["sumo"][
             "pages_per_page_solution"
         ]
-        sumo_kopien_pro_loesung = einstellungen_dictionary["sumo"][
+        sumo_copies_per_solution = settings_dictionary["sumo"][
             "sumo_solution_copies"
         ]
 
         # Settings of what should be created and deleted
-        generiere_einzel_pdfs = einstellungen_dictionary["data"]["generate_single_pdfs"]
-        generiere_sumo_pdf = einstellungen_dictionary["data"]["generate_sumo_pdf"]
-        temp_dateien_loeschen = einstellungen_dictionary["data"]["delete_temp_data"]
+        generate_single_pdfs = settings_dictionary["data"]["generate_single_pdfs"]
+        generate_sumo_pdf = settings_dictionary["data"]["generate_sumo_pdf"]
+        delete_temp_data = settings_dictionary["data"]["delete_temp_data"]
         #%%
 
         # ==================================
@@ -100,114 +100,114 @@ def exam_generator(args):
         random.seed()
 
         # Working directory for the LaTeX compiler
-        latex_verzeichnis = os.path.join(root_directory, "Problems")
+        latex_directory = os.path.join(root_directory, "Problems")
 
         # Template directory
-        template_verzeichnis = os.path.join(root_directory, "Templates")
+        template_directory = os.path.join(root_directory, "Templates")
 
         # Directory where the tests will be saved in (for example: Tests-ET1-WS201920)
-        test_verzeichnis = os.path.join(
+        test_directory = os.path.join(
             root_directory,
-            "Tests-{}-{}".format(name_variante, semester)
+            "Tests-{}-{}".format(variant_name, semester)
             .replace(" ", "")
             .replace("/", ""),
         )
 
         # Directory with the LaTeX source code for the problems (prob. unnecessary, working on it)
-        poolA_verzeichnis = os.path.join(latex_verzeichnis, "poolA")
-        poolB_verzeichnis = os.path.join(latex_verzeichnis, "poolB")
-        poolC_verzeichnis = os.path.join(latex_verzeichnis, "poolC")
-        poolD_verzeichnis = os.path.join(latex_verzeichnis, "poolD")
-        poolE_verzeichnis = os.path.join(latex_verzeichnis, "poolE")
-        poolF_verzeichnis = os.path.join(latex_verzeichnis, "poolF")
-        poolG_verzeichnis = os.path.join(latex_verzeichnis, "poolG")
-        poolH_verzeichnis = os.path.join(latex_verzeichnis, "poolH")
+        poolA_directory = os.path.join(latex_directory, "poolA")
+        poolB_directory = os.path.join(latex_directory, "poolB")
+        poolC_directory = os.path.join(latex_directory, "poolC")
+        poolD_directory = os.path.join(latex_directory, "poolD")
+        poolE_directory = os.path.join(latex_directory, "poolE")
+        poolF_directory = os.path.join(latex_directory, "poolF")
+        poolG_directory = os.path.join(latex_directory, "poolG")
+        poolH_directory = os.path.join(latex_directory, "poolH")
 
         # Creates a list of problem names for every pool (probably unnecessary, working on it)
-        dateinamen_poolA_tex = [
+        file_names_poolA_tex = [
             os.path.basename(fn)
-            for fn in glob.iglob(os.path.join(poolA_verzeichnis, "*.tex"))
+            for fn in glob.iglob(os.path.join(poolA_directory, "*.tex"))
         ]
 
-        dateinamen_poolB_tex = [
+        file_names_poolB_tex = [
             os.path.basename(fn)
-            for fn in glob.iglob(os.path.join(poolB_verzeichnis, "*.tex"))
+            for fn in glob.iglob(os.path.join(poolB_directory, "*.tex"))
         ]
 
-        dateinamen_poolC_tex = [
+        file_names_poolC_tex = [
             os.path.basename(fn)
-            for fn in glob.iglob(os.path.join(poolC_verzeichnis, "*.tex"))
+            for fn in glob.iglob(os.path.join(poolC_directory, "*.tex"))
         ]
 
-        dateinamen_poolD_tex = [
+        file_names_poolD_tex = [
             os.path.basename(fn)
-            for fn in glob.iglob(os.path.join(poolD_verzeichnis, "*.tex"))
+            for fn in glob.iglob(os.path.join(poolD_directory, "*.tex"))
         ]
 
-        dateinamen_poolE_tex = [
+        file_names_poolE_tex = [
             os.path.basename(fn)
-            for fn in glob.iglob(os.path.join(poolE_verzeichnis, "*.tex"))
+            for fn in glob.iglob(os.path.join(poolE_directory, "*.tex"))
         ]
 
-        dateinamen_poolF_tex = [
+        file_names_poolF_tex = [
             os.path.basename(fn)
-            for fn in glob.iglob(os.path.join(poolF_verzeichnis, "*.tex"))
+            for fn in glob.iglob(os.path.join(poolF_directory, "*.tex"))
         ]
 
-        dateinamen_poolG_tex = [
+        file_names_poolG_tex = [
             os.path.basename(fn)
-            for fn in glob.iglob(os.path.join(poolG_verzeichnis, "*.tex"))
+            for fn in glob.iglob(os.path.join(poolG_directory, "*.tex"))
         ]
 
-        dateinamen_poolH_tex = [
+        file_names_poolH_tex = [
             os.path.basename(fn)
-            for fn in glob.iglob(os.path.join(poolH_verzeichnis, "*.tex"))
+            for fn in glob.iglob(os.path.join(poolH_directory, "*.tex"))
         ]
 
         # list of tuples: list of all problems belonging to each pool, name of pool
-        pool_dateien = [
-            (dateinamen_poolA_tex, "A"),
-            (dateinamen_poolB_tex, "B"),
-            (dateinamen_poolC_tex, "C"),
-            (dateinamen_poolD_tex, "D"),
-            (dateinamen_poolE_tex, "E"),
-            (dateinamen_poolF_tex, "F"),
-            (dateinamen_poolG_tex, "G"),
-            (dateinamen_poolH_tex, "H"),
+        pool_files = [
+            (file_names_poolA_tex, "A"),
+            (file_names_poolB_tex, "B"),
+            (file_names_poolC_tex, "C"),
+            (file_names_poolD_tex, "D"),
+            (file_names_poolE_tex, "E"),
+            (file_names_poolF_tex, "F"),
+            (file_names_poolG_tex, "G"),
+            (file_names_poolH_tex, "H"),
         ]
 
         # combines the list of all problem names from all pools
-        dateinamen_tex = []
-        for pool in pool_dateien:
-            dateinamen_tex += pool[0]
+        file_names_tex = []
+        for pool in pool_files:
+            file_names_tex += pool[0]
 
         # General problems for each test
         # A1, B1 -> for 5th Semester RT and 6th semester MT and RES
         # A2, B2 -> for 6th Semester RT (knowledge from RT 2 required)
-        poolA1 = Pool("A1", dateinamen_tex)
-        poolB1 = Pool("B1", dateinamen_tex)
-        poolA2 = Pool("A2", dateinamen_tex)
-        poolB2 = Pool("B2", dateinamen_tex)
+        poolA1 = Pool("A1", file_names_tex)
+        poolB1 = Pool("B1", file_names_tex)
+        poolA2 = Pool("A2", file_names_tex)
+        poolB2 = Pool("B2", file_names_tex)
 
         # Experiment specific problems for V1, V3, V7, V8, V15 und V21
-        poolCV01 = Pool("CV01", dateinamen_tex)
-        poolCV03 = Pool("CV03", dateinamen_tex)
-        poolCV07 = Pool("CV07", dateinamen_tex)
-        poolCV08 = Pool("CV08", dateinamen_tex)
-        poolCV15 = Pool("CV15", dateinamen_tex)
-        poolCV21 = Pool("CV21", dateinamen_tex)
+        poolCV01 = Pool("CV01", file_names_tex)
+        poolCV03 = Pool("CV03", file_names_tex)
+        poolCV07 = Pool("CV07", file_names_tex)
+        poolCV08 = Pool("CV08", file_names_tex)
+        poolCV15 = Pool("CV15", file_names_tex)
+        poolCV21 = Pool("CV21", file_names_tex)
 
         # More experiment specific problems, if there is not enough from C
-        poolDV07 = Pool("DV07", dateinamen_tex)
-        poolDV08 = Pool("DV08", dateinamen_tex)
-        poolDV15 = Pool("DV15", dateinamen_tex)
-        poolDV21 = Pool("DV21", dateinamen_tex)
+        poolDV07 = Pool("DV07", file_names_tex)
+        poolDV08 = Pool("DV08", file_names_tex)
+        poolDV15 = Pool("DV15", file_names_tex)
+        poolDV21 = Pool("DV21", file_names_tex)
 
-        # ------------Custom Testtype/ Testlist----------------#
-        use_custom_test = einstellungen_dictionary["use_custom_test"]
+        # ------------Custom TestTypee/ Testlist----------------#
+        use_custom_test = settings_dictionary["use_custom_test"]
 
         # Loads the dictionary of custom tests
-        test_types_dictionary_strings = einstellungen_dictionary["test_types"]
+        test_types_dictionary_strings = settings_dictionary["test_types"]
 
         # will be final test list
         custom_test_list = []
@@ -222,67 +222,67 @@ def exam_generator(args):
             del test_typ[0]
 
             for a in range(len(test_typ)):
-                custom_test_pools.append(Pool(test_typ[a], dateinamen_tex))
+                custom_test_pools.append(Pool(test_typ[a], file_names_tex))
 
-            custom_test = TestTyp(custom_test_name, *custom_test_pools)
+            custom_test = TestType(custom_test_name, *custom_test_pools)
 
             custom_test_list.append(custom_test)
 
         # Tests for RT1, MT and RES courses
-        testV1 = TestTyp("V01", poolA1, poolB1, poolCV01)
-        testV7 = TestTyp("V07", poolA1, poolB1, poolCV07, poolDV07)
-        testV8_MT_RES = TestTyp("V08", poolA1, poolB1, poolCV08)
-        testV15_MT_RES = TestTyp("V15", poolA1, poolB1, poolCV15, poolDV15)
-        testV21 = TestTyp("V21", poolA1, poolB1, poolCV21, poolDV21)
-        test_liste_ET1 = [testV1, testV7, testV21]
-        test_liste_MT = [testV21, testV8_MT_RES]
-        test_liste_RES = [testV21, testV8_MT_RES, testV15_MT_RES]
+        testV1 = TestType("V01", poolA1, poolB1, poolCV01)
+        testV7 = TestType("V07", poolA1, poolB1, poolCV07, poolDV07)
+        testV8_MT_RES = TestType("V08", poolA1, poolB1, poolCV08)
+        testV15_MT_RES = TestType("V15", poolA1, poolB1, poolCV15, poolDV15)
+        testV21 = TestType("V21", poolA1, poolB1, poolCV21, poolDV21)
+        test_list_ET1 = [testV1, testV7, testV21]
+        test_list_MT = [testV21, testV8_MT_RES]
+        test_list_RES = [testV21, testV8_MT_RES, testV15_MT_RES]
 
         # Tests for RT2 (6th Semester)
-        testV3 = TestTyp("V03", poolA2, poolB2, poolCV03)
-        testV8_ET = TestTyp("V08", poolA2, poolB2, poolCV08)
-        testV15_ET = TestTyp("V15", poolA2, poolB2, poolCV15, poolDV15)
-        test_liste_ET2 = [testV3, testV8_ET, testV15_ET]
+        testV3 = TestType("V03", poolA2, poolB2, poolCV03)
+        testV8_ET = TestType("V08", poolA2, poolB2, poolCV08)
+        testV15_ET = TestType("V15", poolA2, poolB2, poolCV15, poolDV15)
+        test_list_ET2 = [testV3, testV8_ET, testV15_ET]
 
         # for debugging
-        pool_all = Pool(".*", dateinamen_tex)
-        test_all = TestTyp(
-            "VX", *[pool_all for i in range(len(pool_all.stapel_verfuegbar))]
+        pool_all = Pool(".*", file_names_tex)
+        test_all = TestType(
+            "VX", *[pool_all for i in range(len(pool_all.stack_available))]
         )
-        test_liste_all = [test_all]
+        test_list_all = [test_all]
         # --------------
 
         # Assigning test lists to given variants
-        if name_variante == "ET1":
-            titel_praktikum = "Praktikum Regelungstechnik 1 (ET)"
-            test_liste_variante = test_liste_ET1
-        elif name_variante == "ET2":
-            titel_praktikum = "Praktikum Regelungstechnik 2 (ET)"
-            test_liste_variante = test_liste_ET2
-        elif name_variante == "MT":
-            titel_praktikum = "Praktikum Regelung \\& Steuerung (MT)"
-            test_liste_variante = test_liste_MT
-        elif name_variante == "RES":
-            titel_praktikum = "Praktikum Regelungstechnik (RES)"
-            test_liste_variante = test_liste_RES
+        if variant_name == "ET1":
+            title = "Praktikum Regelungstechnik 1 (ET)"
+            test_list_variant = test_list_ET1
+        elif variant_name == "ET2":
+            title = "Praktikum Regelungstechnik 2 (ET)"
+            test_list_variant = test_list_ET2
+        elif variant_name == "MT":
+            title = "Praktikum Regelung \\& Steuerung (MT)"
+            test_list_variant = test_list_MT
+        elif variant_name == "RES":
+            title = "Praktikum Regelungstechnik (RES)"
+            test_list_variant = test_list_RES
         else:
             warn("Unbekannter Bezeichner. Gewuenscht: ET1, ET2, MT oder RES!")
-            test_liste_variante = []
-            titel_praktikum = ""
+            test_list_variant = []
+            title = ""
             quit()
 
         # If a custom test is used
         if use_custom_test:
-            titel_praktikum = f"Praktikum-{name_variante}"
-            test_liste_variante = custom_test_list
+            titel_praktikum = variant_name
+            test_list_variant = custom_test_list
         #%%
 
         # ================================
         # --- Kombination der Aufgaben ---
         # ================================
 
-        test_saetze_pro_gruppe = kombination_aufgaben(
-            anzahl_gruppen, test_liste_variante
+        tests_per_group = combining_problems(
+            number_group_pairs, test_list_variant
         )
 
         # ==================================
@@ -291,53 +291,53 @@ def exam_generator(args):
 
         # Creating the the tuple which contains the pdf names of the problems and solutions
         # for more info view the module
-        namen_aufg_loesungen_pdf = generieren_tex_dateien(
-            latex_verzeichnis,
-            template_verzeichnis,
-            anzahl_gruppen,
-            test_liste_variante,
-            name_variante,
+        names_prob_sol_pdf = generate_tex_files(
+            latex_directory,
+            template_directory,
+            number_group_pairs,
+            test_list_variant,
+            variant_name,
             titel_praktikum,
             semester,
-            test_saetze_pro_gruppe,
-            pool_dateien,
+            tests_per_group,
+            pool_files,
         )
 
         # ===================
         # --- Compiling ---
         # ===================
 
-        kompilieren(
-            test_verzeichnis,
-            latex_verzeichnis,
-            generiere_einzel_pdfs,
-            temp_dateien_loeschen,
+        compile(
+            test_directory,
+            latex_directory,
+            generate_single_pdfs,
+            delete_temp_data,
         )
 
         # ==================================
         # --- Sumo-Files ---
         # ==================================
 
-        if generiere_sumo_pdf:
-            namen_aufg_loesungen_pdf[0].sort()
-            sumo_aufgaben_name = f"Sumo-{name_variante}-Aufgaben.pdf"
-            baue_sumo(
-                test_verzeichnis,
-                sumo_aufgaben_name,
-                namen_aufg_loesungen_pdf[0],
-                sumo_seiten_pro_blatt_test,
-                sumo_kopien_pro_test,
+        if generate_sumo_pdf:
+            names_prob_sol_pdf[0].sort()
+            sumo_name_problems = f"Sumo-{variant_name}-Problems.pdf"
+            build_sumo(
+                test_directory,
+                sumo_name_problems,
+                names_prob_sol_pdf[0],
+                sumo_pages_per_sheet_test,
+                sumo_copies_per_test,
             )
 
-            namen_aufg_loesungen_pdf[1].sort()
+            names_prob_sol_pdf[1].sort()
 
-            sumo_loesungen_name = f"Sumo-{name_variante}-Loesungen.pdf"
-            baue_sumo(
-                test_verzeichnis,
-                sumo_loesungen_name,
-                namen_aufg_loesungen_pdf[1],
-                sumo_seiten_pro_blatt_loesung,
-                sumo_kopien_pro_loesung,
+            sumo_name_solutions = f"Sumo-{variant_name}-Solutions.pdf"
+            build_sumo(
+                test_directory,
+                sumo_name_solutions,
+                names_prob_sol_pdf[1],
+                sumo_pages_per_sheet_solution,
+                sumo_copies_per_solution,
             )
 
     # ==================================
@@ -373,7 +373,7 @@ def main():
                         the main pools (PoolA, PoolB, PoolC, PoolD). They usually differ between general problems,
                         that are used in every test, and problems, that are specific for the given experiment.
 
-                        Tests are combined via instances of the class TestTyp and managed via instances of the class Pool.
+                        Tests are combined via instances of the class TestType and managed via instances of the class Pool.
                         Solutions are saved in separate files.
                         Files for problems have the prefix "aufgabe_", solutions the prefix "loesung_".
                         The scheme is the following: 
