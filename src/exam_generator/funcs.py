@@ -10,9 +10,8 @@ import shutil
 from pathlib import Path
 from warnings import warn
 
-def build_sumo(
-    test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file
-):
+
+def build_sumo(test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file):
 
     """
     This function creates the sumo file which contains all problems/ solutions for all groups.
@@ -35,7 +34,7 @@ def build_sumo(
     Creates:
 
         * pdf file sumo_name.pdf
-    
+
     """
 
     os.chdir(test_directory)
@@ -80,7 +79,7 @@ def generate_tex_files(
 ):
 
     """
-    
+
     This function replaces the variables within the tex problem/ solution files with the information given
     by the setting and returns the names of the according pdf files.
 
@@ -111,8 +110,8 @@ def generate_tex_files(
     :param pool_files: [0] list of names of problems for each pool, [1] name of pool
     :type pool_files: list[tuple]
 
-    :return: [0] problem pdf names, [1] solution pdf names       
-    :rtype: list[tuple]  
+    :return: [0] problem pdf names, [1] solution pdf names
+    :rtype: list[tuple]
 
     """
 
@@ -174,9 +173,7 @@ def generate_tex_files(
 
             # Solution
             # Setting file name and path
-            file_name = (
-                f"Test-{variant_name}-{test_typ.name}-{group_name}-Solution.tex"
-            )
+            file_name = f"Test-{variant_name}-{test_typ.name}-{group_name}-Solution.tex"
             file_path = os.path.join(latex_directory, file_name)
 
             # Replacing parameters in LaTeX file
@@ -228,7 +225,7 @@ def combining_problems(number_group_pairs, test_list_variant):
 
     :return: tests_per_group - problems/ solutions for each group
     :rtype: list[str]
-    
+
     """
 
     tests_per_group = []
@@ -255,9 +252,7 @@ def combining_problems(number_group_pairs, test_list_variant):
     return tests_per_group
 
 
-def compile(
-    test_directory, latex_directory, generate_single_pdfs, delete_temp_data
-):
+def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_data):
 
     """
     This function compiles the tex files and turns them into pdf format and moves them to
@@ -336,16 +331,26 @@ def make_specific(make_all, pool, aufgabe, root_directory):
     # if a pool is selected, all its problems will be added to the creation list
     if pool is not None:
         FILENAME = "Preview_Pool_" + pool
-        filenames_problems.extend(glob.glob(os.path.join(root_directory, "Problems/Pool" + pool + "/problem*.tex")))
+        filenames_problems.extend(
+            glob.glob(
+                os.path.join(root_directory, "Problems/Pool" + pool + "/problem*.tex")
+            )
+        )
 
     # if problem is provided, it is added to the preview creation list
     if aufgabe is not None:
-        filenames_problems.extend(glob.glob(os.path.join(root_directory, "Problems/Pool*/" + aufgabe + ".tex")))
+        filenames_problems.extend(
+            glob.glob(
+                os.path.join(root_directory, "Problems/Pool*/" + aufgabe + ".tex")
+            )
+        )
         FILENAME = "Preview_" + aufgabe
 
     # if make_all is selected the preview creation list contains all problems
     if make_all:
-        filenames_problems = glob.glob(os.path.join(root_directory, "Problems/Pool*/*.tex"))
+        filenames_problems = glob.glob(
+            os.path.join(root_directory, "Problems/Pool*/*.tex")
+        )
         FILENAME = "Preview_all"
 
     specific_directory = os.path.join(root_directory, "Previews")

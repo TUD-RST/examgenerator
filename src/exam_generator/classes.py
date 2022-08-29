@@ -6,6 +6,7 @@ import random
 from warnings import warn
 import re
 
+
 class Pool:
     """
     Represents each pool with its corresponding problems.
@@ -29,25 +30,21 @@ class Pool:
         self.name = name
 
         self.stack_available = []
-        
+
         # [(filename_problem, filename_solution)]; problems that can be chosen from
-        
 
         self.stack_pulled = []
-        
+
         # [(filename_problem, filename_solution)]; selected problems for corresponding group
-        
 
         self.stack_storage = []
-        
+
         # [(filename_problem, dateiname_solution)]; problems which were pulled by last group
-       
+
         # Creates a list with all problems of required pool
         problem_regex = re.compile(f"^problem_{name}_\\d+\\.tex$")
         file_names_pool_problems = [
-            file
-            for file in file_names_tex
-            if re.match(problem_regex, file) is not None
+            file for file in file_names_tex if re.match(problem_regex, file) is not None
         ]
 
         # Checks if problem + solution exists
@@ -70,7 +67,7 @@ class Pool:
     def pull(self):
         """
         Pulls a random problem + solution from the pool
-        
+
         :return: prob_sol
         :rtype: list[]
         """

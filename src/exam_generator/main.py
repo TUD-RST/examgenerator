@@ -9,7 +9,8 @@ import argparse as ap
 import textwrap as tw
 
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+
+sys.path.insert(0, os.path.abspath(".."))
 from exam_generator.classes import *
 from exam_generator.funcs import *
 
@@ -47,9 +48,7 @@ def exam_generator(args):
         # No change of settings in this program!
         settings = args.create_test
 
-        path_settings = os.path.join(
-            root_directory, "Settings", str(settings)
-        )
+        path_settings = os.path.join(root_directory, "Settings", str(settings))
 
         # Loading the json settings into a Python dictionary
         with open(path_settings, "r") as json_datei:
@@ -70,9 +69,7 @@ def exam_generator(args):
         # SUMO-pdf:
         # File contains all tests for the entire semester
         # Creates the test for the whole smester in one go
-        sumo_pages_per_sheet_test = settings_dictionary["sumo"][
-            "pages_per_page_test"
-        ]
+        sumo_pages_per_sheet_test = settings_dictionary["sumo"]["pages_per_page_test"]
         # 4 = printing double paged A5
 
         sumo_copies_per_test = settings_dictionary["sumo"]["sumo_number_copies"]
@@ -81,9 +78,7 @@ def exam_generator(args):
         sumo_pages_per_sheet_solution = settings_dictionary["sumo"][
             "pages_per_page_solution"
         ]
-        sumo_copies_per_solution = settings_dictionary["sumo"][
-            "sumo_solution_copies"
-        ]
+        sumo_copies_per_solution = settings_dictionary["sumo"]["sumo_solution_copies"]
 
         # Settings of what should be created and deleted
         generate_single_pdfs = settings_dictionary["data"]["generate_single_pdfs"]
@@ -281,9 +276,7 @@ def exam_generator(args):
         # --- Kombination der Aufgaben ---
         # ================================
 
-        tests_per_group = combining_problems(
-            number_group_pairs, test_list_variant
-        )
+        tests_per_group = combining_problems(number_group_pairs, test_list_variant)
 
         # ==================================
         # --- Generating the TeX-Files ---
@@ -438,6 +431,7 @@ def main():
 
     else:
         exam_generator(args)
+
 
 if __name__ == "__main__":
     main()
