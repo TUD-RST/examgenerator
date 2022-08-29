@@ -350,9 +350,11 @@ def make_specific(make_all, pool, aufgabe, root_directory):
 
     specific_directory = os.path.join(root_directory, "Previews")
 
-    # veraendert den Namen der file, falls bereits eine gleichbenannte vorhanden ist
+    # changes file name if file already exists
     i = 1
     while Path(os.path.join(specific_directory, FILENAME + ".pdf")).is_file():
+        if i == 1:
+            FILENAME = FILENAME + str(i)
         if i > 10:
             FILENAME = FILENAME[:-2] + str(i)
         if i > 100:
