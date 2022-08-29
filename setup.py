@@ -2,14 +2,14 @@
 
 import os
 from setuptools import setup
+import sys
 
-
-packagename = "exam-generator"
+packagename = "exam_generator"
 
 # consider the path of `setup.py` as root directory:
 PROJECTROOT = os.path.dirname(sys.argv[0]) or "."
 __version__ = (
-    open(os.path.join(PROJECTROOT, packagename, "release.py"), encoding="utf8")
+    open(os.path.join(PROJECTROOT, "src", packagename, "release.py"), encoding="utf8")
     .read()
     .split('__version__ = "', 1)[1]
     .split('"', 1)[0]
@@ -32,5 +32,5 @@ setup(
     """,
     keywords='',
     install_requires=requirements,
-    entry_points={'console_scripts': ['{0}={0}:main'.format(packagename)]}
+    entry_points={'console_scripts': ['{0}=src:{0}:main'.format(packagename)]}
 )
