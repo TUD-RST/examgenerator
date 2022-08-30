@@ -74,6 +74,7 @@
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
+
 <div class="viewcode-block" id="Pool"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.Pool">[docs]</a><span class="k">class</span> <span class="nc">Pool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents each pool with its corresponding problems.</span>
@@ -97,25 +98,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span> <span class="o">=</span> <span class="p">[]</span>
-        
+
         <span class="c1"># [(filename_problem, filename_solution)]; problems that can be chosen from</span>
-        
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stack_pulled</span> <span class="o">=</span> <span class="p">[]</span>
-        
+
         <span class="c1"># [(filename_problem, filename_solution)]; selected problems for corresponding group</span>
-        
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stack_storage</span> <span class="o">=</span> <span class="p">[]</span>
-        
+
         <span class="c1"># [(filename_problem, dateiname_solution)]; problems which were pulled by last group</span>
-       
+
         <span class="c1"># Creates a list with all problems of required pool</span>
         <span class="n">problem_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;^problem_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="se">\\</span><span class="s2">d+</span><span class="se">\\</span><span class="s2">.tex$&quot;</span><span class="p">)</span>
         <span class="n">file_names_pool_problems</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">file</span>
-            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_names_tex</span>
-            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">problem_regex</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_names_tex</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">problem_regex</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="p">]</span>
 
         <span class="c1"># Checks if problem + solution exists</span>
@@ -138,7 +135,7 @@
 <div class="viewcode-block" id="Pool.pull"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.Pool.pull">[docs]</a>    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Pulls a random problem + solution from the pool</span>
-<span class="sd">        </span>
+
 <span class="sd">        :return: prob_sol</span>
 <span class="sd">        :rtype: list[]</span>
 <span class="sd">        &quot;&quot;&quot;</span>

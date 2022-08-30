@@ -10,34 +10,38 @@ The exams/ tests are based off of two major components:
 the LaTeX basis (problems, solutions, templates) and user defined settings.
 
 
-LaTeX
------------------
+Content Generation
+-----------------------
 
-Templates
+LaTeX Templates
 ^^^^^^^^^^^^^^^^^^^^^^^
-There is two LaTeX templates in the ``Templates`` Directory: One for the problems 
+There are two LaTeX templates in the ``templates`` Directory: One for the problems 
 and one for the sample solution and evaluation. In these templates there is 
 placeholders, which will be replaced by this script.
 
 Problems/ Solutions
 ^^^^^^^^^^^^^^^^^^^^^^^
-The problems are located in the
-Aufgaben directory which is furthermore separated into the main pools
-(PoolA, PoolB, ... , PoolH). They usually differ between general
+Problems and solutions are located in the
+``problem_data`` directory which is furthermore separated into the main *pools*
+(``PoolA``, ``PoolB``, ... , ``PoolH``). **definition pool** The pools usually differ between general
 problems, that are used in every test, and problems, that are specific
-for the given experiment. 
+for a given experiment. 
 
-Solutions are saved in separate files. Files for problems have the prefix ``problem\_``,
+Problems and solutions are saved in separate files. Files for problems have the prefix ``problem\_``,
 solutions the prefix ``solution\_``. 
 
-The scheme is the following:
+Naming Scheme
+^^^^^^^^^^^^^^^^^^^^^^
 
-- *problem_A1_2.tex* -> 2. problem of type A1 or for an experiment
+The name scheme is the following:
 
-- *problem_CV03_1.tex* -> 1. problem from experiment (V) number 03 of type C
+- *problem_A1_2.tex* -> 2nd problem from pool A of type 1 or for an experiment
 
-For a more detailed breakdown of the nomenclature view the read.me file
-in the Aufgaben folder. Subtasks of a problem should be structured in an
+- *problem_CV03_1.tex* -> 1st problem from experiment (V) number 03 from pool C
+
+**detailed breakdown**
+For a more detailed breakdown of the nomenclature view the README file
+in the root directory. Subtasks of a problem should be structured in an
 enumerate-surrounding. Within the solution files the solution text has
 to be written in between ``\begin{Loesung}``, ``\end{Loesung}``. 
 The solution of every subtask starts with the key
@@ -109,7 +113,7 @@ Features
 --------------
 
 Based on the sample template it is possible to create as many settings
-templates to your liking. They have to be saved in the ``Settings``
+templates to your liking. They have to be saved in the ``settings``
 directory. With these it is now possible to easily create tests:
 
 -  *-ct* [name of the chosen settings file.json] (–create_test [name of
@@ -129,8 +133,7 @@ solutions:
    creates a preview file for the given problem name of the problem
    without “.tex” In order to receive help type:
 
--  *-h* (–help) This script uses operating commands, which are currently
-   only implemented on Windows.
+-  *-h* (–help) 
 
 Calling Syntax
 ---------------
@@ -151,3 +154,6 @@ python etest_generator.py [-h] [-ct] SETTINGS_FILE [-ma] [-mp] POOL
 
 etest_generator.exe [-h] [-ct] SETTINGSFILE [-ma] [-mp] POOL [-ms]
 PROBLEM
+
+This script uses operating commands, which are currently
+only implemented on Windows.

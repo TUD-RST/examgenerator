@@ -34,8 +34,9 @@ def exam_generator(args):
     """
 
     # main directory
-    root_directory = os.getcwd()
-    
+    root_directory = os.path.abspath(
+        os.path.join(os.getcwd(), os.path.pardir, os.path.pardir)
+    )
 
     if args.create_test is not None:
         # ================ Settings =============================
@@ -46,7 +47,7 @@ def exam_generator(args):
         # No change of settings in this program!
         settings = args.create_test
 
-        path_settings = os.path.join(root_directory, "settings", str(settings))
+        path_settings = os.path.join(root_directory, "Settings", str(settings))
 
         # Loading the json settings into a Python dictionary
         with open(path_settings, "r") as json_datei:
@@ -93,10 +94,10 @@ def exam_generator(args):
         random.seed()
 
         # Working directory for the LaTeX compiler
-        latex_directory = os.path.join(root_directory, "problem_data")
+        latex_directory = os.path.join(root_directory, "Problems")
 
         # Template directory
-        template_directory = os.path.join(root_directory, "templates")
+        template_directory = os.path.join(root_directory, "Templates")
 
         # Directory where the tests will be saved in (for example: Tests-ET1-WS201920)
         test_directory = os.path.join(
@@ -348,10 +349,6 @@ def main():
     """
     Calls parser and delivers arguments to exam_generator.
     """
-    print(os.path.isdir("settings"))
-    print(os.path.isdir("templates"))
-    print(os.path.isdir("problem_data"))
-
     Descr = tw.dedent(
         """\
                         This script creates tests based on given problems and settings

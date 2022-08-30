@@ -7,7 +7,7 @@
 /Modules/__pycache__
 /.vscode
 /src/exam_generator/__pycache__
-
+/src/*.egg-info
 
 !/Problems/poolA
 !/Problems/poolB

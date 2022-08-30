@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 import sys
 
 packagename = "exam_generator"
@@ -22,8 +22,9 @@ setup(
     name=packagename,
     version=__version__,
     author='Niklas Weber',
-    packages=[packagename],
-    package_data={'imagedirpreview': ['templates/*']},
+    packages=find_packages("src"),
+    package_dir = {"": "src"},
+    package_data={'abc': ['templates/*']},
     url='',
     license='',
     description='Script for generating exams based on selected settings/ problems',
@@ -32,5 +33,5 @@ setup(
     """,
     keywords='',
     install_requires=requirements,
-    entry_points={'console_scripts': ['{0}=src:{0}:main'.format(packagename)]}
+    entry_points={'console_scripts': ['{0}={0}:main'.format(packagename)]}
 )

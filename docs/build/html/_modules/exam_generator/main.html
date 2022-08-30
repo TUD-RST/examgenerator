@@ -76,10 +76,10 @@
 <span class="kn">import</span> <span class="nn">argparse</span> <span class="k">as</span> <span class="nn">ap</span>
 <span class="kn">import</span> <span class="nn">textwrap</span> <span class="k">as</span> <span class="nn">tw</span>
 
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">))</span>
-<span class="kn">from</span> <span class="nn">exam_generator.classes</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">exam_generator.funcs</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="kn">from</span> <span class="nn">.classes</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.funcs</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="exam_generator"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.main.exam_generator">[docs]</a><span class="k">def</span> <span class="nf">exam_generator</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
@@ -102,9 +102,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># main directory</span>
-    <span class="n">root_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pardir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>
-    <span class="p">)</span>
+    <span class="n">root_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">create_test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># ================ Settings =============================</span>
@@ -115,9 +114,7 @@
         <span class="c1"># No change of settings in this program!</span>
         <span class="n">settings</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">create_test</span>
 
-        <span class="n">path_settings</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Settings&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">path_settings</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;settings&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">))</span>
 
         <span class="c1"># Loading the json settings into a Python dictionary</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_settings</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_datei</span><span class="p">:</span>
@@ -138,9 +135,7 @@
         <span class="c1"># SUMO-pdf:</span>
         <span class="c1"># File contains all tests for the entire semester</span>
         <span class="c1"># Creates the test for the whole smester in one go</span>
-        <span class="n">sumo_pages_per_sheet_test</span> <span class="o">=</span> <span class="n">settings_dictionary</span><span class="p">[</span><span class="s2">&quot;sumo&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;pages_per_page_test&quot;</span>
-        <span class="p">]</span>
+        <span class="n">sumo_pages_per_sheet_test</span> <span class="o">=</span> <span class="n">settings_dictionary</span><span class="p">[</span><span class="s2">&quot;sumo&quot;</span><span class="p">][</span><span class="s2">&quot;pages_per_page_test&quot;</span><span class="p">]</span>
         <span class="c1"># 4 = printing double paged A5</span>
 
         <span class="n">sumo_copies_per_test</span> <span class="o">=</span> <span class="n">settings_dictionary</span><span class="p">[</span><span class="s2">&quot;sumo&quot;</span><span class="p">][</span><span class="s2">&quot;sumo_number_copies&quot;</span><span class="p">]</span>
@@ -149,9 +144,7 @@
         <span class="n">sumo_pages_per_sheet_solution</span> <span class="o">=</span> <span class="n">settings_dictionary</span><span class="p">[</span><span class="s2">&quot;sumo&quot;</span><span class="p">][</span>
             <span class="s2">&quot;pages_per_page_solution&quot;</span>
         <span class="p">]</span>
-        <span class="n">sumo_copies_per_solution</span> <span class="o">=</span> <span class="n">settings_dictionary</span><span class="p">[</span><span class="s2">&quot;sumo&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;sumo_solution_copies&quot;</span>
-        <span class="p">]</span>
+        <span class="n">sumo_copies_per_solution</span> <span class="o">=</span> <span class="n">settings_dictionary</span><span class="p">[</span><span class="s2">&quot;sumo&quot;</span><span class="p">][</span><span class="s2">&quot;sumo_solution_copies&quot;</span><span class="p">]</span>
 
         <span class="c1"># Settings of what should be created and deleted</span>
         <span class="n">generate_single_pdfs</span> <span class="o">=</span> <span class="n">settings_dictionary</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;generate_single_pdfs&quot;</span><span class="p">]</span>
@@ -168,10 +161,10 @@
         <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">()</span>
 
         <span class="c1"># Working directory for the LaTeX compiler</span>
-        <span class="n">latex_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems&quot;</span><span class="p">)</span>
+        <span class="n">latex_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;problem_data&quot;</span><span class="p">)</span>
 
         <span class="c1"># Template directory</span>
-        <span class="n">template_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Templates&quot;</span><span class="p">)</span>
+        <span class="n">template_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;templates&quot;</span><span class="p">)</span>
 
         <span class="c1"># Directory where the tests will be saved in (for example: Tests-ET1-WS201920)</span>
         <span class="n">test_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -349,9 +342,7 @@
         <span class="c1"># --- Kombination der Aufgaben ---</span>
         <span class="c1"># ================================</span>
 
-        <span class="n">tests_per_group</span> <span class="o">=</span> <span class="n">combining_problems</span><span class="p">(</span>
-            <span class="n">number_group_pairs</span><span class="p">,</span> <span class="n">test_list_variant</span>
-        <span class="p">)</span>
+        <span class="n">tests_per_group</span> <span class="o">=</span> <span class="n">combining_problems</span><span class="p">(</span><span class="n">number_group_pairs</span><span class="p">,</span> <span class="n">test_list_variant</span><span class="p">)</span>
 
         <span class="c1"># ==================================</span>
         <span class="c1"># --- Generating the TeX-Files ---</span>
@@ -425,6 +416,10 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calls parser and delivers arguments to exam_generator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="s2">&quot;settings&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="s2">&quot;templates&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="s2">&quot;problem_data&quot;</span><span class="p">))</span>
+
     <span class="n">Descr</span> <span class="o">=</span> <span class="n">tw</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span>
         <span class="sd">&quot;&quot;&quot;\</span>
 <span class="sd">                        This script creates tests based on given problems and settings</span>
@@ -506,6 +501,7 @@
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">exam_generator</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>

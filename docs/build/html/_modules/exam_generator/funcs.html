@@ -78,9 +78,8 @@
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
-<div class="viewcode-block" id="build_sumo"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.build_sumo">[docs]</a><span class="k">def</span> <span class="nf">build_sumo</span><span class="p">(</span>
-    <span class="n">test_directory</span><span class="p">,</span> <span class="n">sumo_name</span><span class="p">,</span> <span class="n">pdf_list</span><span class="p">,</span> <span class="n">pages_per_sheet</span><span class="p">,</span> <span class="n">copies_per_file</span>
-<span class="p">):</span>
+
+<div class="viewcode-block" id="build_sumo"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.build_sumo">[docs]</a><span class="k">def</span> <span class="nf">build_sumo</span><span class="p">(</span><span class="n">test_directory</span><span class="p">,</span> <span class="n">sumo_name</span><span class="p">,</span> <span class="n">pdf_list</span><span class="p">,</span> <span class="n">pages_per_sheet</span><span class="p">,</span> <span class="n">copies_per_file</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function creates the sumo file which contains all problems/ solutions for all groups.</span>
@@ -103,7 +102,7 @@
 <span class="sd">    Creates:</span>
 
 <span class="sd">        * pdf file sumo_name.pdf</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">test_directory</span><span class="p">)</span>
@@ -148,7 +147,7 @@
 <span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    </span>
+
 <span class="sd">    This function replaces the variables within the tex problem/ solution files with the information given</span>
 <span class="sd">    by the setting and returns the names of the according pdf files.</span>
 
@@ -179,8 +178,8 @@
 <span class="sd">    :param pool_files: [0] list of names of problems for each pool, [1] name of pool</span>
 <span class="sd">    :type pool_files: list[tuple]</span>
 
-<span class="sd">    :return: [0] problem pdf names, [1] solution pdf names       </span>
-<span class="sd">    :rtype: list[tuple]  </span>
+<span class="sd">    :return: [0] problem pdf names, [1] solution pdf names</span>
+<span class="sd">    :rtype: list[tuple]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -242,9 +241,7 @@
 
             <span class="c1"># Solution</span>
             <span class="c1"># Setting file name and path</span>
-            <span class="n">file_name</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Test-</span><span class="si">{</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">-Solution.tex&quot;</span>
-            <span class="p">)</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Test-</span><span class="si">{</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">-Solution.tex&quot;</span>
             <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
 
             <span class="c1"># Replacing parameters in LaTeX file</span>
@@ -296,7 +293,7 @@
 
 <span class="sd">    :return: tests_per_group - problems/ solutions for each group</span>
 <span class="sd">    :rtype: list[str]</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">tests_per_group</span> <span class="o">=</span> <span class="p">[]</span>
@@ -323,9 +320,7 @@
     <span class="k">return</span> <span class="n">tests_per_group</span></div>
 
 
-<div class="viewcode-block" id="compile"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.compile">[docs]</a><span class="k">def</span> <span class="nf">compile</span><span class="p">(</span>
-    <span class="n">test_directory</span><span class="p">,</span> <span class="n">latex_directory</span><span class="p">,</span> <span class="n">generate_single_pdfs</span><span class="p">,</span> <span class="n">delete_temp_data</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="compile"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.compile">[docs]</a><span class="k">def</span> <span class="nf">compile</span><span class="p">(</span><span class="n">test_directory</span><span class="p">,</span> <span class="n">latex_directory</span><span class="p">,</span> <span class="n">generate_single_pdfs</span><span class="p">,</span> <span class="n">delete_temp_data</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function compiles the tex files and turns them into pdf format and moves them to</span>
@@ -404,23 +399,35 @@
     <span class="c1"># if a pool is selected, all its problems will be added to the creation list</span>
     <span class="k">if</span> <span class="n">pool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_Pool_&quot;</span> <span class="o">+</span> <span class="n">pool</span>
-        <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems/Pool&quot;</span> <span class="o">+</span> <span class="n">pool</span> <span class="o">+</span> <span class="s2">&quot;/problem*.tex&quot;</span><span class="p">)))</span>
+        <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems/Pool&quot;</span> <span class="o">+</span> <span class="n">pool</span> <span class="o">+</span> <span class="s2">&quot;/problem*.tex&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="c1"># if problem is provided, it is added to the preview creation list</span>
     <span class="k">if</span> <span class="n">aufgabe</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems/Pool*/&quot;</span> <span class="o">+</span> <span class="n">aufgabe</span> <span class="o">+</span> <span class="s2">&quot;.tex&quot;</span><span class="p">)))</span>
+        <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems/Pool*/&quot;</span> <span class="o">+</span> <span class="n">aufgabe</span> <span class="o">+</span> <span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_&quot;</span> <span class="o">+</span> <span class="n">aufgabe</span>
 
     <span class="c1"># if make_all is selected the preview creation list contains all problems</span>
     <span class="k">if</span> <span class="n">make_all</span><span class="p">:</span>
-        <span class="n">filenames_problems</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems/Pool*/*.tex&quot;</span><span class="p">))</span>
+        <span class="n">filenames_problems</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Problems/Pool*/*.tex&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_all&quot;</span>
 
     <span class="n">specific_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;Previews&quot;</span><span class="p">)</span>
 
-    <span class="c1"># veraendert den Namen der file, falls bereits eine gleichbenannte vorhanden ist</span>
+    <span class="c1"># changes file name if file already exists</span>
     <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">while</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">specific_directory</span><span class="p">,</span> <span class="n">FILENAME</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">FILENAME</span> <span class="o">=</span> <span class="n">FILENAME</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
             <span class="n">FILENAME</span> <span class="o">=</span> <span class="n">FILENAME</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
