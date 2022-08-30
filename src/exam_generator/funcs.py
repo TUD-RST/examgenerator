@@ -136,7 +136,7 @@ def generate_tex_files(
         for test_index, test_typ in enumerate(test_list_variant):
             # Problem
             # Setting file name and path
-            file_name = f"Test-{variant_name}-{test_typ.name}-{group_name}.tex"
+            file_name = f"Exam-{variant_name}-{test_typ.name}-{group_name}.tex"
             file_path = os.path.join(latex_directory, file_name)
 
             # Replacing the parameters in the LaTeX file
@@ -173,7 +173,7 @@ def generate_tex_files(
 
             # Solution
             # Setting file name and path
-            file_name = f"Test-{variant_name}-{test_typ.name}-{group_name}-Solution.tex"
+            file_name = f"Exam-{variant_name}-{test_typ.name}-{group_name}-Solution.tex"
             file_path = os.path.join(latex_directory, file_name)
 
             # Replacing parameters in LaTeX file
@@ -333,7 +333,9 @@ def make_specific(make_all, pool, aufgabe, root_directory):
         FILENAME = "Preview_Pool_" + pool
         filenames_problems.extend(
             glob.glob(
-                os.path.join(root_directory, "Problems/Pool" + pool + "/problem*.tex")
+                os.path.join(
+                    root_directory, "problem_data/Pool" + pool + "/problem*.tex"
+                )
             )
         )
 
@@ -341,7 +343,7 @@ def make_specific(make_all, pool, aufgabe, root_directory):
     if aufgabe is not None:
         filenames_problems.extend(
             glob.glob(
-                os.path.join(root_directory, "Problems/Pool*/" + aufgabe + ".tex")
+                os.path.join(root_directory, "problem_data/Pool*/" + aufgabe + ".tex")
             )
         )
         FILENAME = "Preview_" + aufgabe
@@ -349,11 +351,11 @@ def make_specific(make_all, pool, aufgabe, root_directory):
     # if make_all is selected the preview creation list contains all problems
     if make_all:
         filenames_problems = glob.glob(
-            os.path.join(root_directory, "Problems/Pool*/*.tex")
+            os.path.join(root_directory, "problem_data/Pool*/*.tex")
         )
         FILENAME = "Preview_all"
 
-    specific_directory = os.path.join(root_directory, "Previews")
+    specific_directory = os.path.join(root_directory, "previews")
 
     # changes file name if file already exists
     i = 1

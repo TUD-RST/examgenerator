@@ -9,7 +9,6 @@ import argparse as ap
 import textwrap as tw
 
 
-
 from .classes import *
 from .funcs import *
 
@@ -35,7 +34,6 @@ def exam_generator(args):
 
     # main directory
     root_directory = os.getcwd()
-    
 
     if args.create_test is not None:
         # ================ Settings =============================
@@ -101,7 +99,7 @@ def exam_generator(args):
         # Directory where the tests will be saved in (for example: Tests-ET1-WS201920)
         test_directory = os.path.join(
             root_directory,
-            "Tests-{}-{}".format(variant_name, semester)
+            "Exams-{}-{}".format(variant_name, semester)
             .replace(" ", "")
             .replace("/", ""),
         )
