@@ -115,7 +115,7 @@ def generate_tex_files(
 
     """
 
-    # Deletes all temporary files in the Aufgaben directory
+    # Deletes all temporary files in the problem_data directory
     for file in glob.glob(os.path.join(latex_directory, "*.*")):
         os.remove(file)
 
@@ -311,7 +311,7 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
             warn("Temporary data could not be deleted")
 
 
-def make_specific(make_all, pool, aufgabe, root_directory):
+def make_specific(make_all, pool, problem, root_directory):
     """
     This Function creates previews for given pools/ problems or all.
 
@@ -321,8 +321,8 @@ def make_specific(make_all, pool, aufgabe, root_directory):
     :param pool: Name of the pool to be created
     :type pool: str
 
-    :aufgabe: File name of the problem to be created
-    :type aufgabe: str
+    :problem: File name of the problem to be created
+    :type problem: str
     """
 
     # list of problems to be created
@@ -340,13 +340,13 @@ def make_specific(make_all, pool, aufgabe, root_directory):
         )
 
     # if problem is provided, it is added to the preview creation list
-    if aufgabe is not None:
+    if problem is not None:
         filenames_problems.extend(
             glob.glob(
-                os.path.join(root_directory, "problem_data/Pool*/" + aufgabe + ".tex")
+                os.path.join(root_directory, "problem_data/Pool*/" + problem + ".tex")
             )
         )
-        FILENAME = "Preview_" + aufgabe
+        FILENAME = "Preview_" + problem
 
     # if make_all is selected the preview creation list contains all problems
     if make_all:
@@ -433,7 +433,7 @@ def make_specific(make_all, pool, aufgabe, root_directory):
             "del {0}.aux {0}.log {0}.tex".format(FILENAME), shell=True
         )
     else:
-        print("Fehler")
+        print("Error")
 
     # creating new folder if not already existend
     if not os.path.isdir(specific_directory):

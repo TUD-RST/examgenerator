@@ -2,13 +2,15 @@
 /problem_data/*.fls
 /problem_data/*.tex
 /Exams*
-/Previews
+/previews
 /settings/*.json
 /.vscode
 /src/exam_generator/__pycache__
 /src/*.egg-info
 
 !/settings/settings_template.json
+!/templates/template_problem.tex
+!/templates/template_solution.tex
 !/problem_data/pool*
 !/src
 !/docs
