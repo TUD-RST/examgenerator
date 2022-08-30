@@ -441,3 +441,29 @@ def make_specific(make_all, pool, aufgabe, root_directory):
 
     # moving pdf file to Previews directory
     shutil.move(FILENAME + ".pdf", specific_directory)
+
+
+def check_directory() -> bool:
+    """
+    Checks if rewuired directories exists.
+
+    :return: False=not all exist, True= all exist
+    :rtype: bool
+    """
+    if not os.path.isdir("settings"):
+        warn(f"settings directory does not exist in {os.getcwd()} .")
+        pass
+    if not os.path.isdir("templates"):
+        warn(f"templates directory does not exist in {os.getcwd()} .")
+        pass
+    if not os.path.isdir("problem_data"):
+        warn(f"problem_data directory does not exist in {os.getcwd()} .")
+
+    if not (
+        os.path.isdir("settings")
+        and os.path.isdir("templates")
+        and os.path.isdir("problem_data")
+    ):
+        return False
+    else:
+        return True

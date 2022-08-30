@@ -346,9 +346,8 @@ def main():
     """
     Calls parser and delivers arguments to exam_generator.
     """
-    print(os.path.isdir("settings"))
-    print(os.path.isdir("templates"))
-    print(os.path.isdir("problem_data"))
+    if check_directory() == False:
+        return
 
     Descr = tw.dedent(
         """\
