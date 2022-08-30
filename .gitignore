@@ -8,11 +8,8 @@
 /src/exam_generator/__pycache__
 /src/*.egg-info
 
-!/problem_data/poolA
-!/problem_data/poolB
-!/problem_data/poolC
-!/problem_data/poolD
-!/problem_data/settings_template.json
+!/settings/settings_template.json
+!/problem_data/pool*
 !/src
 !/docs
 !/test 
