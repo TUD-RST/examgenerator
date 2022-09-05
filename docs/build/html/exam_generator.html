@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; exam-generator 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> exam-generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_doc.html">User Doc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-exam_generator.main">Main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-exam_generator.classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-exam_generator.funcs">Functions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">exam-generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/exam_generator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-exam_generator">
+<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-exam_generator" title="Permalink to this heading"></a></h1>
+<section id="module-exam_generator.main">
+<span id="main"></span><h2>Main<a class="headerlink" href="#module-exam_generator.main" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.main.exam_generator">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.main.</span></span><span class="sig-name descname"><span class="pre">exam_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/main.html#exam_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.main.exam_generator" title="Permalink to this definition"></a></dt>
+<dd><p>Main function which combines all modules of this program.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args.create_test</strong> – Would the user like to create a test</p></li>
+<li><p><strong>args.make_all</strong> – Would the user like to create a preview for all problems</p></li>
+<li><p><strong>args.make_pool</strong> – Pool which the user would like to create a preview for</p></li>
+<li><p><strong>args.make_specific</strong> – Name of the problem the user would like to create a preview for</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.main.main">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.main.main" title="Permalink to this definition"></a></dt>
+<dd><p>Calls parser and delivers arguments to exam_generator.</p>
+</dd></dl>
+
+</section>
+<section id="module-exam_generator.classes">
+<span id="classes"></span><h2>Classes<a class="headerlink" href="#module-exam_generator.classes" title="Permalink to this heading"></a></h2>
+<p>This module contains all classes relevant for the exam-generator.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="exam_generator.classes.Pool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam_generator.classes.</span></span><span class="sig-name descname"><span class="pre">Pool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_names_tex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/classes.html#Pool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.classes.Pool" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents each pool with its corresponding problems.</p>
+<p>Construction:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Pool</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file_names_tex</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the pool for example: A1, CV21, DV07</p></li>
+<li><p><strong>file_names_tex</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – All Problem-Solution-file names</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="exam_generator.classes.Pool.ablegen">
+<span class="sig-name descname"><span class="pre">ablegen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/classes.html#Pool.ablegen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.classes.Pool.ablegen" title="Permalink to this definition"></a></dt>
+<dd><p>Discards all pulled problems to the discard pile</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exam_generator.classes.Pool.pull">
+<span class="sig-name descname"><span class="pre">pull</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/classes.html#Pool.pull"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.classes.Pool.pull" title="Permalink to this definition"></a></dt>
+<dd><p>Pulls a random problem + solution from the pool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>prob_sol</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="exam_generator.classes.TestType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam_generator.classes.</span></span><span class="sig-name descname"><span class="pre">TestType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pools</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/classes.html#TestType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.classes.TestType" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents all different test types</p>
+<p>Construction:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TestType</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">pools</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the test type, for example the name of Experiment</p></li>
+<li><p><strong>pools</strong> (<em>list</em><em>[</em><em>pool</em><em>]</em>) – Pools belonging to the test type, mind the “*”</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-exam_generator.funcs">
+<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-exam_generator.funcs" title="Permalink to this heading"></a></h2>
+<p>This module contains all functions relevant for the exam-generator.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.build_sumo">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">build_sumo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sumo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdf_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pages_per_sheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copies_per_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#build_sumo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.build_sumo" title="Permalink to this definition"></a></dt>
+<dd><p>This function creates the sumo file which contains all problems/ solutions for all groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_directory</strong> (<em>str</em>) – Directory in which the created tests are saved</p></li>
+<li><p><strong>sumo_name</strong> (<em>str</em>) – Name of the Sumo file either for the problems or solutions</p></li>
+<li><p><strong>pdf_list</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of the names of the created PDF problem/ solution files</p></li>
+<li><p><strong>pages_per_sheet</strong> (<em>int</em>) – How many different pages there should be displayed on one page/ sheet</p></li>
+<li><p><strong>kopien_pro_blatt</strong> (<em>int</em>) – How many copies you would like for each problem/ solution</p></li>
+</ul>
+</dd>
+</dl>
+<p>Creates:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>pdf file sumo_name.pdf</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.combining_problems">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">combining_problems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_group_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_list_variant</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#combining_problems"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.combining_problems" title="Permalink to this definition"></a></dt>
+<dd><p>For each group this function adds to a list which contains
+problems and their according solutions from given pools
+depending on the test variant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number_group_pairs</strong> (<em>int</em>) – Number of group pairs</p></li>
+<li><p><strong>test_list_variant</strong> (<em>list</em><em>[</em><a class="reference internal" href="#exam_generator.classes.TestType" title="exam_generator.classes.TestType"><em>TestType</em></a><em>]</em>) – List of test variants belonging to chosen variant</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>tests_per_group - problems/ solutions for each group</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.compile">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_single_pdfs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_temp_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#compile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.compile" title="Permalink to this definition"></a></dt>
+<dd><p>This function compiles the tex files and turns them into pdf format and moves them to
+the test directory. Lastly, it deletes temporary data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_directory</strong> (<em>str</em>) – Directory where the generated tests are saved</p></li>
+<li><p><strong>latex_directory</strong> (<em>str</em>) – Working directory of latex compiler</p></li>
+<li><p><strong>generate_single_pdfs</strong> (<em>bool</em>) – Should individual PDFs be created</p></li>
+<li><p><strong>delete_temp_data</strong> (<em>bool</em>) – Should temporary data be deleted</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.generate_tex_files">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">generate_tex_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_group_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_list_variant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semester</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests_per_group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#generate_tex_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.generate_tex_files" title="Permalink to this definition"></a></dt>
+<dd><p>This function replaces the variables within the tex problem/ solution files with the information given
+by the setting and returns the names of the according pdf files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latex_directory</strong> (<em>str</em>) – Directory for the latex compiler</p></li>
+<li><p><strong>template_directory</strong> (<em>int</em>) – Directory of the problem/ solution templates</p></li>
+<li><p><strong>number_group_pairs</strong> (<em>int</em>) – Number of group pairs</p></li>
+<li><p><strong>test_list_variant</strong> (<em>list</em><em>[</em><a class="reference internal" href="#exam_generator.classes.TestType" title="exam_generator.classes.TestType"><em>TestType</em></a><em>]</em>) – List of test variants belonging to chosen variant</p></li>
+<li><p><strong>variant_name</strong> (<em>str</em>) – Name of the test variant</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title of the event. Dependent on name_variant</p></li>
+<li><p><strong>semester</strong> (<em>str</em>) – Given semester in json settings file</p></li>
+<li><p><strong>tests_per_group</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of problems/ solutions for each group</p></li>
+<li><p><strong>pool_files</strong> (<em>list</em><em>[</em><em>tuple</em><em>]</em>) – [0] list of names of problems for each pool, [1] name of pool</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[0] problem pdf names, [1] solution pdf names</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[tuple]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.make_specific">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">make_specific</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">make_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aufgabe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#make_specific"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.make_specific" title="Permalink to this definition"></a></dt>
+<dd><p>This Function creates previews for given pools/ problems or all.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>make_all</strong> (<em>bool</em>) – Make a preview for all problems</p></li>
+<li><p><strong>pool</strong> (<em>str</em>) – Name of the pool to be created</p></li>
+</ul>
+</dd>
+<dt class="field-even">Aufgabe</dt>
+<dd class="field-even"><p>File name of the problem to be created</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial.html" class="btn btn-neutral float-left" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Niklas Weber.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
