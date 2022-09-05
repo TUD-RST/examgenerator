@@ -11,6 +11,7 @@ import textwrap as tw
 
 from .classes import *
 from .funcs import *
+from .customExceptions import *
 
 
 def exam_generator(args):
@@ -35,6 +36,9 @@ def exam_generator(args):
     # main directory
     root_directory = os.getcwd()
 
+    if check_directory(root_directory) == False:
+        return
+
     # ==================================
     # --- Make-Specific ---
     # ==================================
@@ -52,9 +56,17 @@ def exam_generator(args):
     # Settings are adjusted in the settings json files in the settings directory and then loaded into Python
     # No change of settings in this program!
 
+    random.seed()
+
     settings = args.create_test
 
     path_settings = os.path.join(root_directory, "settings", str(settings))
+
+    if not os.path.isfile(path_settings):
+        raise MissingFileError(
+            f"{errorInfo()} File {settings} does not exist. \
+             Please make sure your directory structure follows the instructions."
+        )
 
     # Loading the json settings into a Python dictionary
     with open(path_settings, "r") as json_datei:
@@ -65,31 +77,101 @@ def exam_generator(args):
     # 01+02, 03+04, ..., have the same problems
     number_group_pairs = settings_dictionary["group_pairs"]
 
+    if type(number_group_pairs) is not int:
+        raise SettingsError(
+            f"{errorInfo()} group_pairs in {settings} is not of the required type int. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
     # Degree for which the test is created
     # Prefactored options: ET1, ET2, MT, RES
     variant_name = settings_dictionary["variant_name"]
 
+    if type(variant_name) is not str:
+        raise SettingsError(
+            f"{errorInfo()} variant_name in {settings} is not of the required type string. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
     # Semester
     semester = settings_dictionary["semester"]
+
+    if type(semester) is not str:
+        raise SettingsError(
+            f"{errorInfo()} semester in {settings} is not of the required type string. \
+            Please make sure all types match the ones given in the instructions."
+        )
 
     # SUMO-pdf:
     # File contains all tests for the entire semester
     # Creates the test for the whole smester in one go
-    sumo_pages_per_sheet_test = settings_dictionary["sumo"]["pages_per_page_test"]
     # 4 = printing double paged A5
+    sumo_pages_per_sheet_test = settings_dictionary["sumo"]["pages_per_sheet_test"]
 
-    sumo_copies_per_test = settings_dictionary["sumo"]["sumo_number_copies"]
+    if type(sumo_pages_per_sheet_test) is not int:
+        raise SettingsError(
+            f"{errorInfo()} pages_per_sheet_test in {settings} is not of the required type int. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
     # Has to match the number of participants per groups
+    sumo_copies_per_test = settings_dictionary["sumo"]["sumo_number_copies"]
+
+    if type(sumo_copies_per_test) is not int:
+        raise SettingsError(
+            f"{errorInfo()} sumo_copies_per_test in {settings} is not of the required type int. \
+             Please make sure all types match the ones given in the instructions."
+        )
 
     sumo_pages_per_sheet_solution = settings_dictionary["sumo"][
-        "pages_per_page_solution"
+        "pages_per_sheet_solution"
     ]
+
+    if type(sumo_pages_per_sheet_solution) is not int:
+        raise SettingsError(
+            f"{errorInfo()} pages_per_sheet_solution in {settings} is not of the required type int. \
+             Please make sure all types match the ones given in the instructions."
+        )
     sumo_copies_per_solution = settings_dictionary["sumo"]["sumo_solution_copies"]
+
+    if type(sumo_copies_per_solution) is not int:
+        raise SettingsError(
+            f"{errorInfo()} sumo_copies_per_solution in {settings} is not of the required type int. \
+             Please make sure all types match the ones given in the instructions."
+        )
 
     # Settings of what should be created and deleted
     generate_single_pdfs = settings_dictionary["data"]["generate_single_pdfs"]
+
+    if type(generate_single_pdfs) is not bool:
+        raise SettingsError(
+            f"{errorInfo()} generate_single_pdfs in {settings} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
     generate_sumo_pdf = settings_dictionary["data"]["generate_sumo_pdf"]
+
+    if type(generate_sumo_pdf) is not bool:
+        raise SettingsError(
+            f"{errorInfo()} generate_sumo_pdf in {settings} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
     delete_temp_data = settings_dictionary["data"]["delete_temp_data"]
+
+    if type(delete_temp_data) is not bool:
+        raise SettingsError(
+            f"{errorInfo()} delete_temp_data in {settings} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+    use_custom_test = settings_dictionary["use_custom_test"]
+
+    if type(use_custom_test) is not bool:
+        raise SettingsError(
+            f"{errorInfo()} use_custom_test in {settings} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
 
     # ==================================
     # --- Configuration ---
@@ -98,8 +180,20 @@ def exam_generator(args):
     # Working directory for the LaTeX compiler
     latex_directory = os.path.join(root_directory, "problem_data")
 
+    if not os.path.isdir(latex_directory):
+        raise MissingDirectoryError(
+            f"{errorInfo()} {latex_directory} does not exist. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
     # Template directory
     template_directory = os.path.join(root_directory, "templates")
+
+    if not os.path.isdir(template_directory):
+        raise MissingDirectoryError(
+            f"{errorInfo()} {latex_directory} does not exist. \
+            Please make sure all types match the ones given in the instructions."
+        )
 
     # Directory where the tests will be saved in (for example: Exams-ET1-WS201920)
     test_directory = os.path.join(
@@ -112,7 +206,6 @@ def exam_generator(args):
     file_names_tex = combineFileNames(pool_files)
 
     # ------------Custom Tests----------------#
-    use_custom_test = settings_dictionary["use_custom_test"]
 
     if use_custom_test:
         test_types_dictionary = settings_dictionary["test_types"]
@@ -181,10 +274,13 @@ def exam_generator(args):
         title = variant_name
         test_list_variant = custom_test_list
     elif not use_custom_test:
-        warn("Unbekannter Bezeichner. Gewuenscht: ET1, ET2, MT oder RES!")
         test_list_variant = []
         title = ""
-        quit()
+        raise SettingsError(
+            f"{errorInfo()} {variant_name} does not exists as a premade exam. \
+            Options are ET1, ET2, MT or RES. In case you would like to create a custom test, please \
+            set use_custom_test in {settings} to true and provide your test following the instructions."
+        )
 
     # ================================
     # --- Combining problems ---
@@ -250,8 +346,6 @@ def main():
     """
     Calls parser and delivers arguments to exam_generator.
     """
-    if check_directory() == False:
-        return
 
     Descr = tw.dedent(
         """\

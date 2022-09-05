@@ -8,8 +8,11 @@ import glob
 import subprocess
 import shutil
 from pathlib import Path
+from inspect import currentframe, getframeinfo
+
 from warnings import warn
-from .classes import *
+from classes import *
+from customExceptions import *
 
 
 def buildSumo(test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file):
@@ -434,7 +437,9 @@ def make_specific(make_all, pool, problem, root_directory):
             "del {0}.aux {0}.log {0}.tex".format(FILENAME), shell=True
         )
     else:
-        print("Error")
+        raise CompilingError(
+            f"{errorInfo()}, Problem while compiling the template pdf file."
+        )
 
     # creating new folder if not already existend
     if not os.path.isdir(specific_directory):
@@ -444,26 +449,38 @@ def make_specific(make_all, pool, problem, root_directory):
     shutil.move(FILENAME + ".pdf", specific_directory)
 
 
-def check_directory() -> bool:
+def check_directory(root_directory) -> bool:
     """
     Checks if rewuired directories exists.
 
     :return: False=not all exist, True= all exist
     :rtype: bool
     """
-    if not os.path.isdir("settings"):
-        warn(f"settings directory does not exist in {os.getcwd()} .")
-        pass
-    if not os.path.isdir("templates"):
-        warn(f"templates directory does not exist in {os.getcwd()} .")
-        pass
-    if not os.path.isdir("problem_data"):
-        warn(f"problem_data directory does not exist in {os.getcwd()} .")
+    if not os.path.isdir(os.path.join(os.getcwd(), "settings")):
+        raise MissingDirectoryError(
+            f"{errorInfo()} settings directory does not exist in \
+            current working directory. Please make sure you are starting this program in \
+                a directory following the instructions."
+        )
+
+    if not os.path.isdir(os.path.join(os.getcwd(), "templates")):
+        raise MissingDirectoryError(
+            f"{errorInfo()} templates directory does not exist in \
+            current working directory. Please make sure you are starting this program in \
+                a directory following the instructions."
+        )
+
+    if not os.path.isdir(os.path.join(os.getcwd(), "problem_data")):
+        raise MissingDirectoryError(
+            f"{errorInfo()} problem_data directory does not exist in \
+            current working directory. Please make sure you are starting this program in \
+                a directory following the instructions."
+        )
 
     if not (
-        os.path.isdir("settings")
-        and os.path.isdir("templates")
-        and os.path.isdir("problem_data")
+        os.path.isdir(os.path.join(os.getcwd(), "settings"))
+        and os.path.isdir(os.path.join(os.getcwd(), "templates"))
+        and os.path.isdir(os.path.join(os.getcwd(), "problem_data"))
     ):
         return False
     else:
@@ -591,4 +608,15 @@ def createCustomTestList(test_types_dictionary, file_names_tex):
 
         custom_test_list.append(custom_test)
 
+    if len(custom_test_list) == 0:
+        raise CompilingError(
+            f"{errorInfo()} No custom exams provided. \
+            Please make sure you follow the instructions on creating custom exams."
+        )
+
     return custom_test_list
+
+
+def errorInfo():
+    cf = currentframe()
+    return f"Error in line {cf.f_back.f_lineno} in {getframeinfo(cf).filename}:"

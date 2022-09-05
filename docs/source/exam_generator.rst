@@ -32,5 +32,14 @@ Functions
    :show-inheritance:
 
 
+Custom Errors
+----------------------------
+
+.. automodule:: exam_generator.customErrors
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 
 
