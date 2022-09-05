@@ -2,6 +2,7 @@
 This module contains all functions relevant for the exam-generator.
 """
 
+from genericpath import isfile
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import glob
@@ -10,7 +11,6 @@ import shutil
 from pathlib import Path
 from inspect import currentframe, getframeinfo
 
-from warnings import warn
 from classes import *
 from customExceptions import *
 
@@ -123,8 +123,23 @@ def generateTexFiles(
     for file in glob.glob(os.path.join(latex_directory, "*.*")):
         os.remove(file)
 
-    template_problem_path = os.path.join(template_directory, "template_problem.tex")
-    template_solution_path = os.path.join(template_directory, "template_solution.tex")
+    problem_template = "template_problem.tex"
+    template_problem_path = os.path.join(template_directory, problem_template)
+
+    if not os.path.isfile(template_problem_path):
+        raise MissingFileError(
+            f"{errorInfo} File {problem_template} does not exist in \
+            the settings directory. Please make sure your file structure follows the directions."
+        )
+
+    solution_template = "template_solution.tex"
+    template_solution_path = os.path.join(template_directory, solution_template)
+
+    if not os.path.isfile(template_problem_path):
+        raise MissingFileError(
+            f"{errorInfo} File {problem_template} does not exist in \
+             the settings directory. Please make sure your file structure follows the directions."
+        )
 
     with open(template_problem_path, "r") as d:
         template_problem = d.read()
@@ -296,11 +311,11 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
             )
             process.wait()
             if process.returncode != 0:
-                warn(
-                    f"Problem while compiling {file}. "
-                    f"Temporary data will not be deleted."
-                )
                 delete_temp_data = False
+                raise CompilingError(
+                    f"{errorInfo()} Problem while compiling {file}. \
+                    temporary data will not be deleted."
+                )
             else:
                 shutil.move(file.replace(".tex", ".pdf"), test_directory)
 
@@ -312,7 +327,7 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
         process = subprocess.Popen(command, shell=True)
         process.wait()
         if process.returncode != 0:
-            warn("Temporary data could not be deleted")
+            raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
 
 
 def make_specific(make_all, pool, problem, root_directory):
@@ -369,10 +384,9 @@ def make_specific(make_all, pool, problem, root_directory):
         if i > 10:
             FILENAME = FILENAME[:-2] + str(i)
         if i > 100:
-            warn(
-                "Maximum amount of previews for a single file is reached. Please delete unnecessary files."
+            raise CompilingError(
+                f"{errorInfo()} Maximum amount of previews for a single file is reached. Please delete unnecessary files."
             )
-            quit()
         if i < 11:
             FILENAME = FILENAME[:-1] + str(i)
         i += 1
@@ -499,7 +513,7 @@ def poolDirectoryConfig(latex_directory):
         list[tuple(list[str], str)]: problem/ solution names, name of corresponding pool
     """
 
-    # Directory with the LaTeX source code for the problems (prob. unnecessary, working on it)
+    # Directory with the LaTeX source code for the problems
     poolA_directory = os.path.join(latex_directory, "poolA")
     poolB_directory = os.path.join(latex_directory, "poolB")
     poolC_directory = os.path.join(latex_directory, "poolC")
