@@ -9,9 +9,10 @@ import subprocess
 import shutil
 from pathlib import Path
 from warnings import warn
+from .classes import *
 
 
-def build_sumo(test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file):
+def buildSumo(test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file):
 
     """
     This function creates the sumo file which contains all problems/ solutions for all groups.
@@ -66,7 +67,7 @@ def build_sumo(test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_
         d.close()
 
 
-def generate_tex_files(
+def generateTexFiles(
     latex_directory,
     template_directory,
     number_group_pairs,
@@ -210,7 +211,7 @@ def generate_tex_files(
     return file_names_problems_pdf, file_names_solutions_pdf
 
 
-def combining_problems(number_group_pairs, test_list_variant):
+def combiningProblems(number_group_pairs, test_list_variant):
 
     """
     For each group this function adds to a list which contains
@@ -467,3 +468,127 @@ def check_directory() -> bool:
         return False
     else:
         return True
+
+
+def poolDirectoryConfig(latex_directory):
+    """
+    Sets pool directories and its problem data.
+
+
+    Args:
+        latex_directory (str): working directory of latex compiler
+
+    Returns:
+        list[tuple(list[str], str)]: problem/ solution names, name of corresponding pool
+    """
+
+    # Directory with the LaTeX source code for the problems (prob. unnecessary, working on it)
+    poolA_directory = os.path.join(latex_directory, "poolA")
+    poolB_directory = os.path.join(latex_directory, "poolB")
+    poolC_directory = os.path.join(latex_directory, "poolC")
+    poolD_directory = os.path.join(latex_directory, "poolD")
+    poolE_directory = os.path.join(latex_directory, "poolE")
+    poolF_directory = os.path.join(latex_directory, "poolF")
+    poolG_directory = os.path.join(latex_directory, "poolG")
+    poolH_directory = os.path.join(latex_directory, "poolH")
+
+    # Creates a list of problem names for every pool (probably unnecessary, working on it)
+    file_names_poolA_tex = [
+        os.path.basename(fn)
+        for fn in glob.iglob(os.path.join(poolA_directory, "*.tex"))
+    ]
+
+    file_names_poolB_tex = [
+        os.path.basename(fn)
+        for fn in glob.iglob(os.path.join(poolB_directory, "*.tex"))
+    ]
+
+    file_names_poolC_tex = [
+        os.path.basename(fn)
+        for fn in glob.iglob(os.path.join(poolC_directory, "*.tex"))
+    ]
+
+    file_names_poolD_tex = [
+        os.path.basename(fn)
+        for fn in glob.iglob(os.path.join(poolD_directory, "*.tex"))
+    ]
+
+    file_names_poolE_tex = [
+        os.path.basename(fn)
+        for fn in glob.iglob(os.path.join(poolE_directory, "*.tex"))
+    ]
+
+    file_names_poolF_tex = [
+        os.path.basename(fn)
+        for fn in glob.iglob(os.path.join(poolF_directory, "*.tex"))
+    ]
+
+    file_names_poolG_tex = [
+        os.path.basename(fn)
+        for fn in glob.iglob(os.path.join(poolG_directory, "*.tex"))
+    ]
+
+    file_names_poolH_tex = [
+        os.path.basename(fn)
+        for fn in glob.iglob(os.path.join(poolH_directory, "*.tex"))
+    ]
+
+    # list of tuples: list of all problems belonging to each pool, name of pool
+    pool_files = [
+        (file_names_poolA_tex, "A"),
+        (file_names_poolB_tex, "B"),
+        (file_names_poolC_tex, "C"),
+        (file_names_poolD_tex, "D"),
+        (file_names_poolE_tex, "E"),
+        (file_names_poolF_tex, "F"),
+        (file_names_poolG_tex, "G"),
+        (file_names_poolH_tex, "H"),
+    ]
+
+    return pool_files
+
+
+def combineFileNames(pool_files):
+    """
+    Combines the problems of all individual pools into one.
+
+    Args:
+        pool_files (list[tuple(list[str], str)]): problem/ solution names, name of corresponding pool
+    """
+    file_names_tex = []
+    for pool in pool_files:
+        file_names_tex += pool[0]
+
+
+def createCustomTestList(test_types_dictionary, file_names_tex):
+    """
+    Creates custom test list out of json dictionary.
+
+
+    Args:
+        test_types_dictionary (dict): json dict loaded into Python format
+        file_names_tex (list[str]): list of all problem/ solution file names
+
+    Returns:
+        list[TestType]: list of custom tests
+    """
+    # will be final test list
+    custom_test_list = []
+
+    # converts all test types (strings) to actual test types
+    # and adds them to custom test list
+    for test_types in test_types_dictionary:
+        custom_test_pools = []
+        custom_test = []
+        test_typ = test_types_dictionary.get(str(test_types))
+        custom_test_name = test_typ[0]
+        del test_typ[0]
+
+        for a in range(len(test_typ)):
+            custom_test_pools.append(Pool(test_typ[a], file_names_tex))
+
+        custom_test = TestType(custom_test_name, *custom_test_pools)
+
+        custom_test_list.append(custom_test)
+
+    return custom_test_list
