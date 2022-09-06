@@ -11,8 +11,8 @@ import shutil
 from pathlib import Path
 from inspect import currentframe, getframeinfo
 
-from classes import *
-from customExceptions import *
+from .classes import *
+from .customExceptions import *
 
 
 def buildSumo(test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file):

@@ -35,7 +35,7 @@ Functions
 Custom Errors
 ----------------------------
 
-.. automodule:: exam_generator.customErrors
+.. automodule:: exam_generator.customExceptions
    :members:
    :undoc-members:
    :show-inheritance:
