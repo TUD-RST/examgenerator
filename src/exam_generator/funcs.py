@@ -264,7 +264,7 @@ def combiningProblems(number_group_pairs, test_list_variant):
         # Sets aside the used problems of each pool
         for test_typ in test_list_variant:
             for pool in test_typ.pools:
-                pool.ablegen()
+                pool.discard()
 
         tests_per_group.append(test_satz)
 
@@ -353,7 +353,7 @@ def make_specific(make_all, pool, problem, root_directory):
         filenames_problems.extend(
             glob.glob(
                 os.path.join(
-                    root_directory, "problem_data/Pool" + pool + "/problem*.tex"
+                    root_directory, "problem_data/pool" + pool + "/problem*.tex"
                 )
             )
         )
@@ -362,7 +362,7 @@ def make_specific(make_all, pool, problem, root_directory):
     if problem is not None:
         filenames_problems.extend(
             glob.glob(
-                os.path.join(root_directory, "problem_data/Pool*/" + problem + ".tex")
+                os.path.join(root_directory, "problem_data/pool*/" + problem + ".tex")
             )
         )
         FILENAME = "Preview_" + problem
@@ -370,7 +370,7 @@ def make_specific(make_all, pool, problem, root_directory):
     # if make_all is selected the preview creation list contains all problems
     if make_all:
         filenames_problems = glob.glob(
-            os.path.join(root_directory, "problem_data/Pool*/*.tex")
+            os.path.join(root_directory, "problem_data/pool*/*.tex")
         )
         FILENAME = "Preview_all"
 
@@ -501,6 +501,34 @@ def check_directory(root_directory) -> bool:
         return True
 
 
+def poolDataPull(latex_directory):
+    """
+    Sets pool directories and its problem data.
+
+
+    Args:
+        latex_directory (str): working directory of latex compiler
+
+    Returns:
+        list[tuple(list[str], str)]: problem/ solution names, name of corresponding pool
+    """
+    pool_info = []
+
+    for pool_name in os.listdir(latex_directory):
+        pool_dir = os.path.join(latex_directory, pool_name)
+
+        if not os.path.isdir(pool_dir):
+            continue
+
+        problem_data_list = [
+            os.path.basename(fn) for fn in glob.iglob(os.path.join(pool_dir, "*.tex"))
+        ]
+
+        pool_info.append(problem_data_list, pool_name)
+
+    return pool_info
+
+
 def poolDirectoryConfig(latex_directory):
     """
     Sets pool directories and its problem data.
@@ -585,10 +613,14 @@ def combineFileNames(pool_files):
 
     Args:
         pool_files (list[tuple(list[str], str)]): problem/ solution names, name of corresponding pool
+
+    Returns:
+        list[str]: names of all problems/ solutions
     """
     file_names_tex = []
     for pool in pool_files:
         file_names_tex += pool[0]
+    return file_names_tex
 
 
 def createCustomTestList(test_types_dictionary, file_names_tex):
@@ -603,7 +635,12 @@ def createCustomTestList(test_types_dictionary, file_names_tex):
     Returns:
         list[TestType]: list of custom tests
     """
-    # will be final test list
+
+    if len(test_types_dictionary) == 0:
+        raise SettingsError(
+            f"{errorInfo()} No custom exams provided in your settings. \
+            Please make sure you follow the instructions on creating custom exams."
+        )
     custom_test_list = []
 
     # converts all test types (strings) to actual test types
@@ -615,18 +652,34 @@ def createCustomTestList(test_types_dictionary, file_names_tex):
         custom_test_name = test_typ[0]
         del test_typ[0]
 
-        for a in range(len(test_typ)):
-            custom_test_pools.append(Pool(test_typ[a], file_names_tex))
+        for pool_name in test_typ:
+
+            # checking if there is any problems/ solutions for the given pools
+            # unnecessary because now done when initialising a pool instance
+            """pool_files_exist = False
+            for file in file_names_tex:
+                if pool_name in file:
+                    pool_files_exist = True
+
+            if not pool_files_exist:
+                raise SettingsError(
+                    f"{errorInfo()} The pool {pool_name} does not have any \
+                    problem/ solution files."
+                )"""
+
+            new_pool = Pool(pool_name, file_names_tex)
+
+            # checking if new pool already exists so not two instances are created
+            for existing_pool in custom_test_pools:
+                if existing_pool.name == new_pool.name:
+                    new_pool = existing_pool
+                    break
+
+            custom_test_pools.append(new_pool)
 
         custom_test = TestType(custom_test_name, *custom_test_pools)
 
         custom_test_list.append(custom_test)
-
-    if len(custom_test_list) == 0:
-        raise CompilingError(
-            f"{errorInfo()} No custom exams provided. \
-            Please make sure you follow the instructions on creating custom exams."
-        )
 
     return custom_test_list
 

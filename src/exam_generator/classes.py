@@ -6,6 +6,9 @@ import random
 from warnings import warn
 import re
 
+from .customExceptions import *
+from .funcs import errorInfo
+
 
 class Pool:
     """
@@ -39,7 +42,7 @@ class Pool:
 
         self.stack_storage = []
 
-        # [(filename_problem, dateiname_solution)]; problems which were pulled by last group
+        # [(filename_problem, filename_solution)]; problems which were pulled by last group
 
         # Creates a list with all problems of required pool
         problem_regex = re.compile(f"^problem_{name}_\\d+\\.tex$")
@@ -49,19 +52,23 @@ class Pool:
 
         # Checks if problem + solution exists
         if len(file_names_pool_problems) == 0:
-            warn(f"There is no more problems available in Pool {self.name}")
+            raise MissingFileError(
+                f"{errorInfo()} There is no problems available in Pool {self.name}. \
+                Please ensure there is problem/ solution data for every used pool."
+            )
 
         # Searches solution for problem
         for file in file_names_pool_problems:
-            file_solution = file.replace("aufgabe", "loesung")
+            file_solution = file.replace("problem", "solution")
 
             # Adds problem and solution to stack
             if file_solution in file_names_tex:
                 self.stack_available.append((file, file_solution))
 
             else:
-                warn(
-                    f"{file} does not have a corresponding solution file {file_solution}"
+                raise MissingFileError(
+                    f"{errorInfo()} File {file_solution} does not exist. \
+                    Please make sure that all your problem files have a corresponding solution file."
                 )
 
     def pull(self):
@@ -69,7 +76,7 @@ class Pool:
         Pulls a random problem + solution from the pool
 
         :return: prob_sol
-        :rtype: list[]
+        :rtype: tuple(str, str)
         """
         if len(self.stack_available) == 0:
             # Stack with available problems is exhausted
@@ -79,8 +86,9 @@ class Pool:
                 self.stack_available = self.stack_storage
                 self.stack_storage = []
             else:
-                raise RuntimeError(
-                    f"Pool {self.name} is exhausted, problems might repeat within the group"
+                raise CompilingError(
+                    f"{errorInfo()} Pool {self.name} is exhausted, problems might repeat within the group. \
+                    Please ensure that your problem/ solution data size is sufficient."
                 )
         # Random selection of problems/solution pairs
         prob_sol = self.stack_available.pop(
@@ -90,7 +98,7 @@ class Pool:
 
         return prob_sol
 
-    def ablegen(self):
+    def discard(self):
         """
         Discards all pulled problems to the discard pile
         """

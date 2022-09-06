@@ -46,7 +46,7 @@ class SettingsError(Exception):
     :type settings_file: str
     """
 
-    def __init__(self, info, settings_file):
+    def __init__(self, info, settings_file=None):
         self.info = info
         self.settings_file = settings_file
 
@@ -62,6 +62,6 @@ class CompilingError(Exception):
     :type file: str. Defaulted to None
     """
 
-    def __init__(self, info, file=None):
+    def __init__(self, info, extra_info=None):
         self.info = info
-        self.file = file
+        self.file = extra_info
