@@ -20,11 +20,11 @@ class Pool:
     :param name: Name of the pool for example: A1, CV21, DV07
     :type name: str
 
-    :param file_names_tex: All Problem-Solution-file names
-    :type file_names_tex: list[str]
+    :param pool_files: All Problem-Solution-file names of the pool
+    :type pool_files: list[str]
     """
 
-    def __init__(self, name, file_names_tex):
+    def __init__(self, name, pool_files):
         """
         Creates new pool instance
         """
@@ -44,9 +44,9 @@ class Pool:
         # [(filename_problem, filename_solution)]; problems which were pulled by last group
 
         # Creates a list with all problems of required pool
-        problem_regex = re.compile(f"^problem_{name}_\\d+\\.tex$")
+        problem_regex = re.compile(f"^problem_\\d+\\.tex$")
         file_names_pool_problems = [
-            file for file in file_names_tex if re.match(problem_regex, file) is not None
+            file for file in pool_files if re.match(problem_regex, file) is not None
         ]
 
         # Checks if problem + solution exists
@@ -61,7 +61,7 @@ class Pool:
             file_solution = file.replace("problem", "solution")
 
             # Adds problem and solution to stack
-            if file_solution in file_names_tex:
+            if file_solution in pool_files:
                 self.stack_available.append((file, file_solution))
 
             else:

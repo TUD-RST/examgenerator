@@ -4,21 +4,19 @@ import pytest
 from exam_generator import classes
 from exam_generator import customExceptions
 
-file_names_tex = [
-    "problem_A1_1.tex",
-    "problem_A1_2.tex",
-    "problem_A1_3.tex",
-    "problem_B1_1.tex",
-    "problem_CV03_1.tex",
-    "solution_A1_1.tex",
-    "solution_A1_2.tex",
-    "solution_A1_3.tex",
-    "solution_CV03_1.tex",
-]
 
+def test_pool_working():
 
-def test_pool_working(file_names_tex):
-    test_pool = classes.Pool("A1", file_names_tex)
+    pool_files_A1 = [
+        "problem_1.tex",
+        "problem_2.tex",
+        "problem_3.tex",
+        "solution_1.tex",
+        "solution_2.tex",
+        "solution_3.tex",
+    ]
+
+    test_pool = classes.Pool("A1", pool_files_A1)
 
     error = False
 
@@ -26,9 +24,9 @@ def test_pool_working(file_names_tex):
         error = True
 
     stack = [
-        ("problem_A1_1.tex", "solution_A1_1.tex"),
-        ("problem_A1_2.tex", "solution_A1_2.tex"),
-        ("problem_A1_3.tex", "solution_A1_3.tex"),
+        ("problem_1.tex", "solution_1.tex"),
+        ("problem_2.tex", "solution_2.tex"),
+        ("problem_3.tex", "solution_3.tex"),
     ]
     if test_pool.stack_available != stack:
         error = True
@@ -36,14 +34,16 @@ def test_pool_working(file_names_tex):
     assert error == False
 
 
-def test_Pool_noData(file_names_tex):
+def test_Pool_noData():
+    pool_files_D = []
     with pytest.raises(customExceptions.MissingFileError):
-        test_pool = classes.Pool("D", file_names_tex)
+        test_pool = classes.Pool("D", pool_files_D)
 
 
-def test_Pool_noCorrespondingSolution(file_names_tex):
+def test_Pool_noCorrespondingSolution():
+    pool_files_B1 = ["problem_1.tex"]
     with pytest.raises(customExceptions.MissingFileError):
-        test_pool = classes.Pool("B1", file_names_tex)
+        test_pool = classes.Pool("B1", pool_files_B1)
 
 
 def test_Pool_pull_working(file_names_tex):
@@ -67,7 +67,8 @@ def test_Pool_pull_working(file_names_tex):
 
 
 def test_Pool_pull_exhausted():
-    pool = classes.Pool("CV03", file_names_tex)
+    pool_files_CV03 = ["problem_1.tex", "problem_2.tex", "solution_1.tex"]
+    pool = classes.Pool("CV03", pool_files_CV03)
 
     pool.pull()
 

@@ -624,14 +624,14 @@ def combineFileNames(pool_files):
     return file_names_tex
 
 
-def createCustomTestList(test_types_dictionary, file_names_tex):
+def createCustomTestList(test_types_dictionary, pool_info):
     """
     Creates custom test list out of json dictionary.
 
 
     Args:
         test_types_dictionary (dict): json dict loaded into Python format
-        file_names_tex (list[str]): list of all problem/ solution file names
+        pool_info (list[tuple(list[str], str)]): pool files, pool name
 
     Returns:
         list[TestType]: list of custom tests
@@ -668,7 +668,13 @@ def createCustomTestList(test_types_dictionary, file_names_tex):
                     problem/ solution files."
                 )"""
 
-            new_pool = Pool(pool_name, file_names_tex)
+            # selects the correct file list for the pool
+            for pool in pool_info:
+                if pool[1] == pool_name:
+                    pool_file_list = pool[0]
+                    break
+
+            new_pool = Pool(pool_name, pool_file_list)
 
             # checking if new pool already exists so not two instances are created
             for existing_pool in custom_test_pools:
