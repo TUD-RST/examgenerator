@@ -9,6 +9,10 @@
 /src/*.egg-info
 
 !/settings/settings_template.json
+!/settings/settings_ET1.json
+!/settings/settings_ET2.json
+!/settings/settings_MT.json
+!/settings/settings_RES.json
 !/templates/template_problem.tex
 !/templates/template_solution.tex
 !/problem_data/pool*

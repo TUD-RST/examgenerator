@@ -1,0 +1,35 @@
+{
+  "group_pairs": 2,
+  "variant_name": "Praktikum Regelungstechnik 2 (ET)",
+  "semester": "WS 2021/22",
+  "sumo": {
+    "pages_per_sheet_test": 4,
+    "sumo_number_copies": 4,
+    "pages_per_sheet_solution": 4,
+    "sumo_solution_copies": 1
+  },
+  "data": {
+    "generate_single_pdfs": true,
+    "generate_sumo_pdf": true,
+    "delete_temp_data": true
+  },
+  "use_custom_test": true,
+  "test_types": {
+    "V03": [
+      "A2",
+      "B2",
+      "CV03"
+    ],
+    "V08": [
+      "A2",
+      "B2",
+      "CV08"
+    ],
+    "V15": [
+      "A2",
+      "B2",
+      "CV15",
+      "DV15"
+    ]
+  }
+}
