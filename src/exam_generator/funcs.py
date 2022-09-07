@@ -646,14 +646,10 @@ def createCustomTestList(test_types_dictionary, pool_info):
 
     # converts all test types (strings) to actual test types
     # and adds them to custom test list
-    for test_types in test_types_dictionary:
+    for test_name, pool_list in test_types_dictionary.items():
         custom_test_pools = []
-        custom_test = []
-        test_typ = test_types_dictionary.get(str(test_types))
-        custom_test_name = test_typ[0]
-        del test_typ[0]
 
-        for pool_name in test_typ:
+        for pool_name in pool_list:
 
             # checking if there is any problems/ solutions for the given pools
             # unnecessary because now done when initialising a pool instance
@@ -684,7 +680,7 @@ def createCustomTestList(test_types_dictionary, pool_info):
 
             custom_test_pools.append(new_pool)
 
-        custom_test = TestType(custom_test_name, *custom_test_pools)
+        custom_test = TestType(test_name, *custom_test_pools)
 
         custom_test_list.append(custom_test)
 

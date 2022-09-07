@@ -16,20 +16,17 @@
   "use_custom_test": true,
   "test_types": {
     "test1": [
-      "Test",
       "A1",
       "B1",
       "B2",
       "CV03"
     ],
     "test2": [
-      "Test2",
       "A1",
       "B1",
       "B1"
     ],
     "test3": [
-      "Test3",
       "B2",
       "B1",
       "CV03"

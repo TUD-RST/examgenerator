@@ -209,76 +209,14 @@ def exam_generator(args):
         test_types_dictionary = settings_dictionary["test_types"]
         custom_test_list = createCustomTestList(test_types_dictionary, file_names_tex)
 
-    # ------------Premade Tests----------------#
-
-    # General problems for each test
-    # A1, B1 -> for 5th Semester RT and 6th semester MT and RES
-    # A2, B2 -> for 6th Semester RT (knowledge from RT 2 required)
-    poolA1 = Pool("A1", file_names_tex)
-    poolB1 = Pool("B1", file_names_tex)
-    poolA2 = Pool("A2", file_names_tex)
-    poolB2 = Pool("B2", file_names_tex)
-
-    # Experiment specific problems for V1, V3, V7, V8, V15 und V21
-    poolCV01 = Pool("CV01", file_names_tex)
-    poolCV03 = Pool("CV03", file_names_tex)
-    poolCV07 = Pool("CV07", file_names_tex)
-    poolCV08 = Pool("CV08", file_names_tex)
-    poolCV15 = Pool("CV15", file_names_tex)
-    poolCV21 = Pool("CV21", file_names_tex)
-
-    # More experiment specific problems, if there is not enough from C
-    poolDV07 = Pool("DV07", file_names_tex)
-    poolDV08 = Pool("DV08", file_names_tex)
-    poolDV15 = Pool("DV15", file_names_tex)
-    poolDV21 = Pool("DV21", file_names_tex)
-
-    # Tests for RT1, MT and RES courses
-    testV1 = TestType("V01", poolA1, poolB1, poolCV01)
-    testV7 = TestType("V07", poolA1, poolB1, poolCV07, poolDV07)
-    testV8_MT_RES = TestType("V08", poolA1, poolB1, poolCV08)
-    testV15_MT_RES = TestType("V15", poolA1, poolB1, poolCV15, poolDV15)
-    testV21 = TestType("V21", poolA1, poolB1, poolCV21, poolDV21)
-    test_list_ET1 = [testV1, testV7, testV21]
-    test_list_MT = [testV21, testV8_MT_RES]
-    test_list_RES = [testV21, testV8_MT_RES, testV15_MT_RES]
-
-    # Tests for RT2 (6th Semester)
-    testV3 = TestType("V03", poolA2, poolB2, poolCV03)
-    testV8_ET = TestType("V08", poolA2, poolB2, poolCV08)
-    testV15_ET = TestType("V15", poolA2, poolB2, poolCV15, poolDV15)
-    test_list_ET2 = [testV3, testV8_ET, testV15_ET]
-
     # for debugging
     pool_all = Pool(".*", file_names_tex)
     test_all = TestType("VX", *[pool_all for i in range(len(pool_all.stack_available))])
     test_list_all = [test_all]
 
     # ------------Titles and Test Lists Config----------------#
-
-    if variant_name == "ET1":
-        title = "Praktikum Regelungstechnik 1 (ET)"
-        test_list_variant = test_list_ET1
-    elif variant_name == "ET2":
-        title = "Praktikum Regelungstechnik 2 (ET)"
-        test_list_variant = test_list_ET2
-    elif variant_name == "MT":
-        title = "Praktikum Regelung \\& Steuerung (MT)"
-        test_list_variant = test_list_MT
-    elif variant_name == "RES":
-        title = "Praktikum Regelungstechnik (RES)"
-        test_list_variant = test_list_RES
-    elif use_custom_test:
-        title = variant_name
-        test_list_variant = custom_test_list
-    elif not use_custom_test:
-        test_list_variant = []
-        title = ""
-        raise SettingsError(
-            f"{errorInfo()} {variant_name} does not exists as a premade exam. \
-            Options are ET1, ET2, MT or RES. In case you would like to create a custom test, please \
-            set use_custom_test in {settings} to true and provide your test following the instructions."
-        )
+    test_list_variant = custom_test_list
+    title = variant_name
 
     # ================================
     # --- Combining problems ---
