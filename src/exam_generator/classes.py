@@ -6,7 +6,6 @@ import random
 import re
 
 from .customExceptions import *
-from .funcs import errorInfo
 
 
 class Pool:

@@ -2,13 +2,13 @@
 This module contains all functions relevant for the exam-generator.
 """
 
+from logging import RootLogger
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import glob
 import subprocess
 import shutil
 from pathlib import Path
-from inspect import currentframe, getframeinfo
 
 from .classes import *
 from .customExceptions import *
@@ -118,7 +118,7 @@ def generateTexFiles(
 
     """
 
-    # Deletes all temporary files in the problem_data directory
+    # Deletes all temporary files in the pool_data directory
     for file in glob.glob(os.path.join(latex_directory, "*.*")):
         os.remove(file)
 
@@ -346,26 +346,20 @@ def make_specific(make_all, pool, problem, root_directory):
     if pool is not None:
         FILENAME = "Preview_Pool_" + pool
         filenames_problems.extend(
-            glob.glob(
-                os.path.join(
-                    root_directory, "problem_data/pool" + pool + "/problem*.tex"
-                )
-            )
+            glob.glob(os.path.join(root_directory, f"pool_data/{pool}/problem*.tex"))
         )
 
     # if problem is provided, it is added to the preview creation list
     if problem is not None:
         filenames_problems.extend(
-            glob.glob(
-                os.path.join(root_directory, "problem_data/pool*/" + problem + ".tex")
-            )
+            glob.glob(os.path.join(root_directory, "pool_data/*/" + problem + ".tex"))
         )
         FILENAME = "Preview_" + problem
 
     # if make_all is selected the preview creation list contains all problems
     if make_all:
         filenames_problems = glob.glob(
-            os.path.join(root_directory, "problem_data/pool*/*.tex")
+            os.path.join(root_directory, "pool_data/*/problems*.tex")
         )
         FILENAME = "Preview_all"
 
@@ -429,7 +423,7 @@ def make_specific(make_all, pool, problem, root_directory):
             f.write("\\textbf{{{0}}}\n\n".format(name.replace("_", "\\_")))
             f.write("\\input{{{0}}}\n\n".format(name))
             f.write("\\textbf{Loesung:}\\\\\n\n")
-            f.write("\\input{{{0}}}\n\n".format(name.replace("aufgabe", "loesung")))
+            f.write("\\input{{{0}}}\n\n".format(name.replace("problem", "solution")))
             f.write("\\hrulefill\n\n\n")
 
         # Document end
@@ -465,23 +459,23 @@ def check_directory(root_directory) -> bool:
     :return: False=not all exist, True= all exist
     :rtype: bool
     """
-    if not os.path.isdir(os.path.join(os.getcwd(), "settings")):
+    if not os.path.isdir(os.path.join(root_directory, "settings")):
         raise MissingDirectoryError(
             f"{errorInfo()} settings directory does not exist in \
             current working directory. Please make sure you are starting this program in \
                 a directory following the instructions."
         )
 
-    if not os.path.isdir(os.path.join(os.getcwd(), "templates")):
+    if not os.path.isdir(os.path.join(root_directory, "templates")):
         raise MissingDirectoryError(
             f"{errorInfo()} templates directory does not exist in \
             current working directory. Please make sure you are starting this program in \
                 a directory following the instructions."
         )
 
-    if not os.path.isdir(os.path.join(os.getcwd(), "problem_data")):
+    if not os.path.isdir(os.path.join(root_directory, "pool_data")):
         raise MissingDirectoryError(
-            f"{errorInfo()} problem_data directory does not exist in \
+            f"{errorInfo()} pool_data directory does not exist in \
             current working directory. Please make sure you are starting this program in \
                 a directory following the instructions."
         )
@@ -508,22 +502,22 @@ def pullPoolData(latex_directory):
         if not os.path.isdir(pool_dir):
             continue
 
-        problem_data_list = [
+        pool_data_list = [
             os.path.basename(fn) for fn in glob.iglob(os.path.join(pool_dir, "*.tex"))
         ]
 
-        for file in problem_data_list:
+        for file in pool_data_list:
             if ("problem" not in file) and ("solution" not in file):
                 raise CompilingError(
                     f"{errorInfo()} File name {file} does not follow the \
                     naming pattern given in the instructions."
                 )
 
-        pool_info.append(problem_data_list, pool_name)
+        pool_info.append((pool_data_list, pool_name))
 
     if len(pool_info) == 0:
         raise MissingDirectoryError(
-            f"{errorInfo()} No pools provided in the problem_data directory. \
+            f"{errorInfo()} No pools provided in the pool_data directory. \
             Please make sure your directory setup follows the instructions."
         )
 
@@ -665,6 +659,7 @@ def createCustomTestList(test_types_dictionary, pool_info):
                 )"""
 
             # selects the correct file list for the pool
+            pool_file_list = []
             for pool in pool_info:
                 if pool[1] == pool_name:
                     pool_file_list = pool[0]
@@ -680,13 +675,11 @@ def createCustomTestList(test_types_dictionary, pool_info):
 
             custom_test_pools.append(new_pool)
 
+            for pool in custom_test_pools:
+                print(pool.name)
+
         custom_test = TestType(test_name, *custom_test_pools)
 
         custom_test_list.append(custom_test)
 
     return custom_test_list
-
-
-def errorInfo():
-    cf = currentframe()
-    return f"Error in line {cf.f_back.f_lineno} in {getframeinfo(cf).filename}:"

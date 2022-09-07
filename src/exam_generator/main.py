@@ -191,7 +191,7 @@ def exam_generator(args):
     # ==================================
 
     # Working directory for the LaTeX compiler
-    latex_directory = os.path.join(root_directory, "problem_data")
+    latex_directory = os.path.join(root_directory, "pool_data")
 
     if not os.path.isdir(latex_directory):
         raise MissingDirectoryError(
@@ -220,7 +220,7 @@ def exam_generator(args):
 
     # ------------Custom Tests----------------#
     test_types_dictionary = settings_dictionary["test_types"]
-    custom_test_list = createCustomTestList(test_types_dictionary, file_names_tex)
+    custom_test_list = createCustomTestList(test_types_dictionary, pool_files)
 
     # for debugging
     pool_all = Pool(".*", file_names_tex)
@@ -351,7 +351,6 @@ def main():
     parser.add_argument(
         "-mp",
         "--make_pool",
-        choices=["A", "B", "C", "D", "E", "F", "G", "H"],
         help="Creates a Preview for all problems of the given pool",
     )
     parser.add_argument(

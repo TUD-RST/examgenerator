@@ -1,3 +1,5 @@
+from inspect import currentframe, getframeinfo
+
 """
 This file contains custom errors for the exam generator.
 """
@@ -30,7 +32,7 @@ class MissingFileError(Exception):
     :type file: str
     """
 
-    def __init__(self, info, file):
+    def __init__(self, info, file=None):
         self.info = info
         self.file = file
 
@@ -65,3 +67,8 @@ class CompilingError(Exception):
     def __init__(self, info, extra_info=None):
         self.info = info
         self.file = extra_info
+
+
+def errorInfo():
+    cf = currentframe()
+    return f"Error in line {cf.f_back.f_lineno} in {getframeinfo(cf).filename}:"
