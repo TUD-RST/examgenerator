@@ -1,6 +1,7 @@
 {
   "group_pairs": 2,
-  "variant_name": "Praktikum Regelungstechnik 1 (ET)",
+  "variant_name": "ET1",
+  "title": "Praktikum Regelungstechnik 1 (ET)",
   "semester": "WS 2021/22",
   "sumo": {
     "pages_per_sheet_test": 4,

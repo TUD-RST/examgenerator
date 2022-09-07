@@ -81,8 +81,15 @@ def exam_generator(args):
             Please make sure all types match the ones given in the instructions."
         )
 
+    title = settings_dictionary["title"]
+
+    if type(title) is not str:
+        raise SettingsError(
+            f"{errorInfo()} title in {settings} is not of the required type string. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
     # Degree for which the test is created
-    # Prefactored options: ET1, ET2, MT, RES
     variant_name = settings_dictionary["variant_name"]
 
     if type(variant_name) is not str:
@@ -163,14 +170,6 @@ def exam_generator(args):
              Please make sure all types match the ones given in the instructions."
         )
 
-    use_custom_test = settings_dictionary["use_custom_test"]
-
-    if type(use_custom_test) is not bool:
-        raise SettingsError(
-            f"{errorInfo()} use_custom_test in {settings} is not of the required type bool. \
-             Please make sure all types match the ones given in the instructions."
-        )
-
     # ==================================
     # --- Configuration ---
     # ==================================
@@ -204,25 +203,19 @@ def exam_generator(args):
     file_names_tex = combineFileNames(pool_files)
 
     # ------------Custom Tests----------------#
-
-    if use_custom_test:
-        test_types_dictionary = settings_dictionary["test_types"]
-        custom_test_list = createCustomTestList(test_types_dictionary, file_names_tex)
+    test_types_dictionary = settings_dictionary["test_types"]
+    custom_test_list = createCustomTestList(test_types_dictionary, file_names_tex)
 
     # for debugging
     pool_all = Pool(".*", file_names_tex)
     test_all = TestType("VX", *[pool_all for i in range(len(pool_all.stack_available))])
     test_list_all = [test_all]
 
-    # ------------Titles and Test Lists Config----------------#
-    test_list_variant = custom_test_list
-    title = variant_name
-
     # ================================
     # --- Combining problems ---
     # ================================
 
-    tests_per_group = combiningProblems(number_group_pairs, test_list_variant)
+    tests_per_group = combiningProblems(number_group_pairs, custom_test_list)
 
     # ==================================
     # --- Generating the TeX-Files ---
@@ -232,7 +225,7 @@ def exam_generator(args):
         latex_directory,
         template_directory,
         number_group_pairs,
-        test_list_variant,
+        custom_test_list,
         variant_name,
         title,
         semester,
