@@ -2,7 +2,6 @@
 This module contains all functions relevant for the exam-generator.
 """
 
-from genericpath import isfile
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import glob
@@ -178,9 +177,7 @@ def generateTexFiles(
                 for pool_tuple in pool_files:
                     if prob_sol[0] in pool_tuple[0]:
                         pool_name = str(pool_tuple[1])
-                        problem_string += (
-                            f"\\input{{pool{pool_name}/{prob_sol[0]}}}\n\n"
-                        )
+                        problem_string += f"\\input{{{pool_name}/{prob_sol[0]}}}\n\n"
 
             file_content = file_content.replace("__AUFGABEN__", problem_string)
 
@@ -214,9 +211,7 @@ def generateTexFiles(
                 for pool_tuple in pool_files:
                     if prob_sol[0] in pool_tuple[0]:
                         pool_name = pool_tuple[1]
-                        solution_string += (
-                            f"\\input{{pool{pool_name}/{prob_sol[1]}}}\n\n"
-                        )
+                        solution_string += f"\\input{{{pool_name}/{prob_sol[1]}}}\n\n"
 
             file_content = file_content.replace("__AUFGABEN__", solution_string)
 
@@ -465,7 +460,7 @@ def make_specific(make_all, pool, problem, root_directory):
 
 def check_directory(root_directory) -> bool:
     """
-    Checks if rewuired directories exists.
+    Checks if required directories exists.
 
     :return: False=not all exist, True= all exist
     :rtype: bool
@@ -491,17 +486,10 @@ def check_directory(root_directory) -> bool:
                 a directory following the instructions."
         )
 
-    if not (
-        os.path.isdir(os.path.join(os.getcwd(), "settings"))
-        and os.path.isdir(os.path.join(os.getcwd(), "templates"))
-        and os.path.isdir(os.path.join(os.getcwd(), "problem_data"))
-    ):
-        return False
-    else:
-        return True
+    return True
 
 
-def poolDataPull(latex_directory):
+def pullPoolData(latex_directory):
     """
     Sets pool directories and its problem data.
 
@@ -524,7 +512,20 @@ def poolDataPull(latex_directory):
             os.path.basename(fn) for fn in glob.iglob(os.path.join(pool_dir, "*.tex"))
         ]
 
+        for file in problem_data_list:
+            if ("problem" not in file) and ("solution" not in file):
+                raise CompilingError(
+                    f"{errorInfo()} File name {file} does not follow the \
+                    naming pattern given in the instructions."
+                )
+
         pool_info.append(problem_data_list, pool_name)
+
+    if len(pool_info) == 0:
+        raise MissingDirectoryError(
+            f"{errorInfo()} No pools provided in the problem_data directory. \
+            Please make sure your directory setup follows the instructions."
+        )
 
     return pool_info
 

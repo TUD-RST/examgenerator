@@ -3,7 +3,6 @@ This module contains all classes relevant for the exam-generator.
 """
 
 import random
-from warnings import warn
 import re
 
 from .customExceptions import *

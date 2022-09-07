@@ -1,5 +1,4 @@
 import pytest
-import os
 
 from exam_generator import funcs
 from exam_generator import classes
@@ -7,10 +6,10 @@ from exam_generator import customExceptions
 
 file_names_tex = [
     "problem_A1_1.tex",
-    "problem_B1_1.tex",
-    "problem_CV03_1.tex",
     "solution_A1_1.tex",
+    "problem_B1_1.tex",
     "solution_B1_1.tex",
+    "problem_CV03_1.tex",
     "solution_CV03_1.tex",
 ]
 
@@ -68,7 +67,7 @@ def test_createCustomTestList_noEntries(file_names_tex):
         funcs.createCustomTestList(test_types_dic, file_names_tex)
 
 
-def test_createCustomTestList_wrongPool(file_names_tex):
+def test_createCustomTestList_noProblemsForPool(file_names_tex):
     test_types_dic = {
         "test1": ["Test1", "APPA"],
     }

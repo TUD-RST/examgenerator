@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-import glob
 import random
-from warnings import warn
 import json
 import argparse as ap
 import textwrap as tw
@@ -201,7 +199,7 @@ def exam_generator(args):
         "Exams-{}-{}".format(variant_name, semester).replace(" ", "").replace("/", ""),
     )
 
-    pool_files = poolDirectoryConfig(latex_directory)
+    pool_files = pullPoolData(latex_directory)
 
     file_names_tex = combineFileNames(pool_files)
 
