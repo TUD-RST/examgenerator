@@ -170,6 +170,22 @@ def exam_generator(args):
              Please make sure all types match the ones given in the instructions."
         )
 
+    if sumo_copies_per_solution < 1 or sumo_copies_per_test < 1:
+        raise SettingsError(
+            f"{errorInfo()} You have to have at least one copy for each test/ solution in {settings}."
+        )
+
+    if sumo_pages_per_sheet_test != 2 and sumo_pages_per_sheet_test != 4:
+        raise SettingsError(
+            f"{errorInfo()} Please choose between 2 or 4 pages per sheet for your \
+            sumo problem/ solution files in {settings}."
+        )
+
+    if number_group_pairs < 1:
+        raise SettingsError(
+            f"{errorInfo()} You have to have at least one group_pair in {settings}."
+        )
+
     # ==================================
     # --- Configuration ---
     # ==================================
