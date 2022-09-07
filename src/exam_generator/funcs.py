@@ -2,7 +2,6 @@
 This module contains all functions relevant for the exam-generator.
 """
 
-from logging import RootLogger
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import glob
@@ -674,9 +673,6 @@ def createCustomTestList(test_types_dictionary, pool_info):
                     break
 
             custom_test_pools.append(new_pool)
-
-            for pool in custom_test_pools:
-                print(pool.name)
 
         custom_test = TestType(test_name, *custom_test_pools)
 
