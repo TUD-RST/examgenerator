@@ -359,7 +359,7 @@ def make_specific(make_all, pool, problem, root_directory):
     # if make_all is selected the preview creation list contains all problems
     if make_all:
         filenames_problems = glob.glob(
-            os.path.join(root_directory, "pool_data/*/problems*.tex")
+            os.path.join(root_directory, "pool_data/*/problem*.tex")
         )
         FILENAME = "Preview_all"
 
@@ -369,7 +369,7 @@ def make_specific(make_all, pool, problem, root_directory):
     i = 1
     while Path(os.path.join(specific_directory, FILENAME + ".pdf")).is_file():
         if i == 1:
-            FILENAME = FILENAME + str(i)
+            FILENAME = FILENAME + "_" + str(i)
         if i > 10:
             FILENAME = FILENAME[:-2] + str(i)
         if i > 100:
