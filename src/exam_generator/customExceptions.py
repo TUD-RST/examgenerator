@@ -23,7 +23,7 @@ class MissingDirectoryError(Exception):
 
 class MissingFileError(Exception):
     """
-    Error raised when a need file is missing.
+    Error raised when a needed file is missing.
 
     :param info: errorInfo()
     :type info: func

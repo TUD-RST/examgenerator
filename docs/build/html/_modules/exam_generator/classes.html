@@ -71,8 +71,9 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">.customExceptions</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="Pool"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.Pool">[docs]</a><span class="k">class</span> <span class="nc">Pool</span><span class="p">:</span>
@@ -86,11 +87,11 @@
 <span class="sd">    :param name: Name of the pool for example: A1, CV21, DV07</span>
 <span class="sd">    :type name: str</span>
 
-<span class="sd">    :param file_names_tex: All Problem-Solution-file names</span>
-<span class="sd">    :type file_names_tex: list[str]</span>
+<span class="sd">    :param pool_files: All Problem-Solution-file names of the pool</span>
+<span class="sd">    :type pool_files: list[str]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">file_names_tex</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">pool_files</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates new pool instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -107,29 +108,33 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stack_storage</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># [(filename_problem, dateiname_solution)]; problems which were pulled by last group</span>
+        <span class="c1"># [(filename_problem, filename_solution)]; problems which were pulled by last group</span>
 
         <span class="c1"># Creates a list with all problems of required pool</span>
-        <span class="n">problem_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;^problem_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="se">\\</span><span class="s2">d+</span><span class="se">\\</span><span class="s2">.tex$&quot;</span><span class="p">)</span>
+        <span class="n">problem_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;^problem_</span><span class="se">\\</span><span class="s2">d+</span><span class="se">\\</span><span class="s2">.tex$&quot;</span><span class="p">)</span>
         <span class="n">file_names_pool_problems</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_names_tex</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">problem_regex</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">pool_files</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">problem_regex</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="p">]</span>
 
         <span class="c1"># Checks if problem + solution exists</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_names_pool_problems</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There is no more problems available in Pool </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">MissingFileError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> There is no problems available in Pool </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. </span><span class="se">\</span>
+<span class="s2">                Please ensure there is problem/ solution data for every used pool.&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Searches solution for problem</span>
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_names_pool_problems</span><span class="p">:</span>
-            <span class="n">file_solution</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;aufgabe&quot;</span><span class="p">,</span> <span class="s2">&quot;loesung&quot;</span><span class="p">)</span>
+            <span class="n">file_solution</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;problem&quot;</span><span class="p">,</span> <span class="s2">&quot;solution&quot;</span><span class="p">)</span>
 
             <span class="c1"># Adds problem and solution to stack</span>
-            <span class="k">if</span> <span class="n">file_solution</span> <span class="ow">in</span> <span class="n">file_names_tex</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">file_solution</span> <span class="ow">in</span> <span class="n">pool_files</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">file</span><span class="p">,</span> <span class="n">file_solution</span><span class="p">))</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> does not have a corresponding solution file </span><span class="si">{</span><span class="n">file_solution</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">raise</span> <span class="n">MissingFileError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> File </span><span class="si">{</span><span class="n">file_solution</span><span class="si">}</span><span class="s2"> does not exist. </span><span class="se">\</span>
+<span class="s2">                    Please make sure that all your problem files have a corresponding solution file.&quot;</span>
                 <span class="p">)</span>
 
 <div class="viewcode-block" id="Pool.pull"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.Pool.pull">[docs]</a>    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -137,7 +142,7 @@
 <span class="sd">        Pulls a random problem + solution from the pool</span>
 
 <span class="sd">        :return: prob_sol</span>
-<span class="sd">        :rtype: list[]</span>
+<span class="sd">        :rtype: tuple(str, str)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># Stack with available problems is exhausted</span>
@@ -147,8 +152,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack_storage</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">stack_storage</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Pool </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is exhausted, problems might repeat within the group&quot;</span>
+                <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Pool </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is exhausted, problems might repeat within the group. </span><span class="se">\</span>
+<span class="s2">                    Please ensure that your problem/ solution data size is sufficient.&quot;</span>
                 <span class="p">)</span>
         <span class="c1"># Random selection of problems/solution pairs</span>
         <span class="n">prob_sol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack_available</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
@@ -158,7 +164,7 @@
 
         <span class="k">return</span> <span class="n">prob_sol</span></div>
 
-<div class="viewcode-block" id="Pool.ablegen"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.Pool.ablegen">[docs]</a>    <span class="k">def</span> <span class="nf">ablegen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pool.discard"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.classes.Pool.discard">[docs]</a>    <span class="k">def</span> <span class="nf">discard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Discards all pulled problems to the discard pile</span>
 <span class="sd">        &quot;&quot;&quot;</span>

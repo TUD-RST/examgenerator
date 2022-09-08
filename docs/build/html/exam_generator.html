@@ -44,6 +44,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-exam_generator.main">Main</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-exam_generator.classes">Classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-exam_generator.funcs">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-exam_generator.customExceptions">Custom Errors</a></li>
 </ul>
 </li>
 </ul>
@@ -104,7 +105,7 @@
 <p>This module contains all classes relevant for the exam-generator.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="exam_generator.classes.Pool">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam_generator.classes.</span></span><span class="sig-name descname"><span class="pre">Pool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_names_tex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/classes.html#Pool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.classes.Pool" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam_generator.classes.</span></span><span class="sig-name descname"><span class="pre">Pool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/classes.html#Pool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.classes.Pool" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Represents each pool with its corresponding problems.</p>
 <p>Construction:</p>
@@ -115,13 +116,13 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – Name of the pool for example: A1, CV21, DV07</p></li>
-<li><p><strong>file_names_tex</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – All Problem-Solution-file names</p></li>
+<li><p><strong>pool_files</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – All Problem-Solution-file names of the pool</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="exam_generator.classes.Pool.ablegen">
-<span class="sig-name descname"><span class="pre">ablegen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/classes.html#Pool.ablegen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.classes.Pool.ablegen" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="exam_generator.classes.Pool.discard">
+<span class="sig-name descname"><span class="pre">discard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/classes.html#Pool.discard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.classes.Pool.discard" title="Permalink to this definition"></a></dt>
 <dd><p>Discards all pulled problems to the discard pile</p>
 </dd></dl>
 
@@ -134,7 +135,7 @@
 <dd class="field-odd"><p>prob_sol</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[]</p>
+<dd class="field-even"><p>tuple(str, str)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -165,8 +166,8 @@
 <span id="functions"></span><h2>Functions<a class="headerlink" href="#module-exam_generator.funcs" title="Permalink to this heading"></a></h2>
 <p>This module contains all functions relevant for the exam-generator.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="exam_generator.funcs.build_sumo">
-<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">build_sumo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sumo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdf_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pages_per_sheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copies_per_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#build_sumo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.build_sumo" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="exam_generator.funcs.buildSumo">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">buildSumo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sumo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdf_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pages_per_sheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copies_per_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#buildSumo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.buildSumo" title="Permalink to this definition"></a></dt>
 <dd><p>This function creates the sumo file which contains all problems/ solutions for all groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -188,8 +189,39 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="exam_generator.funcs.combining_problems">
-<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">combining_problems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_group_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_list_variant</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#combining_problems"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.combining_problems" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="exam_generator.funcs.check_directory">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">check_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_directory</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/exam_generator/funcs.html#check_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.check_directory" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if required directories exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>False=not all exist, True= all exist</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.combineFileNames">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">combineFileNames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#combineFileNames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.combineFileNames" title="Permalink to this definition"></a></dt>
+<dd><p>Combines the problems of all individual pools into one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pool_files</strong> (<em>list</em><em>[</em><em>tuple</em><em>(</em><em>list</em><em>[</em><em>str</em><em>]</em><em>, </em><em>str</em><em>)</em><em>]</em>) – problem/ solution names, name of corresponding pool</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>names of all problems/ solutions</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.combiningProblems">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">combiningProblems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_group_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_list_variant</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#combiningProblems"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.combiningProblems" title="Permalink to this definition"></a></dt>
 <dd><p>For each group this function adds to a list which contains
 problems and their according solutions from given pools
 depending on the test variant.</p>
@@ -227,8 +259,28 @@ the test directory. Lastly, it deletes temporary data.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="exam_generator.funcs.generate_tex_files">
-<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">generate_tex_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_group_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_list_variant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semester</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests_per_group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#generate_tex_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.generate_tex_files" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="exam_generator.funcs.createCustomTestList">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">createCustomTestList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_types_dictionary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#createCustomTestList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.createCustomTestList" title="Permalink to this definition"></a></dt>
+<dd><p>Creates custom test list out of json dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_types_dictionary</strong> (<em>dict</em>) – json dict loaded into Python format</p></li>
+<li><p><strong>pool_info</strong> (<em>list</em><em>[</em><em>tuple</em><em>(</em><em>list</em><em>[</em><em>str</em><em>]</em><em>, </em><em>str</em><em>)</em><em>]</em>) – pool files, pool name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of custom tests</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="#exam_generator.classes.TestType" title="exam_generator.classes.TestType">TestType</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.generateTexFiles">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">generateTexFiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_group_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_list_variant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semester</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests_per_group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#generateTexFiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.generateTexFiles" title="Permalink to this definition"></a></dt>
 <dd><p>This function replaces the variables within the tex problem/ solution files with the information given
 by the setting and returns the names of the according pdf files.</p>
 <dl class="field-list simple">
@@ -256,7 +308,7 @@ by the setting and returns the names of the according pdf files.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exam_generator.funcs.make_specific">
-<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">make_specific</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">make_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aufgabe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#make_specific"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.make_specific" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">make_specific</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">make_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#make_specific"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.make_specific" title="Permalink to this definition"></a></dt>
 <dd><p>This Function creates previews for given pools/ problems or all.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -265,11 +317,113 @@ by the setting and returns the names of the according pdf files.</p>
 <li><p><strong>pool</strong> (<em>str</em>) – Name of the pool to be created</p></li>
 </ul>
 </dd>
-<dt class="field-even">Aufgabe</dt>
+<dt class="field-even">Problem</dt>
 <dd class="field-even"><p>File name of the problem to be created</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.poolDirectoryConfig">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">poolDirectoryConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#poolDirectoryConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.poolDirectoryConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Sets pool directories and its problem data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>latex_directory</strong> (<em>str</em>) – working directory of latex compiler</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>problem/ solution names, name of corresponding pool</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[tuple(list[str], str)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.pullPoolData">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">pullPoolData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#pullPoolData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.pullPoolData" title="Permalink to this definition"></a></dt>
+<dd><p>Sets pool directories and its problem data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>latex_directory</strong> (<em>str</em>) – working directory of latex compiler</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>problem/ solution names, name of corresponding pool</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[tuple(list[str], str)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-exam_generator.customExceptions">
+<span id="custom-errors"></span><h2>Custom Errors<a class="headerlink" href="#module-exam_generator.customExceptions" title="Permalink to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="exam_generator.customExceptions.CompilingError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam_generator.customExceptions.</span></span><span class="sig-name descname"><span class="pre">CompilingError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/customExceptions.html#CompilingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.customExceptions.CompilingError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Error raised when there is a problem during the compiling process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info</strong> (<em>func</em>) – errorInfo()</p></li>
+<li><p><strong>file</strong> (<em>str. Defaulted to None</em>) – name of file where compiling failed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="exam_generator.customExceptions.MissingDirectoryError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam_generator.customExceptions.</span></span><span class="sig-name descname"><span class="pre">MissingDirectoryError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/customExceptions.html#MissingDirectoryError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.customExceptions.MissingDirectoryError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Error raised when a needed directory is missing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info</strong> (<em>func</em>) – errorInfo()</p></li>
+<li><p><strong>directory</strong> (<em>str. Default None.</em>) – missing directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="exam_generator.customExceptions.MissingFileError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam_generator.customExceptions.</span></span><span class="sig-name descname"><span class="pre">MissingFileError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/customExceptions.html#MissingFileError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.customExceptions.MissingFileError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Error raised when a need file is missing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info</strong> (<em>func</em>) – errorInfo()</p></li>
+<li><p><strong>file</strong> (<em>str</em>) – missing file name</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="exam_generator.customExceptions.SettingsError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">exam_generator.customExceptions.</span></span><span class="sig-name descname"><span class="pre">SettingsError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/customExceptions.html#SettingsError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.customExceptions.SettingsError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Error raised when there is a problem with user input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info</strong> (<em>func</em>) – errorInfo()</p></li>
+<li><p><strong>settings_file</strong> (<em>str</em>) – name of settings file</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.customExceptions.errorInfo">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.customExceptions.</span></span><span class="sig-name descname"><span class="pre">errorInfo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/customExceptions.html#errorInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.customExceptions.errorInfo" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 </section>
