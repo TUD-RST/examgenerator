@@ -506,7 +506,7 @@ def pullPoolData(latex_directory):
         ]
 
         for file in pool_data_list:
-            if ("problem" not in file) and ("solution" not in file):
+            if "problem" not in file and  "solution" not in file:
                 raise CompilingError(
                     f"{errorInfo()} File name {file} does not follow the \
                     naming pattern given in the instructions."
@@ -522,85 +522,6 @@ def pullPoolData(latex_directory):
 
     return pool_info
 
-
-def poolDirectoryConfig(latex_directory):
-    """
-    Sets pool directories and its problem data.
-
-
-    Args:
-        latex_directory (str): working directory of latex compiler
-
-    Returns:
-        list[tuple(list[str], str)]: problem/ solution names, name of corresponding pool
-    """
-
-    # Directory with the LaTeX source code for the problems
-    poolA_directory = os.path.join(latex_directory, "poolA")
-    poolB_directory = os.path.join(latex_directory, "poolB")
-    poolC_directory = os.path.join(latex_directory, "poolC")
-    poolD_directory = os.path.join(latex_directory, "poolD")
-    poolE_directory = os.path.join(latex_directory, "poolE")
-    poolF_directory = os.path.join(latex_directory, "poolF")
-    poolG_directory = os.path.join(latex_directory, "poolG")
-    poolH_directory = os.path.join(latex_directory, "poolH")
-
-    # Creates a list of problem names for every pool (probably unnecessary, working on it)
-    file_names_poolA_tex = [
-        os.path.basename(fn)
-        for fn in glob.iglob(os.path.join(poolA_directory, "*.tex"))
-    ]
-
-    file_names_poolB_tex = [
-        os.path.basename(fn)
-        for fn in glob.iglob(os.path.join(poolB_directory, "*.tex"))
-    ]
-
-    file_names_poolC_tex = [
-        os.path.basename(fn)
-        for fn in glob.iglob(os.path.join(poolC_directory, "*.tex"))
-    ]
-
-    file_names_poolD_tex = [
-        os.path.basename(fn)
-        for fn in glob.iglob(os.path.join(poolD_directory, "*.tex"))
-    ]
-
-    file_names_poolE_tex = [
-        os.path.basename(fn)
-        for fn in glob.iglob(os.path.join(poolE_directory, "*.tex"))
-    ]
-
-    file_names_poolF_tex = [
-        os.path.basename(fn)
-        for fn in glob.iglob(os.path.join(poolF_directory, "*.tex"))
-    ]
-
-    file_names_poolG_tex = [
-        os.path.basename(fn)
-        for fn in glob.iglob(os.path.join(poolG_directory, "*.tex"))
-    ]
-
-    file_names_poolH_tex = [
-        os.path.basename(fn)
-        for fn in glob.iglob(os.path.join(poolH_directory, "*.tex"))
-    ]
-
-    # list of tuples: list of all problems belonging to each pool, name of pool
-    pool_files = [
-        (file_names_poolA_tex, "A"),
-        (file_names_poolB_tex, "B"),
-        (file_names_poolC_tex, "C"),
-        (file_names_poolD_tex, "D"),
-        (file_names_poolE_tex, "E"),
-        (file_names_poolF_tex, "F"),
-        (file_names_poolG_tex, "G"),
-        (file_names_poolH_tex, "H"),
-    ]
-
-    return pool_files
-
-
 def combineFileNames(pool_files):
     """
     Combines the problems of all individual pools into one.
@@ -615,7 +536,6 @@ def combineFileNames(pool_files):
     for pool in pool_files:
         file_names_tex += pool[0]
     return file_names_tex
-
 
 def createCustomTestList(test_types_dictionary, pool_info):
     """

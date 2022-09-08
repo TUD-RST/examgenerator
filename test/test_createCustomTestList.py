@@ -4,31 +4,35 @@ from exam_generator import funcs
 from exam_generator import classes
 from exam_generator import customExceptions
 
-file_names_tex = [
-    "problem_A1_1.tex",
-    "solution_A1_1.tex",
-    "problem_B1_1.tex",
-    "solution_B1_1.tex",
-    "problem_CV03_1.tex",
-    "solution_CV03_1.tex",
-]
 
+def test_createCustomTestList_correct():
 
-def test_createCustomTestList_correct(file_names_tex):
+    poolA_files = ["problem_1.tex",
+    "solution_1.tex"]
+
+    poolB_files = ["problem_1.tex",
+    "solution_1.tex"]
+
+    poolC_files = ["problem_1.tex",
+    "solution_1.tex"]
+
+    pool_info = [(poolA_files, "A1"), (poolB_files, "B1"), (poolC_files, "CV03")]
 
     test_types_dic = {
-        "test1": ["Test1", "A1", "B1", "CV03"],
-        "test2": ["Test2", "A1", "B1"],
+        "test1": ["A1", "B1", "CV03"],
+        "test2": ["A1", "B1"],
     }
 
-    poolA1 = classes.Pool("A1", file_names_tex)
-    poolB1 = classes.Pool("B1", file_names_tex)
-    poolCV03 = classes.Pool("CV03", file_names_tex)
 
-    pool_list1 = [poolA1, poolB1, poolCV03]
-    pool_list2 = [poolA1, poolB1]
 
-    custom_test_list = funcs.createCustomTestList(test_types_dic, file_names_tex)
+    poolA1 = classes.Pool("A1", poolA_files)
+    poolB1 = classes.Pool("B1", poolB_files)
+    poolCV03 = classes.Pool("CV03", poolC_files)
+
+    pool_list1 = (poolA1, poolB1, poolCV03)
+    pool_list2 = (poolA1, poolB1)
+
+    custom_test_list = funcs.createCustomTestList(test_types_dic, pool_info)
 
     error = False
 
@@ -43,8 +47,9 @@ def test_createCustomTestList_correct(file_names_tex):
     if len(testtype1.pools) != len(pool_list1):
         error = True
 
-    for pool in testtype1.pools:
-        if pool.name != pool_list1[pool.index()].name:
+    pool_list_test1 = testtype1.pools
+    for pool in pool_list_test1:
+        if pool.name != pool_list1[pool_list_test1.index(pool)].name:
             error = True
 
     # checking second testtype
@@ -54,22 +59,30 @@ def test_createCustomTestList_correct(file_names_tex):
     if len(testtype1.pools) != len(pool_list2):
         error = True
 
-    for pool in testtype2.pools:
-        if pool.name != pool_list2[pool.index()].name:
+    pool_list_test2 = testtype2.pools
+
+    for pool in pool_list2:
+        if pool.name != pool_list2[pool_list_test2.index(pool)].name:
             error = True
 
     assert error == False
 
 
-def test_createCustomTestList_noEntries(file_names_tex):
+def test_createCustomTestList_noEntries():
+    poolA_files = ["problem_1.tex",
+    "solution_1.tex"]
+
+    poolB_files = ["problem_1.tex",
+    "solution_1.tex"]
+
+    poolC_files = ["problem_1.tex",
+    "solution_1.tex"]
+
+    pool_info = [(poolA_files, "A1"), (poolB_files, "B1"), (poolC_files, "CV03")]
+
     test_types_dic = {}
     with pytest.raises(customExceptions.SettingsError):
-        funcs.createCustomTestList(test_types_dic, file_names_tex)
+        funcs.createCustomTestList(test_types_dic, pool_info)
 
 
-def test_createCustomTestList_noProblemsForPool(file_names_tex):
-    test_types_dic = {
-        "test1": ["Test1", "APPA"],
-    }
-    with pytest.raises(customExceptions.SettingsError):
-        funcs.createCustomTestList(test_types_dic, file_names_tex)
+

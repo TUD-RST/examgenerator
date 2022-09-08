@@ -46,15 +46,23 @@ def test_Pool_noCorrespondingSolution():
         test_pool = classes.Pool("B1", pool_files_B1)
 
 
-def test_Pool_pull_working(file_names_tex):
-    pool = classes.Pool("A1", file_names_tex)
+def test_Pool_pull_working():
+    pool_files_A1 = [
+        "problem_1.tex",
+        "problem_2.tex",
+        "problem_3.tex",
+        "solution_1.tex",
+        "solution_2.tex",
+        "solution_3.tex",
+    ]
+    pool = classes.Pool("A1", pool_files_A1)
 
     prob_sol = pool.pull()
 
     stack = [
-        ("problem_A1_1.tex", "solution_A1_1.tex"),
-        ("problem_A1_2.tex", "solution_A1_2.tex"),
-        ("problem_A1_3.tex", "solution_A1_3.tex"),
+        ("problem_1.tex", "solution_1.tex"),
+        ("problem_2.tex", "solution_2.tex"),
+        ("problem_3.tex", "solution_3.tex"),
     ]
 
     prob_sol_from_stack = False
@@ -67,7 +75,7 @@ def test_Pool_pull_working(file_names_tex):
 
 
 def test_Pool_pull_exhausted():
-    pool_files_CV03 = ["problem_1.tex", "problem_2.tex", "solution_1.tex"]
+    pool_files_CV03 = ["problem_1.tex", "solution_1.tex"]
     pool = classes.Pool("CV03", pool_files_CV03)
 
     pool.pull()
