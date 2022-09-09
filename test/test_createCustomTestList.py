@@ -7,14 +7,11 @@ from exam_generator import customExceptions
 
 def test_createCustomTestList_correct():
 
-    poolA_files = ["problem_1.tex",
-    "solution_1.tex"]
+    poolA_files = ["problem_1.tex", "solution_1.tex"]
 
-    poolB_files = ["problem_1.tex",
-    "solution_1.tex"]
+    poolB_files = ["problem_1.tex", "solution_1.tex"]
 
-    poolC_files = ["problem_1.tex",
-    "solution_1.tex"]
+    poolC_files = ["problem_1.tex", "solution_1.tex"]
 
     pool_info = [(poolA_files, "A1"), (poolB_files, "B1"), (poolC_files, "CV03")]
 
@@ -22,8 +19,6 @@ def test_createCustomTestList_correct():
         "test1": ["A1", "B1", "CV03"],
         "test2": ["A1", "B1"],
     }
-
-
 
     poolA1 = classes.Pool("A1", poolA_files)
     poolB1 = classes.Pool("B1", poolB_files)
@@ -69,20 +64,14 @@ def test_createCustomTestList_correct():
 
 
 def test_createCustomTestList_noEntries():
-    poolA_files = ["problem_1.tex",
-    "solution_1.tex"]
+    poolA_files = ["problem_1.tex", "solution_1.tex"]
 
-    poolB_files = ["problem_1.tex",
-    "solution_1.tex"]
+    poolB_files = ["problem_1.tex", "solution_1.tex"]
 
-    poolC_files = ["problem_1.tex",
-    "solution_1.tex"]
+    poolC_files = ["problem_1.tex", "solution_1.tex"]
 
     pool_info = [(poolA_files, "A1"), (poolB_files, "B1"), (poolC_files, "CV03")]
 
     test_types_dic = {}
     with pytest.raises(customExceptions.SettingsError):
         funcs.createCustomTestList(test_types_dic, pool_info)
-
-
-
