@@ -8,6 +8,7 @@ import glob
 import subprocess
 import shutil
 from pathlib import Path
+from addict import Dict
 
 from .classes import *
 from .customExceptions import *
@@ -599,3 +600,95 @@ def createCustomTestList(test_types_dictionary, pool_info):
         custom_test_list.append(custom_test)
 
     return custom_test_list
+
+def checkSettings(settings, settings_file):
+    if not isinstance(settings.group_pairs, int):
+        raise SettingsError(
+            f"{errorInfo()} group_pairs in {settings_file} is not of the required type int. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.title, str):
+        raise SettingsError(
+            f"{errorInfo()} title in {settings_file} is not of the required type string. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.variant_name, str):
+        raise SettingsError(
+            f"{errorInfo()} variant_name in {settings_file} is not of the required type string. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.semester, str):
+        raise SettingsError(
+            f"{errorInfo()} semester in {settings_file} is not of the required type string. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.sumo.pages_per_sheet_test, int):
+        raise SettingsError(
+            f"{errorInfo()} pages_per_sheet_test in {settings_file} is not of the required type int. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.sumo.sumo_problem_copies, int):
+        raise SettingsError(
+            f"{errorInfo()} sumo_number_copies in {settings_file} is not of the required type int. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+
+    if not isinstance(settings.sumo.pages_per_sheet_solution, int):
+        raise SettingsError(
+            f"{errorInfo()} pages_per_sheet_solution in {settings_file} is not of the required type int. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.sumo.sumo_solution_copies, int):
+        raise SettingsError(
+            f"{errorInfo()} sumo_copies_per_solution in {settings_file} is not of the required type int. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+
+    if not isinstance(settings.data.generate_single_pdfs, bool):
+        raise SettingsError(
+            f"{errorInfo()} generate_single_pdfs in {settings_file} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+
+    if not isinstance(settings.data.generate_sumo_pdf, bool):
+        raise SettingsError(
+            f"{errorInfo()} generate_sumo_pdf in {settings_file} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.data.delete_temp_data, bool):
+        raise SettingsError(
+            f"{errorInfo()} delete_temp_data in {settings_file} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+    if settings.sumo.sumo_solution_copies < 1 or settings.sumo.sumo_problem_copies < 1:
+        raise SettingsError(
+            f"{errorInfo()} You have to have at least one copy for each test/ solution in {settings_file}."
+        )
+
+    if (settings.sumo.pages_per_sheet_test != 2) and (settings.sumo.pages_per_sheet_test != 4):
+        raise SettingsError(
+            f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \
+            per sheet for your sumo problem/ solution files in {settings_file}."
+        )
+    
+    if (settings.sumo.pages_per_sheet_solution != 2) and (settings.sumo.pages_per_sheet_solution != 4):
+        raise SettingsError(
+            f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \
+            per sheet for your sumo problem/ solution files in {settings_file}."
+        )
+
+    if settings.group_pairs < 1:
+        raise SettingsError(
+            f"{errorInfo()} You have to have at least one group_pair in {settings_file}."
+        )
