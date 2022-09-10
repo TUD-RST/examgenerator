@@ -56,13 +56,18 @@ def exam_generator(args):
 
     random.seed()
 
-    settings_file = args.create_test
+    settings_path = args.create_test
 
-    path_settings = os.path.join(root_directory, "settings", str(settings_file))
+    path_settings = os.path.join(root_directory, settings_path)
+
+    if not os.path.isfile(path_settings):
+        path_settings = settings_path
+
+    settings_name = os.path.normpath(settings_path).split(os.sep)[-1]
 
     if not os.path.isfile(path_settings):
         raise MissingFileError(
-            f"{errorInfo()} File {settings_file} does not exist. \
+            f"{errorInfo()} File {settings_name} does not exist. \
              Please make sure your directory structure follows the instructions."
         )
 
@@ -73,7 +78,7 @@ def exam_generator(args):
     # converts Python dict into addict Dic
     settings = Dict(settings_dictionary)
 
-    checkSettings(settings, settings_file)
+    checkSettings(settings, settings_name)
 
     # ==================================
     # --- Configuration ---

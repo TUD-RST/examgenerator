@@ -1,11 +1,11 @@
 {
   "group_pairs": 2,
-  "variant_name": "RES",
   "title": "Praktikum Regelungstechnik (RES)",
+  "variant_name": "RES",
   "semester": "WS 2021/22",
   "sumo": {
     "pages_per_sheet_test": 4,
-    "sumo_number_copies": 4,
+    "sumo_problem_copies": 4,
     "pages_per_sheet_solution": 4,
     "sumo_solution_copies": 1
   },
