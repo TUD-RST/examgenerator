@@ -2,6 +2,7 @@
 This module contains all functions relevant for the exam-generator.
 """
 
+from genericpath import isfile
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import glob
@@ -320,7 +321,7 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
             raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
 
 
-def make_specific(make_all, pool, problem, root_directory):
+def make_specific(make_all, pool, problem_path, root_directory):
     """
     This Function creates previews for given pools/ problems or all.
 
@@ -345,10 +346,18 @@ def make_specific(make_all, pool, problem, root_directory):
         )
 
     # if problem is provided, it is added to the preview creation list
-    if problem is not None:
+    if problem_path is not None:
+        abs_path = os.path.join(root_directory, problem_path)
+
+        if not os.path.isfile(abs_path):
+            abs_path = problem_path
+            
         filenames_problems.extend(
-            glob.glob(os.path.join(root_directory, "pool_data/*/" + problem + ".tex"))
+            glob.glob(abs_path)
         )
+
+        problem = os.path.normpath(abs_path).split(os.sep)[-1].removesuffix(".tex")
+        
         FILENAME = "Preview_" + problem
 
     # if make_all is selected the preview creation list contains all problems
