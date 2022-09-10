@@ -52,7 +52,7 @@ def test_createCustomTestList_correct():
     pool_list_test1 = testtype1.pools
     
     # checks if name of random pool in list is correct
-    index = random.randint(0, len(pool_list_test1))
+    index = random.randint(0, len(pool_list_test1)-1)
 
     if pool_list_test1[index].name != pool_list1[index].name:
         error = True
@@ -71,8 +71,9 @@ def test_createCustomTestList_correct():
     pool_list_test2 = testtype2.pools
 
     # checks if name of random pool in list is correct
-    index = random.randint(0, len(pool_list_test2))
-    if pool_list_test2[index].name != pool_list2[index].name:
+    new_index = random.randint(0, len(pool_list_test2)-1)
+
+    if pool_list_test2[new_index].name != pool_list2[new_index].name:
         error = True
 
     assert error == False
