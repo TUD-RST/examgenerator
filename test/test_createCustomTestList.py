@@ -1,4 +1,6 @@
 import pytest
+import os
+import random
 
 from exam_generator import funcs
 from exam_generator import classes
@@ -6,27 +8,29 @@ from exam_generator import customExceptions
 
 
 def test_createCustomTestList_correct():
+    """
+    Expects createCustomTestList() to compile a correct list.
+    """
 
-    poolA_files = ["problem_1.tex", "solution_1.tex"]
+    directory = os.path.join(os.getcwd(), "test_directories", "createCustomTestList_1")
 
-    poolB_files = ["problem_1.tex", "solution_1.tex"]
+    pool_info = funcs.pullPoolData(directory)
 
-    poolC_files = ["problem_1.tex", "solution_1.tex"]
-
-    pool_info = [(poolA_files, "A1"), (poolB_files, "B1"), (poolC_files, "CV03")]
-
+    # test_types resembling the json data
     test_types_dic = {
         "test1": ["A1", "B1", "CV03"],
         "test2": ["A1", "B1"],
     }
 
-    poolA1 = classes.Pool("A1", poolA_files)
-    poolB1 = classes.Pool("B1", poolB_files)
-    poolCV03 = classes.Pool("CV03", poolC_files)
+    # expected data for comparison
+    poolA1 = classes.Pool("A1", pool_info[0][0])
+    poolB1 = classes.Pool("B1", pool_info[1][0])
+    poolCV03 = classes.Pool("CV03", pool_info[2][0])
 
     pool_list1 = (poolA1, poolB1, poolCV03)
     pool_list2 = (poolA1, poolB1)
 
+    # checking the function
     custom_test_list = funcs.createCustomTestList(test_types_dic, pool_info)
 
     error = False
@@ -36,42 +40,53 @@ def test_createCustomTestList_correct():
 
     # checking first testtype
     testtype1 = custom_test_list[0]
-    if testtype1.name != "Test1":
+
+    # TestType name check
+    if testtype1.name != "test1":
         error = True
 
+    # TestType pools length check
     if len(testtype1.pools) != len(pool_list1):
         error = True
 
     pool_list_test1 = testtype1.pools
-    for pool in pool_list_test1:
-        if pool.name != pool_list1[pool_list_test1.index(pool)].name:
-            error = True
+    
+    # checks if name of random pool in list is correct
+    index = random.randint(0, len(pool_list_test1))
+
+    if pool_list_test1[index].name != pool_list1[index].name:
+        error = True
 
     # checking second testtype
     testtype2 = custom_test_list[1]
-    if testtype2.name != "Test2":
+
+    # TestType name check
+    if testtype2.name != "test2":
         error = True
-    if len(testtype1.pools) != len(pool_list2):
+    
+    # TestType pools length check
+    if len(testtype2.pools) != len(pool_list2):
         error = True
 
     pool_list_test2 = testtype2.pools
 
-    for pool in pool_list2:
-        if pool.name != pool_list2[pool_list_test2.index(pool)].name:
-            error = True
+    # checks if name of random pool in list is correct
+    index = random.randint(0, len(pool_list_test2))
+    if pool_list_test2[index].name != pool_list2[index].name:
+        error = True
 
     assert error == False
 
 
 def test_createCustomTestList_noEntries():
-    poolA_files = ["problem_1.tex", "solution_1.tex"]
+    """
+    Expects a SettingsError when no custom test was provided in the json data.
+    """
+    directory = os.path.join(os.getcwd(), "test_directories", "createCustomTestList_1")
 
-    poolB_files = ["problem_1.tex", "solution_1.tex"]
+    pool_info = funcs.pullPoolData(directory)
 
-    poolC_files = ["problem_1.tex", "solution_1.tex"]
-
-    pool_info = [(poolA_files, "A1"), (poolB_files, "B1"), (poolC_files, "CV03")]
-
+    # dic representing the json data
     test_types_dic = {}
     with pytest.raises(customExceptions.SettingsError):
         funcs.createCustomTestList(test_types_dic, pool_info)

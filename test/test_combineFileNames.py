@@ -1,19 +1,23 @@
 import pytest
+import os
 
 from exam_generator import funcs
 
 
-def test_combine_file_names():
-    pool_info = [
-        (["problem_A1_1.tex", "solution_A1_1.tex"], "poolA"),
-        (["problem_B1_1.tex", "solution_B1_1.tex"], "poolB"),
-    ]
+def test_combineFileNames():
+    """
+    Expects combineFileNames to create the correct joined list.
+    """
+    
+    directory = os.path.join(os.getcwd(), "test_directories", "combineFileNames_1")
+
+    pool_info = funcs.pullPoolData(directory)
 
     result = [
-        "problem_A1_1.tex",
-        "solution_A1_1.tex",
-        "problem_B1_1.tex",
-        "solution_B1_1.tex",
+        "problem_1.tex",
+        "solution_1.tex",
+        "problem_1.tex",
+        "solution_1.tex",
     ]
 
     assert funcs.combineFileNames(pool_info) == result
