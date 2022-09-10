@@ -170,14 +170,10 @@ def generateTexFiles(
             # This could probably be solved more elegantly, but it works for now
 
             problem_string = ""
-
             for prob_sol in tests_per_group[group][test_index]:
                 problem_string += f"\\item\n"
-
-                for pool_tuple in pool_files:
-                    if prob_sol[0] in pool_tuple[0]:
-                        pool_name = str(pool_tuple[1])
-                        problem_string += f"\\input{{{pool_name}/{prob_sol[0]}}}\n\n"
+                pool_name = prob_sol[2]
+                problem_string += f"\\input{{{pool_name}/{prob_sol[0]}}}\n\n"
 
             file_content = file_content.replace("__AUFGABEN__", problem_string)
 
@@ -208,10 +204,9 @@ def generateTexFiles(
             for prob_sol in tests_per_group[group][test_index]:
                 solution_string += f"\\item\n"
 
-                for pool_tuple in pool_files:
-                    if prob_sol[0] in pool_tuple[0]:
-                        pool_name = pool_tuple[1]
-                        solution_string += f"\\input{{{pool_name}/{prob_sol[1]}}}\n\n"
+
+                pool_name = prob_sol[2]
+                solution_string += f"\\input{{{pool_name}/{prob_sol[1]}}}\n\n"
 
             file_content = file_content.replace("__AUFGABEN__", solution_string)
 

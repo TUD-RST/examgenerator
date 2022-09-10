@@ -62,7 +62,7 @@ def exam_generator(args):
 
     if not os.path.isfile(path_settings):
         raise MissingFileError(
-            f"{errorInfo()} File {settings} does not exist. \
+            f"{errorInfo()} File {settings_file} does not exist. \
              Please make sure your directory structure follows the instructions."
         )
 
