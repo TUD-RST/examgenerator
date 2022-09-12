@@ -309,7 +309,6 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
                 shutil.move(file.replace(".tex", ".pdf"), test_directory)
 
     # Delete temporary data
-    # ToDo: mit python machen!
     if delete_temp_data:
         deleteCommand()
 
