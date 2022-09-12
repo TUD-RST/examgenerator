@@ -4,12 +4,14 @@ This module contains all functions relevant for the exam-generator.
 
 from genericpath import isfile
 import os
+from platform import platform
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import glob
 import subprocess
 import shutil
 from pathlib import Path
 from addict import Dict
+import platform
 
 from .classes import *
 from .customExceptions import *
@@ -313,12 +315,7 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
     # Delete temporary data
     # ToDo: mit python machen!
     if delete_temp_data:
-        command = "del /Q *.dvi *.ps *.aux *.log *.tex"
-        print(command)
-        process = subprocess.Popen(command, shell=True)
-        process.wait()
-        if process.returncode != 0:
-            raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
+        deleteCommand()
 
 
 def make_specific(make_all, pool_path, problem_path, root_directory):
@@ -448,9 +445,7 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
     process.wait()
 
     if process.returncode == 0:
-        process = subprocess.Popen(
-            "del {0}.aux {0}.log {0}.tex".format(FILENAME), shell=True
-        )
+        deleteCommand(FILENAME)
     else:
         raise CompilingError(
             f"{errorInfo()}, Problem while compiling the template pdf file."
@@ -704,3 +699,30 @@ def checkSettings(settings, settings_file):
         raise SettingsError(
             f"{errorInfo()} You have to have at least one group_pair in {settings_file}."
         )
+    
+
+def deleteCommand(filename = None):
+    """
+    Deletes temporary data with commands based on OS.
+
+    :param filename: Specific name to be deleted. Defaulted to None
+    :type filename: str
+    """
+    if platform.system() == "Windows":
+        command = "del /Q *.dvi *.ps *.aux *.log *.tex"
+        if filename is not None:
+           command = "del {0}.aux {0}.log {0}.tex".format(filename)
+
+    elif platform.system() == "Linux":
+        command = "rm -f *.dvi *.ps *.aux *.log *.tex"
+        if filename is not None:
+            command = "rm -f {0}.aux {0}.log {0}.tex".format(filename)
+    else:
+        raise CompilingError(f"{errorInfo()} Your operating system is not supported. Please try again on Windows or Linux.")
+
+    print(command)
+    process = subprocess.Popen(command, shell=True)
+    process.wait()
+    if process.returncode != 0:
+        raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
+
