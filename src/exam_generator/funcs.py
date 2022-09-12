@@ -321,7 +321,7 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
             raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
 
 
-def make_specific(make_all, pool, problem_path, root_directory):
+def make_specific(make_all, pool_path, problem_path, root_directory):
     """
     This Function creates previews for given pools/ problems or all.
 
@@ -339,12 +339,20 @@ def make_specific(make_all, pool, problem_path, root_directory):
     filenames_problems = []
 
     # if a pool is selected, all its problems will be added to the creation list
-    if pool is not None:
-        FILENAME = "Preview_Pool_" + pool
+    if pool_path is not None:
+
+        abs_path = os.path.join(root_directory, f"{pool_path}/problem*.tex")
+
+        if not os.path.isfile(abs_path):
+            abs_path = os.path.join(pool_path, "problem*.tex")
+
         filenames_problems.extend(
-            glob.glob(os.path.join(root_directory, f"pool_data/{pool}/problem*.tex"))
+            glob.glob(abs_path)
         )
 
+        pool = os.path.normpath(pool_path).split(os.sep)[-1]
+
+        FILENAME = "Preview_Pool_" + pool
     # if problem is provided, it is added to the preview creation list
     if problem_path is not None:
         abs_path = os.path.join(root_directory, problem_path)
