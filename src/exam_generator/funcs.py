@@ -81,7 +81,6 @@ def generateTexFiles(
     title,
     semester,
     tests_per_group,
-    pool_files,
 ):
 
     """
@@ -112,9 +111,6 @@ def generateTexFiles(
 
     :param tests_per_group: List of problems/ solutions for each group
     :type tests_per_group: list[str]
-
-    :param pool_files: [0] list of names of problems for each pool, [1] name of pool
-    :type pool_files: list[tuple]
 
     :return: [0] problem pdf names, [1] solution pdf names
     :rtype: list[tuple]
@@ -236,7 +232,7 @@ def combiningProblems(number_group_pairs, test_list_variant):
     :type test_list_variant: list[TestType]
 
     :return: tests_per_group - problems/ solutions for each group
-    :rtype: list[str]
+    :rtype: list[list[list[tuple(str, str, str)]]]
 
     """
 

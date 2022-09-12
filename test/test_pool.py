@@ -69,6 +69,12 @@ def test_Pool_pull_working():
     ]
 
     prob_sol_from_stack = False
+
+    # removing the name of the pool since it is not stacked
+    prob_sol_list = list(prob_sol)
+    prob_sol_list.remove("A1")
+    prob_sol = tuple(prob_sol_list)
+
     if prob_sol in stack:
         prob_sol_from_stack = True
 

@@ -139,7 +139,6 @@ def exam_generator(args):
         settings.title,
         settings.semester,
         tests_per_group,
-        pool_files,
     )
 
     # ===================
