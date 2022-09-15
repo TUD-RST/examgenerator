@@ -70,12 +70,16 @@
 <span class="sd">This module contains all functions relevant for the exam-generator.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">genericpath</span> <span class="kn">import</span> <span class="n">isfile</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">platform</span> <span class="kn">import</span> <span class="n">platform</span>
 <span class="kn">from</span> <span class="nn">PyPDF2</span> <span class="kn">import</span> <span class="n">PdfFileReader</span><span class="p">,</span> <span class="n">PdfFileWriter</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">addict</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">platform</span>
 
 <span class="kn">from</span> <span class="nn">.classes</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.customExceptions</span> <span class="kn">import</span> <span class="o">*</span>
@@ -145,7 +149,6 @@
     <span class="n">title</span><span class="p">,</span>
     <span class="n">semester</span><span class="p">,</span>
     <span class="n">tests_per_group</span><span class="p">,</span>
-    <span class="n">pool_files</span><span class="p">,</span>
 <span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -176,9 +179,6 @@
 
 <span class="sd">    :param tests_per_group: List of problems/ solutions for each group</span>
 <span class="sd">    :type tests_per_group: list[str]</span>
-
-<span class="sd">    :param pool_files: [0] list of names of problems for each pool, [1] name of pool</span>
-<span class="sd">    :type pool_files: list[tuple]</span>
 
 <span class="sd">    :return: [0] problem pdf names, [1] solution pdf names</span>
 <span class="sd">    :rtype: list[tuple]</span>
@@ -237,14 +237,10 @@
             <span class="c1"># This could probably be solved more elegantly, but it works for now</span>
 
             <span class="n">problem_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
             <span class="k">for</span> <span class="n">prob_sol</span> <span class="ow">in</span> <span class="n">tests_per_group</span><span class="p">[</span><span class="n">group</span><span class="p">][</span><span class="n">test_index</span><span class="p">]:</span>
                 <span class="n">problem_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">item</span><span class="se">\n</span><span class="s2">&quot;</span>
-
-                <span class="k">for</span> <span class="n">pool_tuple</span> <span class="ow">in</span> <span class="n">pool_files</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">prob_sol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">pool_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                        <span class="n">pool_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pool_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                        <span class="n">problem_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="si">{</span><span class="n">pool_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob_sol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="se">}}\n\n</span><span class="s2">&quot;</span>
+                <span class="n">pool_name</span> <span class="o">=</span> <span class="n">prob_sol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">problem_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="si">{</span><span class="n">pool_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob_sol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="se">}}\n\n</span><span class="s2">&quot;</span>
 
             <span class="n">file_content</span> <span class="o">=</span> <span class="n">file_content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__AUFGABEN__&quot;</span><span class="p">,</span> <span class="n">problem_string</span><span class="p">)</span>
 
@@ -275,10 +271,9 @@
             <span class="k">for</span> <span class="n">prob_sol</span> <span class="ow">in</span> <span class="n">tests_per_group</span><span class="p">[</span><span class="n">group</span><span class="p">][</span><span class="n">test_index</span><span class="p">]:</span>
                 <span class="n">solution_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">item</span><span class="se">\n</span><span class="s2">&quot;</span>
 
-                <span class="k">for</span> <span class="n">pool_tuple</span> <span class="ow">in</span> <span class="n">pool_files</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">prob_sol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">pool_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                        <span class="n">pool_name</span> <span class="o">=</span> <span class="n">pool_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                        <span class="n">solution_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="si">{</span><span class="n">pool_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob_sol</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="se">}}\n\n</span><span class="s2">&quot;</span>
+
+                <span class="n">pool_name</span> <span class="o">=</span> <span class="n">prob_sol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">solution_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="si">{</span><span class="n">pool_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob_sol</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="se">}}\n\n</span><span class="s2">&quot;</span>
 
             <span class="n">file_content</span> <span class="o">=</span> <span class="n">file_content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__AUFGABEN__&quot;</span><span class="p">,</span> <span class="n">solution_string</span><span class="p">)</span>
 
@@ -305,7 +300,7 @@
 <span class="sd">    :type test_list_variant: list[TestType]</span>
 
 <span class="sd">    :return: tests_per_group - problems/ solutions for each group</span>
-<span class="sd">    :rtype: list[str]</span>
+<span class="sd">    :rtype: list[list[list[tuple(str, str, str)]]]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -382,17 +377,11 @@
                 <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">),</span> <span class="n">test_directory</span><span class="p">)</span>
 
     <span class="c1"># Delete temporary data</span>
-    <span class="c1"># ToDo: mit python machen!</span>
     <span class="k">if</span> <span class="n">delete_temp_data</span><span class="p">:</span>
-        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;del /Q *.dvi *.ps *.aux *.log *.tex&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Temporary data could not be deleted.&quot;</span><span class="p">)</span></div>
+        <span class="n">deleteCommand</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="make_specific"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.make_specific">[docs]</a><span class="k">def</span> <span class="nf">make_specific</span><span class="p">(</span><span class="n">make_all</span><span class="p">,</span> <span class="n">pool</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">root_directory</span><span class="p">):</span>
+<div class="viewcode-block" id="make_specific"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.make_specific">[docs]</a><span class="k">def</span> <span class="nf">make_specific</span><span class="p">(</span><span class="n">make_all</span><span class="p">,</span> <span class="n">pool_path</span><span class="p">,</span> <span class="n">problem_path</span><span class="p">,</span> <span class="n">root_directory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This Function creates previews for given pools/ problems or all.</span>
 
@@ -410,17 +399,33 @@
     <span class="n">filenames_problems</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># if a pool is selected, all its problems will be added to the creation list</span>
-    <span class="k">if</span> <span class="n">pool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_Pool_&quot;</span> <span class="o">+</span> <span class="n">pool</span>
+    <span class="k">if</span> <span class="n">pool_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="n">abs_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pool_path</span><span class="si">}</span><span class="s2">/problem*.tex&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">abs_path</span><span class="p">):</span>
+            <span class="n">abs_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pool_path</span><span class="p">,</span> <span class="s2">&quot;problem*.tex&quot;</span><span class="p">)</span>
+
         <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;pool_data/</span><span class="si">{</span><span class="n">pool</span><span class="si">}</span><span class="s2">/problem*.tex&quot;</span><span class="p">))</span>
+            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">abs_path</span><span class="p">)</span>
         <span class="p">)</span>
 
+        <span class="n">pool</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">pool_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_Pool_&quot;</span> <span class="o">+</span> <span class="n">pool</span>
     <span class="c1"># if problem is provided, it is added to the preview creation list</span>
-    <span class="k">if</span> <span class="n">problem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">problem_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">abs_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="n">problem_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">abs_path</span><span class="p">):</span>
+            <span class="n">abs_path</span> <span class="o">=</span> <span class="n">problem_path</span>
+            
         <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;pool_data/*/&quot;</span> <span class="o">+</span> <span class="n">problem</span> <span class="o">+</span> <span class="s2">&quot;.tex&quot;</span><span class="p">))</span>
+            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">abs_path</span><span class="p">)</span>
         <span class="p">)</span>
+
+        <span class="n">problem</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">abs_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
+        
         <span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_&quot;</span> <span class="o">+</span> <span class="n">problem</span>
 
     <span class="c1"># if make_all is selected the preview creation list contains all problems</span>
@@ -503,9 +508,7 @@
     <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
-            <span class="s2">&quot;del </span><span class="si">{0}</span><span class="s2">.aux </span><span class="si">{0}</span><span class="s2">.log </span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">),</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
+        <span class="n">deleteCommand</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2">, Problem while compiling the template pdf file.&quot;</span>
@@ -574,7 +577,7 @@
         <span class="p">]</span>
 
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">pool_data_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;problem&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">file</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;solution&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">file</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;problem&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">file</span> <span class="ow">and</span>  <span class="s2">&quot;solution&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> File name </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> does not follow the </span><span class="se">\</span>
 <span class="s2">                    naming pattern given in the instructions.&quot;</span>
@@ -590,85 +593,6 @@
 
     <span class="k">return</span> <span class="n">pool_info</span></div>
 
-
-<div class="viewcode-block" id="poolDirectoryConfig"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.poolDirectoryConfig">[docs]</a><span class="k">def</span> <span class="nf">poolDirectoryConfig</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Sets pool directories and its problem data.</span>
-
-
-<span class="sd">    Args:</span>
-<span class="sd">        latex_directory (str): working directory of latex compiler</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        list[tuple(list[str], str)]: problem/ solution names, name of corresponding pool</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Directory with the LaTeX source code for the problems</span>
-    <span class="n">poolA_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="s2">&quot;poolA&quot;</span><span class="p">)</span>
-    <span class="n">poolB_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="s2">&quot;poolB&quot;</span><span class="p">)</span>
-    <span class="n">poolC_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="s2">&quot;poolC&quot;</span><span class="p">)</span>
-    <span class="n">poolD_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="s2">&quot;poolD&quot;</span><span class="p">)</span>
-    <span class="n">poolE_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="s2">&quot;poolE&quot;</span><span class="p">)</span>
-    <span class="n">poolF_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="s2">&quot;poolF&quot;</span><span class="p">)</span>
-    <span class="n">poolG_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="s2">&quot;poolG&quot;</span><span class="p">)</span>
-    <span class="n">poolH_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="s2">&quot;poolH&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Creates a list of problem names for every pool (probably unnecessary, working on it)</span>
-    <span class="n">file_names_poolA_tex</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">poolA_directory</span><span class="p">,</span> <span class="s2">&quot;*.tex&quot;</span><span class="p">))</span>
-    <span class="p">]</span>
-
-    <span class="n">file_names_poolB_tex</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">poolB_directory</span><span class="p">,</span> <span class="s2">&quot;*.tex&quot;</span><span class="p">))</span>
-    <span class="p">]</span>
-
-    <span class="n">file_names_poolC_tex</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">poolC_directory</span><span class="p">,</span> <span class="s2">&quot;*.tex&quot;</span><span class="p">))</span>
-    <span class="p">]</span>
-
-    <span class="n">file_names_poolD_tex</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">poolD_directory</span><span class="p">,</span> <span class="s2">&quot;*.tex&quot;</span><span class="p">))</span>
-    <span class="p">]</span>
-
-    <span class="n">file_names_poolE_tex</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">poolE_directory</span><span class="p">,</span> <span class="s2">&quot;*.tex&quot;</span><span class="p">))</span>
-    <span class="p">]</span>
-
-    <span class="n">file_names_poolF_tex</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">poolF_directory</span><span class="p">,</span> <span class="s2">&quot;*.tex&quot;</span><span class="p">))</span>
-    <span class="p">]</span>
-
-    <span class="n">file_names_poolG_tex</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">poolG_directory</span><span class="p">,</span> <span class="s2">&quot;*.tex&quot;</span><span class="p">))</span>
-    <span class="p">]</span>
-
-    <span class="n">file_names_poolH_tex</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">poolH_directory</span><span class="p">,</span> <span class="s2">&quot;*.tex&quot;</span><span class="p">))</span>
-    <span class="p">]</span>
-
-    <span class="c1"># list of tuples: list of all problems belonging to each pool, name of pool</span>
-    <span class="n">pool_files</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">file_names_poolA_tex</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="n">file_names_poolB_tex</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="n">file_names_poolC_tex</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="n">file_names_poolD_tex</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="n">file_names_poolE_tex</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="n">file_names_poolF_tex</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="n">file_names_poolG_tex</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="n">file_names_poolH_tex</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">),</span>
-    <span class="p">]</span>
-
-    <span class="k">return</span> <span class="n">pool_files</span></div>
-
-
 <div class="viewcode-block" id="combineFileNames"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.combineFileNames">[docs]</a><span class="k">def</span> <span class="nf">combineFileNames</span><span class="p">(</span><span class="n">pool_files</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combines the problems of all individual pools into one.</span>
@@ -683,7 +607,6 @@
     <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pool_files</span><span class="p">:</span>
         <span class="n">file_names_tex</span> <span class="o">+=</span> <span class="n">pool</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">file_names_tex</span></div>
-
 
 <div class="viewcode-block" id="createCustomTestList"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.createCustomTestList">[docs]</a><span class="k">def</span> <span class="nf">createCustomTestList</span><span class="p">(</span><span class="n">test_types_dictionary</span><span class="p">,</span> <span class="n">pool_info</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -747,6 +670,125 @@
         <span class="n">custom_test_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">custom_test</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">custom_test_list</span></div>
+
+<div class="viewcode-block" id="checkSettings"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.checkSettings">[docs]</a><span class="k">def</span> <span class="nf">checkSettings</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">settings_file</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">group_pairs</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> group_pairs in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type int. </span><span class="se">\</span>
+<span class="s2">            Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> title in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type string. </span><span class="se">\</span>
+<span class="s2">            Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> variant_name in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type string. </span><span class="se">\</span>
+<span class="s2">            Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">semester</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> semester in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type string. </span><span class="se">\</span>
+<span class="s2">            Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_test</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> pages_per_sheet_test in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type int. </span><span class="se">\</span>
+<span class="s2">            Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">sumo_problem_copies</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> sumo_number_copies in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type int. </span><span class="se">\</span>
+<span class="s2">             Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_solution</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> pages_per_sheet_solution in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type int. </span><span class="se">\</span>
+<span class="s2">             Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">sumo_solution_copies</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> sumo_copies_per_solution in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type int. </span><span class="se">\</span>
+<span class="s2">             Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">generate_single_pdfs</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> generate_single_pdfs in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type bool. </span><span class="se">\</span>
+<span class="s2">             Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">generate_sumo_pdf</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> generate_sumo_pdf in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type bool. </span><span class="se">\</span>
+<span class="s2">             Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">delete_temp_data</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> delete_temp_data in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type bool. </span><span class="se">\</span>
+<span class="s2">             Please make sure all types match the ones given in the instructions.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">sumo_solution_copies</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">sumo_problem_copies</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> You have to have at least one copy for each test/ solution in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_test</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_test</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages </span><span class="se">\</span>
+<span class="s2">            per sheet for your sumo problem/ solution files in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_solution</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_solution</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages </span><span class="se">\</span>
+<span class="s2">            per sheet for your sumo problem/ solution files in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">group_pairs</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> You have to have at least one group_pair in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span></div>
+    
+
+<div class="viewcode-block" id="deleteCommand"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.deleteCommand">[docs]</a><span class="k">def</span> <span class="nf">deleteCommand</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deletes temporary data with commands based on OS.</span>
+
+<span class="sd">    :param filename: Specific name to be deleted. Defaulted to None</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;del /Q *.dvi *.ps *.aux *.log *.tex&quot;</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+           <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;del </span><span class="si">{0}</span><span class="s2">.aux </span><span class="si">{0}</span><span class="s2">.log </span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Linux&quot;</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;rm -f *.dvi *.ps *.aux *.log *.tex&quot;</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;rm -f </span><span class="si">{0}</span><span class="s2">.aux </span><span class="si">{0}</span><span class="s2">.log </span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Your operating system is not supported. Please try again on Windows or Linux.&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+    <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Temporary data could not be deleted.&quot;</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>
