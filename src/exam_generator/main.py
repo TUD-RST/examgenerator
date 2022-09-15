@@ -5,7 +5,7 @@ import random
 import json
 import argparse as ap
 import textwrap as tw
-
+from addict import Dict
 
 from .classes import *
 from .funcs import *
@@ -56,13 +56,18 @@ def exam_generator(args):
 
     random.seed()
 
-    settings = args.create_test
+    settings_path = args.create_test
 
-    path_settings = os.path.join(root_directory, "settings", str(settings))
+    path_settings = os.path.join(root_directory, settings_path)
+
+    if not os.path.isfile(path_settings):
+        path_settings = settings_path
+
+    settings_name = os.path.normpath(settings_path).split(os.sep)[-1]
 
     if not os.path.isfile(path_settings):
         raise MissingFileError(
-            f"{errorInfo()} File {settings} does not exist. \
+            f"{errorInfo()} File {settings_name} does not exist. \
              Please make sure your directory structure follows the instructions."
         )
 
@@ -70,121 +75,10 @@ def exam_generator(args):
     with open(path_settings, "r") as json_datei:
         settings_dictionary = json.load(json_datei)
 
-    # Determines the amount of group pairs
-    # for example:  6 => group pairs 01-12
-    # 01+02, 03+04, ..., have the same problems
-    number_group_pairs = settings_dictionary["group_pairs"]
+    # converts Python dict into addict Dic
+    settings = Dict(settings_dictionary)
 
-    if type(number_group_pairs) is not int:
-        raise SettingsError(
-            f"{errorInfo()} group_pairs in {settings} is not of the required type int. \
-            Please make sure all types match the ones given in the instructions."
-        )
-
-    title = settings_dictionary["title"]
-
-    if type(title) is not str:
-        raise SettingsError(
-            f"{errorInfo()} title in {settings} is not of the required type string. \
-            Please make sure all types match the ones given in the instructions."
-        )
-
-    # Degree for which the test is created
-    variant_name = settings_dictionary["variant_name"]
-
-    if type(variant_name) is not str:
-        raise SettingsError(
-            f"{errorInfo()} variant_name in {settings} is not of the required type string. \
-            Please make sure all types match the ones given in the instructions."
-        )
-
-    # Semester
-    semester = settings_dictionary["semester"]
-
-    if type(semester) is not str:
-        raise SettingsError(
-            f"{errorInfo()} semester in {settings} is not of the required type string. \
-            Please make sure all types match the ones given in the instructions."
-        )
-
-    # SUMO-pdf:
-    # File contains all tests for the entire semester
-    # Creates the test for the whole smester in one go
-    # 4 = printing double paged A5
-    sumo_pages_per_sheet_test = settings_dictionary["sumo"]["pages_per_sheet_test"]
-
-    if type(sumo_pages_per_sheet_test) is not int:
-        raise SettingsError(
-            f"{errorInfo()} pages_per_sheet_test in {settings} is not of the required type int. \
-            Please make sure all types match the ones given in the instructions."
-        )
-
-    # Has to match the number of participants per groups
-    sumo_copies_per_test = settings_dictionary["sumo"]["sumo_number_copies"]
-
-    if type(sumo_copies_per_test) is not int:
-        raise SettingsError(
-            f"{errorInfo()} sumo_copies_per_test in {settings} is not of the required type int. \
-             Please make sure all types match the ones given in the instructions."
-        )
-
-    sumo_pages_per_sheet_solution = settings_dictionary["sumo"][
-        "pages_per_sheet_solution"
-    ]
-
-    if type(sumo_pages_per_sheet_solution) is not int:
-        raise SettingsError(
-            f"{errorInfo()} pages_per_sheet_solution in {settings} is not of the required type int. \
-             Please make sure all types match the ones given in the instructions."
-        )
-    sumo_copies_per_solution = settings_dictionary["sumo"]["sumo_solution_copies"]
-
-    if type(sumo_copies_per_solution) is not int:
-        raise SettingsError(
-            f"{errorInfo()} sumo_copies_per_solution in {settings} is not of the required type int. \
-             Please make sure all types match the ones given in the instructions."
-        )
-
-    # Settings of what should be created and deleted
-    generate_single_pdfs = settings_dictionary["data"]["generate_single_pdfs"]
-
-    if type(generate_single_pdfs) is not bool:
-        raise SettingsError(
-            f"{errorInfo()} generate_single_pdfs in {settings} is not of the required type bool. \
-             Please make sure all types match the ones given in the instructions."
-        )
-
-    generate_sumo_pdf = settings_dictionary["data"]["generate_sumo_pdf"]
-
-    if type(generate_sumo_pdf) is not bool:
-        raise SettingsError(
-            f"{errorInfo()} generate_sumo_pdf in {settings} is not of the required type bool. \
-             Please make sure all types match the ones given in the instructions."
-        )
-
-    delete_temp_data = settings_dictionary["data"]["delete_temp_data"]
-
-    if type(delete_temp_data) is not bool:
-        raise SettingsError(
-            f"{errorInfo()} delete_temp_data in {settings} is not of the required type bool. \
-             Please make sure all types match the ones given in the instructions."
-        )
-
-    if sumo_copies_per_solution < 1 or sumo_copies_per_test < 1:
-        raise SettingsError(
-            f"{errorInfo()} You have to have at least one copy for each test/ solution in {settings}."
-        )
-
-    if sumo_pages_per_sheet_test != 2 and sumo_pages_per_sheet_test != 4:
-        raise SettingsError(
-            f"{errorInfo()} Please choose between 2 or 4 pages per sheet for your \
-            sumo problem/ solution files in {settings}."
-        )
-
-    if number_group_pairs < 1:
-        raise SettingsError(
-            f"{errorInfo()} You have to have at least one group_pair in {settings}."
-        )
+    checkSettings(settings, settings_name)
 
     # ==================================
     # --- Configuration ---
@@ -211,7 +105,7 @@ def exam_generator(args):
     # Directory where the tests will be saved in (for example: Exams-ET1-WS201920)
     test_directory = os.path.join(
         root_directory,
-        "Exams-{}-{}".format(variant_name, semester).replace(" ", "").replace("/", ""),
+        "Exams-{}-{}".format(settings.variant_name, settings.semester).replace(" ", "").replace("/", ""),
     )
 
     pool_files = pullPoolData(latex_directory)
@@ -219,8 +113,7 @@ def exam_generator(args):
     file_names_tex = combineFileNames(pool_files)
 
     # ------------Custom Tests----------------#
-    test_types_dictionary = settings_dictionary["test_types"]
-    custom_test_list = createCustomTestList(test_types_dictionary, pool_files)
+    custom_test_list = createCustomTestList(settings.test_types, pool_files)
 
     # for debugging
     pool_all = Pool(".*", file_names_tex)
@@ -231,7 +124,7 @@ def exam_generator(args):
     # --- Combining problems ---
     # ================================
 
-    tests_per_group = combiningProblems(number_group_pairs, custom_test_list)
+    tests_per_group = combiningProblems(settings.group_pairs, custom_test_list)
 
     # ==================================
     # --- Generating the TeX-Files ---
@@ -240,13 +133,12 @@ def exam_generator(args):
     names_prob_sol_pdf = generateTexFiles(
         latex_directory,
         template_directory,
-        number_group_pairs,
+        settings.group_pairs,
         custom_test_list,
-        variant_name,
-        title,
-        semester,
+        settings.variant_name,
+        settings.title,
+        settings.semester,
         tests_per_group,
-        pool_files,
     )
 
     # ===================
@@ -256,34 +148,34 @@ def exam_generator(args):
     compile(
         test_directory,
         latex_directory,
-        generate_single_pdfs,
-        delete_temp_data,
+        settings.data.generate_single_pdfs,
+        settings.data.delete_temp_data,
     )
 
     # ==================================
     # --- Sumo-Files ---
     # ==================================
 
-    if generate_sumo_pdf:
+    if settings.data.generate_sumo_pdf:
         names_prob_sol_pdf[0].sort()
-        sumo_name_problems = f"Sumo-{variant_name}-Problems.pdf"
+        sumo_name_problems = f"Sumo-{settings.variant_name}-Problems.pdf"
         buildSumo(
             test_directory,
             sumo_name_problems,
             names_prob_sol_pdf[0],
-            sumo_pages_per_sheet_test,
-            sumo_copies_per_test,
+            settings.sumo.pages_per_sheet_test,
+            settings.sumo.sumo_problem_copies,
         )
 
         names_prob_sol_pdf[1].sort()
 
-        sumo_name_solutions = f"Sumo-{variant_name}-Solutions.pdf"
+        sumo_name_solutions = f"Sumo-{settings.variant_name}-Solutions.pdf"
         buildSumo(
             test_directory,
             sumo_name_solutions,
             names_prob_sol_pdf[1],
-            sumo_pages_per_sheet_solution,
-            sumo_copies_per_solution,
+            settings.sumo.pages_per_sheet_solution,
+            settings.sumo.sumo_solution_copies,
         )
 
 

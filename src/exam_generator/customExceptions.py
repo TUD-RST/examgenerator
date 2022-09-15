@@ -77,4 +77,4 @@ def errorInfo():
     :rtype: str
     """
     cf = currentframe()
-    return f"Error in line {cf.f_back.f_lineno} in {getframeinfo(cf).filename}:"
+    return f"Error in line {cf.f_back.f_lineno}:"

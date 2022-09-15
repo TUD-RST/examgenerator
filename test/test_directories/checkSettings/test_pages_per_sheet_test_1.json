@@ -1,0 +1,35 @@
+{
+    "group_pairs": 2,
+    "title": "Exam for ET1",
+    "variant_name": "ET1",
+    "semester": "WS 2021/22",
+    "sumo": {
+      "pages_per_sheet_test": "4",
+      "sumo_problem_copies": 4,
+      "pages_per_sheet_solution": 4,
+      "sumo_solution_copies": 1
+    },
+    "data": {
+      "generate_single_pdfs": true,
+      "generate_sumo_pdf": true,
+      "delete_temp_data": true
+    },
+    "test_types": {
+      "test1": [
+        "A1",
+        "B1",
+        "B2",
+        "CV03"
+      ],
+      "test2": [
+        "A1",
+        "B1",
+        "B1"
+      ],
+      "test3": [
+        "B2",
+        "B1",
+        "CV03"
+      ]
+    }
+  }

@@ -2,12 +2,16 @@
 This module contains all functions relevant for the exam-generator.
 """
 
+from genericpath import isfile
 import os
+from platform import platform
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import glob
 import subprocess
 import shutil
 from pathlib import Path
+from addict import Dict
+import platform
 
 from .classes import *
 from .customExceptions import *
@@ -77,7 +81,6 @@ def generateTexFiles(
     title,
     semester,
     tests_per_group,
-    pool_files,
 ):
 
     """
@@ -108,9 +111,6 @@ def generateTexFiles(
 
     :param tests_per_group: List of problems/ solutions for each group
     :type tests_per_group: list[str]
-
-    :param pool_files: [0] list of names of problems for each pool, [1] name of pool
-    :type pool_files: list[tuple]
 
     :return: [0] problem pdf names, [1] solution pdf names
     :rtype: list[tuple]
@@ -169,14 +169,10 @@ def generateTexFiles(
             # This could probably be solved more elegantly, but it works for now
 
             problem_string = ""
-
             for prob_sol in tests_per_group[group][test_index]:
                 problem_string += f"\\item\n"
-
-                for pool_tuple in pool_files:
-                    if prob_sol[0] in pool_tuple[0]:
-                        pool_name = str(pool_tuple[1])
-                        problem_string += f"\\input{{{pool_name}/{prob_sol[0]}}}\n\n"
+                pool_name = prob_sol[2]
+                problem_string += f"\\input{{{pool_name}/{prob_sol[0]}}}\n\n"
 
             file_content = file_content.replace("__AUFGABEN__", problem_string)
 
@@ -207,10 +203,9 @@ def generateTexFiles(
             for prob_sol in tests_per_group[group][test_index]:
                 solution_string += f"\\item\n"
 
-                for pool_tuple in pool_files:
-                    if prob_sol[0] in pool_tuple[0]:
-                        pool_name = pool_tuple[1]
-                        solution_string += f"\\input{{{pool_name}/{prob_sol[1]}}}\n\n"
+
+                pool_name = prob_sol[2]
+                solution_string += f"\\input{{{pool_name}/{prob_sol[1]}}}\n\n"
 
             file_content = file_content.replace("__AUFGABEN__", solution_string)
 
@@ -237,7 +232,7 @@ def combiningProblems(number_group_pairs, test_list_variant):
     :type test_list_variant: list[TestType]
 
     :return: tests_per_group - problems/ solutions for each group
-    :rtype: list[str]
+    :rtype: list[list[list[tuple(str, str, str)]]]
 
     """
 
@@ -314,17 +309,11 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
                 shutil.move(file.replace(".tex", ".pdf"), test_directory)
 
     # Delete temporary data
-    # ToDo: mit python machen!
     if delete_temp_data:
-        command = "del /Q *.dvi *.ps *.aux *.log *.tex"
-        print(command)
-        process = subprocess.Popen(command, shell=True)
-        process.wait()
-        if process.returncode != 0:
-            raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
+        deleteCommand()
 
 
-def make_specific(make_all, pool, problem, root_directory):
+def make_specific(make_all, pool_path, problem_path, root_directory):
     """
     This Function creates previews for given pools/ problems or all.
 
@@ -342,17 +331,33 @@ def make_specific(make_all, pool, problem, root_directory):
     filenames_problems = []
 
     # if a pool is selected, all its problems will be added to the creation list
-    if pool is not None:
-        FILENAME = "Preview_Pool_" + pool
+    if pool_path is not None:
+
+        abs_path = os.path.join(root_directory, f"{pool_path}/problem*.tex")
+
+        if not os.path.isfile(abs_path):
+            abs_path = os.path.join(pool_path, "problem*.tex")
+
         filenames_problems.extend(
-            glob.glob(os.path.join(root_directory, f"pool_data/{pool}/problem*.tex"))
+            glob.glob(abs_path)
         )
 
+        pool = os.path.normpath(pool_path).split(os.sep)[-1]
+
+        FILENAME = "Preview_Pool_" + pool
     # if problem is provided, it is added to the preview creation list
-    if problem is not None:
+    if problem_path is not None:
+        abs_path = os.path.join(root_directory, problem_path)
+
+        if not os.path.isfile(abs_path):
+            abs_path = problem_path
+            
         filenames_problems.extend(
-            glob.glob(os.path.join(root_directory, "pool_data/*/" + problem + ".tex"))
+            glob.glob(abs_path)
         )
+
+        problem = os.path.normpath(abs_path).split(os.sep)[-1].removesuffix(".tex")
+        
         FILENAME = "Preview_" + problem
 
     # if make_all is selected the preview creation list contains all problems
@@ -435,9 +440,7 @@ def make_specific(make_all, pool, problem, root_directory):
     process.wait()
 
     if process.returncode == 0:
-        process = subprocess.Popen(
-            "del {0}.aux {0}.log {0}.tex".format(FILENAME), shell=True
-        )
+        deleteCommand(FILENAME)
     else:
         raise CompilingError(
             f"{errorInfo()}, Problem while compiling the template pdf file."
@@ -599,3 +602,122 @@ def createCustomTestList(test_types_dictionary, pool_info):
         custom_test_list.append(custom_test)
 
     return custom_test_list
+
+def checkSettings(settings, settings_file):
+    if not isinstance(settings.group_pairs, int):
+        raise SettingsError(
+            f"{errorInfo()} group_pairs in {settings_file} is not of the required type int. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.title, str):
+        raise SettingsError(
+            f"{errorInfo()} title in {settings_file} is not of the required type string. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.variant_name, str):
+        raise SettingsError(
+            f"{errorInfo()} variant_name in {settings_file} is not of the required type string. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.semester, str):
+        raise SettingsError(
+            f"{errorInfo()} semester in {settings_file} is not of the required type string. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.sumo.pages_per_sheet_test, int):
+        raise SettingsError(
+            f"{errorInfo()} pages_per_sheet_test in {settings_file} is not of the required type int. \
+            Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.sumo.sumo_problem_copies, int):
+        raise SettingsError(
+            f"{errorInfo()} sumo_number_copies in {settings_file} is not of the required type int. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+
+    if not isinstance(settings.sumo.pages_per_sheet_solution, int):
+        raise SettingsError(
+            f"{errorInfo()} pages_per_sheet_solution in {settings_file} is not of the required type int. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.sumo.sumo_solution_copies, int):
+        raise SettingsError(
+            f"{errorInfo()} sumo_copies_per_solution in {settings_file} is not of the required type int. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+
+    if not isinstance(settings.data.generate_single_pdfs, bool):
+        raise SettingsError(
+            f"{errorInfo()} generate_single_pdfs in {settings_file} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+
+    if not isinstance(settings.data.generate_sumo_pdf, bool):
+        raise SettingsError(
+            f"{errorInfo()} generate_sumo_pdf in {settings_file} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+    if not isinstance(settings.data.delete_temp_data, bool):
+        raise SettingsError(
+            f"{errorInfo()} delete_temp_data in {settings_file} is not of the required type bool. \
+             Please make sure all types match the ones given in the instructions."
+        )
+
+    if settings.sumo.sumo_solution_copies < 1 or settings.sumo.sumo_problem_copies < 1:
+        raise SettingsError(
+            f"{errorInfo()} You have to have at least one copy for each test/ solution in {settings_file}."
+        )
+
+    if (settings.sumo.pages_per_sheet_test != 2) and (settings.sumo.pages_per_sheet_test != 4):
+        raise SettingsError(
+            f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \
+            per sheet for your sumo problem/ solution files in {settings_file}."
+        )
+    
+    if (settings.sumo.pages_per_sheet_solution != 2) and (settings.sumo.pages_per_sheet_solution != 4):
+        raise SettingsError(
+            f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \
+            per sheet for your sumo problem/ solution files in {settings_file}."
+        )
+
+    if settings.group_pairs < 1:
+        raise SettingsError(
+            f"{errorInfo()} You have to have at least one group_pair in {settings_file}."
+        )
+    
+
+def deleteCommand(filename = None):
+    """
+    Deletes temporary data with commands based on OS.
+
+    :param filename: Specific name to be deleted. Defaulted to None
+    :type filename: str
+    """
+    if platform.system() == "Windows":
+        command = "del /Q *.dvi *.ps *.aux *.log *.tex"
+        if filename is not None:
+           command = "del {0}.aux {0}.log {0}.tex".format(filename)
+
+    elif platform.system() == "Linux":
+        command = "rm -f *.dvi *.ps *.aux *.log *.tex"
+        if filename is not None:
+            command = "rm -f {0}.aux {0}.log {0}.tex".format(filename)
+    else:
+        raise CompilingError(f"{errorInfo()} Your operating system is not supported. Please try again on Windows or Linux.")
+
+    print(command)
+    process = subprocess.Popen(command, shell=True)
+    process.wait()
+    if process.returncode != 0:
+        raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
+

@@ -92,6 +92,9 @@ class Pool:
         prob_sol = self.stack_available.pop(
             random.randint(0, len(self.stack_available) - 1)
         )
+
+        # adding name of pool
+        prob_sol = (*prob_sol, self.name)
         self.stack_pulled.append(prob_sol)
 
         return prob_sol
