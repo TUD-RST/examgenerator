@@ -604,6 +604,15 @@ def createCustomTestList(test_types_dictionary, pool_info):
     return custom_test_list
 
 def checkSettings(settings, settings_file):
+    """
+    Checks the json settings file for user input errors.
+
+    :param settings: settings input from user.
+    :type settings: Dict from  addict
+
+    :param settings_file: name of the used settings file.
+    :type settings_file: str
+    """
     if not isinstance(settings.group_pairs, int):
         raise SettingsError(
             f"{errorInfo()} group_pairs in {settings_file} is not of the required type int. \
@@ -723,4 +732,10 @@ def deleteCommand(filename = None):
 
 
 def initializeRandomNumberGenerator(seed = 1024):
+    """
+    Initializes random seed.
+
+    :param seed: seed. Defaults to 1024 for debugging purposes.
+    :type seed: int
+    """
     random.seed(seed)
