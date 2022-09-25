@@ -2,7 +2,6 @@
 This module contains all functions relevant for the exam-generator.
 """
 
-from genericpath import isfile
 import os
 from platform import platform
 from PyPDF2 import PdfFileReader, PdfFileWriter

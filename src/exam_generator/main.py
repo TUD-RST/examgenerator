@@ -109,7 +109,9 @@ def exam_generator(args):
     # Directory where the tests will be saved in (for example: Exams-ET1-WS201920)
     test_directory = os.path.join(
         root_directory,
-        "Exams-{}-{}".format(settings.variant_name, settings.semester).replace(" ", "").replace("/", ""),
+        "Exams-{}-{}".format(settings.variant_name, settings.semester)
+        .replace(" ", "")
+        .replace("/", ""),
     )
 
     pool_files = pullPoolData(latex_directory)
@@ -259,7 +261,7 @@ def main():
         "-rs",
         "--random_seed",
         type=int,
-        help="Set a new random seed, allowing the same exam to be created, yet with different problems pulled. Provide a positive integer of your liking."
+        help="Set a new random seed, allowing the same exam to be created, yet with different problems pulled. Provide a positive integer of your liking.",
     )
 
     args = parser.parse_args()
@@ -271,13 +273,13 @@ def main():
         and (args.make_specific is None)
     ):
         parser.error("Please choose at least one of the options. For help type: -h")
-    
+
     elif args.random_seed is not None and args.create_test is None:
         parser.error("You can only select a random seed when creating an exam.")
-    
+
     elif args.random_seed <= 0:
         parser.error("Please select a positive integer as your random seed.")
-    
+
     else:
         exam_generator(args)
 
