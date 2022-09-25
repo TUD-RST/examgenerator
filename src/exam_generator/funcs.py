@@ -721,3 +721,6 @@ def deleteCommand(filename = None):
     if process.returncode != 0:
         raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
 
+
+def initializeRandomNumberGenerator(seed = 1024):
+    random.seed(seed)
