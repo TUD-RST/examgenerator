@@ -75,8 +75,7 @@ in combination with these *settings*...
 
 we can easily create an exam, looking like this:
 
-![Problem](https://prnt.sc/TcgJkhmu3VbR)
+![Problem](./examples/readme/problem.png)
 
-![Solution](https://prnt.sc/ZirhaYzivKmL)
 
 
