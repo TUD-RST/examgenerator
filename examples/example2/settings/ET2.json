@@ -3,16 +3,16 @@
   "title": "Lab Control Theory 2 (ET)",
   "variant_name": "ET2",
   "semester": "WS 2022/23",
+  "data": {
+    "generate_single_pdfs": true,
+    "generate_sumo_pdf": true,
+    "delete_temp_data": true
+  },
   "sumo": {
     "pages_per_sheet_test": 4,
     "sumo_problem_copies": 15,
     "pages_per_sheet_solution": 2,
     "sumo_solution_copies": 1
-  },
-  "data": {
-    "generate_single_pdfs": true,
-    "generate_sumo_pdf": true,
-    "delete_temp_data": true
   },
   "test_types": {
     "Lab03": [

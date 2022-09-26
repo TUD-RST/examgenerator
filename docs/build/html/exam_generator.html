@@ -257,7 +257,7 @@ depending on the test variant.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exam_generator.funcs.compile">
-<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_single_pdfs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_temp_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#compile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.compile" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_temp_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#compile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.compile" title="Permalink to this definition"></a></dt>
 <dd><p>This function compiles the tex files and turns them into pdf format and moves them to
 the test directory. Lastly, it deletes temporary data.</p>
 <dl class="field-list simple">
@@ -265,7 +265,6 @@ the test directory. Lastly, it deletes temporary data.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>test_directory</strong> (<em>str</em>) – Directory where the generated tests are saved</p></li>
 <li><p><strong>latex_directory</strong> (<em>str</em>) – Working directory of latex compiler</p></li>
-<li><p><strong>generate_single_pdfs</strong> (<em>bool</em>) – Should individual PDFs be created</p></li>
 <li><p><strong>delete_temp_data</strong> (<em>bool</em>) – Should temporary data be deleted</p></li>
 </ul>
 </dd>
@@ -299,6 +298,17 @@ the test directory. Lastly, it deletes temporary data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Specific name to be deleted. Defaulted to None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.deletePDF">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">deletePDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#deletePDF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.deletePDF" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes a pdf file based on os.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – name of the file to be deleted.</p>
 </dd>
 </dl>
 </dd></dl>

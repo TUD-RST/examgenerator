@@ -154,7 +154,6 @@ def exam_generator(args):
     compile(
         test_directory,
         latex_directory,
-        settings.data.generate_single_pdfs,
         settings.data.delete_temp_data,
     )
 
@@ -183,6 +182,17 @@ def exam_generator(args):
             settings.sumo.pages_per_sheet_solution,
             settings.sumo.sumo_solution_copies,
         )
+    
+    if not settings.data.generate_single_pdfs:
+        files = os.listdir(test_directory)
+
+        os.chdir(test_directory)
+
+        for file in files:
+            if "Sumo" not in file:
+                deletePDF(file)
+
+        os.chdir(root_directory)
 
 
 def main():

@@ -147,6 +147,12 @@ Lastly, we create our <code class="docutils literal notranslate"><span class="pr
 &quot;variant_name&quot;: &quot;Math1&quot;,            ← Short handle displayed in the file names
 &quot;semester&quot;: &quot;WS 2022/23&quot;,           ← Current semester
 
+&quot;data&quot;:{
+    &quot;generate_single_pdfs&quot;: true,    ← We would like the option to look at the problems for each group seperately
+    &quot;generate_sumo_pdf&quot;: true,       ← We would like a sumo file
+    &quot;delete_temp_data&quot;: true         ← Deleteing temporary data is always usefull
+},
+
 &quot;sumo&quot;:{
     &quot;pages_per_sheet_test&quot;: 2,       ← Students will get their tests printed out in A4 format
     &quot;sumo_problem_copies&quot;: 5,        ← Amount of copies of each group, total here is 5 copies *3 groups -&gt; 15 students
@@ -154,11 +160,6 @@ Lastly, we create our <code class="docutils literal notranslate"><span class="pr
     &quot;sumo_solution_copies&quot;: 1        ← There is only one solution copy required
 },
 
-&quot;data&quot;:{
-    &quot;generate_single_pdfs&quot;: true,    ← We would like the option to look at the problems for each group seperately
-    &quot;generate_sumo_pdf&quot;: true,       ← We would like a sumo file
-    &quot;delete_temp_data&quot;: true         ← Deleteing temporary data is always usefull
-},
 
 &quot;test_types&quot;:{                       ← Our exam is created here
     &quot;MathExam&quot;: [                    ← Name of the exam
@@ -252,6 +253,12 @@ that leaves us with 15 copies for our sumo file.</p>
 &quot;variant_name&quot;: &quot;ET2&quot;,
 &quot;semester&quot;: &quot;WS 2022/23&quot;,
 
+&quot;data&quot;:{
+    &quot;generate_single_pdfs&quot;: false,      ← We do not need the tests for each group separately
+    &quot;generate_sumo_pdf&quot;: true,
+    &quot;delete_temp_data&quot;: true
+},
+
 &quot;sumo&quot;:{
     &quot;pages_per_sheet_test&quot;: 4,          ← Students will receive their exams in A5 format
     &quot;sumo_problem_copies&quot;: 15,          ← 15*2 -&gt; 30 total copies
@@ -259,11 +266,6 @@ that leaves us with 15 copies for our sumo file.</p>
     &quot;sumo_solution_copies&quot;: 1
 },
 
-&quot;data&quot;:{
-    &quot;generate_single_pdfs&quot;: false,      ← We do not need the tests for each group separately
-    &quot;generate_sumo_pdf&quot;: true,
-    &quot;delete_temp_data&quot;: true
-},
 
 &quot;test_types&quot;:{
     &quot;Lab03&quot;: [                          ← First exam

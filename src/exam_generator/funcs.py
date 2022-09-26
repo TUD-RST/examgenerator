@@ -152,7 +152,8 @@ def generateTexFiles(
         for test_index, test_typ in enumerate(test_list_variant):
             # Problem
             # Setting file name and path
-            file_name = f"Exam-{variant_name}-{test_typ.name}-{group_name}.tex"
+            name = test_typ.name.replace(" ","")
+            file_name = f"Exam-{variant_name}-{name}-{group_name}.tex"
             file_path = os.path.join(latex_directory, file_name)
 
             # Replacing the parameters in the LaTeX file
@@ -183,7 +184,7 @@ def generateTexFiles(
 
             # Solution
             # Setting file name and path
-            file_name = f"Exam-{variant_name}-{test_typ.name}-{group_name}-Solution.tex"
+            file_name = f"Exam-{variant_name}-{name}-{group_name}-Solution.tex"
             file_path = os.path.join(latex_directory, file_name)
 
             # Replacing parameters in LaTeX file
@@ -258,7 +259,7 @@ def combiningProblems(number_group_pairs, test_list_variant):
     return tests_per_group
 
 
-def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_data):
+def compile(test_directory, latex_directory, delete_temp_data):
 
     """
     This function compiles the tex files and turns them into pdf format and moves them to
@@ -270,9 +271,6 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
     :param latex_directory: Working directory of latex compiler
     :type latex_directory: str
 
-    :param generate_single_pdfs: Should individual PDFs be created
-    :type generate_single_pdfs: bool
-
     :param delete_temp_data: Should temporary data be deleted
     :type delete_temp_data: bool
     """
@@ -281,30 +279,29 @@ def compile(test_directory, latex_directory, generate_single_pdfs, delete_temp_d
     os.mkdir(test_directory)
     os.chdir(latex_directory)
 
-    if generate_single_pdfs:
-        tex_files = [
-            file for file in os.listdir(latex_directory) if file.endswith(".tex")
-        ]
+    tex_files = [
+        file for file in os.listdir(latex_directory) if file.endswith(".tex")
+    ]
 
-        for file in tex_files:
-            # execute pdflatex twice to resolve references
-            command = (
-                f"pdflatex -interaction=batchmode {file} && "
-                f"pdflatex -interaction=batchmode {file}"
+    for file in tex_files:
+        # execute pdflatex twice to resolve references
+        command = (
+            f"pdflatex -interaction=batchmode {file} && "
+            f"pdflatex -interaction=batchmode {file}"
+        )
+        print(command)
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+        )
+        process.wait()
+        if process.returncode != 0:
+            delete_temp_data = False
+            raise CompilingError(
+                f"{errorInfo()} Problem while compiling {file}. \
+                temporary data will not be deleted."
             )
-            print(command)
-            process = subprocess.Popen(
-                command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-            )
-            process.wait()
-            if process.returncode != 0:
-                delete_temp_data = False
-                raise CompilingError(
-                    f"{errorInfo()} Problem while compiling {file}. \
-                    temporary data will not be deleted."
-                )
-            else:
-                shutil.move(file.replace(".tex", ".pdf"), test_directory)
+        else:
+            shutil.move(file.replace(".tex", ".pdf"), test_directory)
 
     # Delete temporary data
     if delete_temp_data:
@@ -730,6 +727,22 @@ def deleteCommand(filename=None):
     if process.returncode != 0:
         raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
 
+def deletePDF(filename):
+    """
+    Deletes a pdf file based on os.
+
+    :param filename: name of the file to be deleted.
+    :type filename: str
+    """
+    if platform.system() == "Windows":
+        command = f"del /Q {filename}"
+    elif platform.system() == "Linux":
+        command = f"rm -f {filename}"
+    
+    process = subprocess.Popen(command, shell=True)
+    process.wait()
+    if process.returncode != 0:
+        raise CompilingError(f"{errorInfo()} Single PDFs could not be deleted.")
 
 def initializeRandomNumberGenerator(seed=1024):
     """
