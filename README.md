@@ -53,7 +53,7 @@ in combination with these *settings*...
 
     "sumo":{                           
         "pages_per_sheet_test": 2,       ← Students will get their tests printed out in A4 format      
-        "sumo_problem_copies": 1,        ← Amount of copies of each group, total here is 5 copies *3 groups -> 15 students
+        "sumo_problem_copies": 1,        ← Amount of copies of each group
         "pages_per_sheet_solution": 2,   ← Solution will be printed in A4 as well
         "sumo_solution_copies": 1        ← There is only one solution copy required
     },
@@ -74,5 +74,9 @@ in combination with these *settings*...
 ```
 
 we can easily create an exam, looking like this:
+
+![Problem](https://prnt.sc/TcgJkhmu3VbR)
+
+![Solution](https://prnt.sc/ZirhaYzivKmL)
 
 
