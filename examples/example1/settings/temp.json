@@ -1,0 +1,23 @@
+{
+  "group_pairs": 2,
+  "title": "Exam for Math 2 (MA2)",
+  "variant_name": "Math2",
+  "semester": "WS 2022/23",
+  "sumo": {
+    "pages_per_sheet_test": 2,
+    "sumo_problem_copies": 1,
+    "pages_per_sheet_solution": 2,
+    "sumo_solution_copies": 1
+  },
+  "data": {
+    "generate_single_pdfs": true,
+    "generate_sumo_pdf": true,
+    "delete_temp_data": true
+  },
+  "test_types": {
+    "MathExam": [
+      "MC_easy",
+      "proofs"
+    ]
+  }
+}

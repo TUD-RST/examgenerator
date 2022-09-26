@@ -1,60 +1,78 @@
-# Eingangstests für das Praktikum Regelungstechnik
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-**Diese können wie folgt generiert werden:**
+# Exam Generator
 
-```bash
-python3 etest_generator.py
+Exam_generator is a script which is designed to create exams/ tests from 
+pools of problems while ensuring that there will be no repetition amongst
+different groups.
+
+## Current Status 
+
+This project is currently in the development process and is set to release at the end of October 2022.
+
+## Documentation
+
+Documentation for this project including a detailed user guide, tutorials and the API doc is available
+in this repository.
+
+## Example
+
+The exam generator allows quick creation of tests and exams.
+
+With the following *directory setup*...
+
+    C:.                                 ← Our current working directory                  
+    ├───pool_data                       ← Directory for all different pool directories                
+    │   ├───MC_easy                     ← Pool with easy multiple choice questions
+    │   │       problem_1.tex
+    │   │       problem_2.tex
+    │   │       solution_1.tex
+    │   │       solution_2.tex
+    │   │
+    │   └───MC_hard                     ← Pool with hard multiple choice questions
+    │           problem_4.tex
+    │           problem_5.tex
+    │           solution_4.tex
+    │           solution_5.tex 
+    │
+    ├───settings                        
+    │       Math1.json                  ← Settings file 
+    │
+    └───templates                       ← LaTeX Templates
+            template_problem.tex
+            template_solution.tex 
+
+in combination with these *settings*...
+
+```
+    {            
+    "group_pairs": 2,                   ← Let's choose our maximum amount of possible groups                   
+    "title": "Exam for Math 1 (MA1)",   ← The title that will be displayed on the exam
+    "variant_name": "Math1",            ← Short handle displayed in the file names
+    "semester": "WS 2022/23",           ← Current semester
+
+    "sumo":{                           
+        "pages_per_sheet_test": 2,       ← Students will get their tests printed out in A4 format      
+        "sumo_problem_copies": 1,        ← Amount of copies of each group, total here is 5 copies *3 groups -> 15 students
+        "pages_per_sheet_solution": 2,   ← Solution will be printed in A4 as well
+        "sumo_solution_copies": 1        ← There is only one solution copy required
+    },
+
+    "data":{
+        "generate_single_pdfs": true,    ← We would like the option to look at the problems for each group seperately
+        "generate_sumo_pdf": true,       ← We would like a sumo file
+        "delete_temp_data": true         ← Deleteing temporary data is always usefull
+    },
+
+    "test_types":{                       ← Our exam is created here
+        "MathExam": [                    ← Name of the exam
+        "MC_easy",                       ← Pool for first problem
+        "proofs"                         ← Pool for second problem
+        ]
+    }
+    }
 ```
 
-**Folgende Anpassungsmöglichkeiten gibt es für ``etest_generator.py``**
-**Die Einstellungen erfolgen in ``einstellungen.json``**
+we can easily create an exam, looking like this:
 
-```python
-# ================ Einstellungen Beginn =============================
-# Festlegung, wieviel Gruppenpaare erzeugt werden sollen
-# z.B. 6: Gruppen 01 bis 12
-# 01+02, 03+04, etc. haben jeweils die gleichen Aufgaben
-anzahl_gruppen = 6
 
-# Studiengang, für den erzeugt werden soll.
-# Mögliche Optionen: ET1, ET2, MT, RES
-name_variante = "ET1"
-
-# Semester
-semester = "WS 2019/20"
-
-# Für Datei, die sämtliche Tests des Semesters zum Ausdruck enthält
-sumo_seiten_pro_blatt_test = 4  # 4 = doppelseitig A5
-sumo_kopien_pro_test = 6
-sumo_seiten_pro_blatt_loesung = 4
-sumo_kopien_pro_loesung = 1
-
-# Einstellungen, was erzeugt und gelöscht werden soll.
-generiere_einzel_pdfs = True
-generiere_sumo_pdf = True
-temp_dateien_loeschen = True
-# ================ Einstellungen Ende =============================
-```
-
-Die generierten Tests finden sich dann im Verzeichnis
-``Tests-[Studiengang]-[Semester]`` wieder.
-
-**Ausgewählte Dateien/ Pools können wie folgt generiert werden:**
-```bash
-python3 make_specific.py
-```
-**Die Einstellungen hierfür erfolgen in ``einstellungen_make_specific.json``**
-
-```json
-{
- "datei_name": "Ihr Dateiname",
- "make_PoolA": false,
- "make_PoolB": false,
- "make_PoolC": false,
- "make_PoolD": false,
- "make_einzel_datei": false,
- "liste_namen_einzel_dateien": ["Name einer Aufgabe", "Name einer weiteren Aufgabe", "..."]
-}
-```
-
-**Die erstellten Previews sind im Verzeichnis ``Previews`` zu finden.**
