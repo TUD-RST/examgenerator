@@ -46,19 +46,39 @@ Additionally, please refrain from using "\\" or "/" in your filenames since this
 
 File Content
 """"""""""""""""""""""""
-Subtasks of a problem should be structured in an
-enumerate-surrounding. This can be done with the ``\item`` key. 
+Subtasks of a problem should be structured in the ``Problem`` surrounding.
+The problem text has to be written between ``\begin{Problem}``, ``\end{Problem}``.
+Every subtask starts with the ``\item`` key. 
 
 Within the solution files the solution text has
-to be written in between ``\begin{Loesung}``, ``\end{Loesung}``. 
+to be written in between ``\begin{Solution}``, ``\end{Solution}``. 
 The solution of every subtask starts with the key
-``\lsgitem``. 
+``\solitem``. 
 
 It is possible to assign points to problems and
-solutions with the macro ``\Pkte{n}``. Where ``n`` is the number of points given at that exact spot.
+solutions with the macro ``\Pts{n}``. Where ``n`` is the number of points given at that exact spot.
 During the compiling process the given points will be added automatically for the entire test.
 Please be aware that if you would like to show points both on the exam and the solutions,
 you will have to manually input points in the problem and solution file.
+
+Problem example:
+::
+   
+   This is an example problem.
+   \begin{Problem}
+   \item What is 2+2? \Pts{1}
+   \item Are you happy? \Pts{10}
+   \end{Problem}
+
+
+Solution example:
+::
+
+   The solution is the following:
+   \begin{Solution}
+   \solitem 2+2=4 \Pts{1}
+   \solitem Are you happy? - Yes \Pts{10}
+   \end{Solution}
 
 
 Settings
@@ -67,8 +87,7 @@ Settings
 There are the following options for the exam creation, which can be configured 
 in a json settings file:
 
--  *group_pairs*: Determines the amount of group pairs for example: 6 =>
-   group pairs 01-12
+-  *group_pairs*: Determines the number of groups.
 
 
 -  *variant_name*: Typically the name of the degree/ lab the exam is created for.
@@ -107,7 +126,7 @@ in a json settings file:
    is recommended unless there is issues during the compiling process
 
 - *test_types*: This is where you will be able to build your exams out of your pools.
-   For example: "TestExam": ["A1", "B", "CV03"] will create an exam called TestExam concisting out 
+   For example: "TestExam": ["A1", "B", "CV03"] will create an exam called TestExam consisting 
    of 3 problems randomly newly drawn from the given pools for each group_pair. A more detailed 
    example of how to create exams is provided in the tutorial.
 
@@ -143,6 +162,15 @@ directory. With these it is now possible to easily create exams:
    the chosen settings file]) creates a folder in which the created
    tests, based on the provided settings, are saved
 
+If you would like to select a new random seed, allowing for different results
+when creating the same exam:
+
+- *-rs* [seed]
+
+.. Hint::
+   This only works in combination with creating an exam (-ct).
+
+
 Additionally, the script can help with the creation/ review of problems/
 solutions:
 
@@ -152,7 +180,7 @@ solutions:
 -  *-mp* [Pool] (–make_pool [POOLPATH]) creates a preview file for all
    problems/ solutions for the given pool
 
--  *-ms* [name of the problem] (–make_specific [PROBLEMPATH])
+-  *-ms* [PROBLEMPATH] (–make_specific [PROBLEMPATH])
    creates a preview file for the given problem name of the problem
    
   
@@ -176,11 +204,11 @@ At the root directory you can now call:
 
 
 exam_generator [-h] [-ct] SETTINGSPATH [-ma] [-mp] POOLPATH
-[-ms] PROBLEMPATH
+[-ms] PROBLEMPATH [-rs] SEED
 
 
 **Syntax for the stand-alone application**
 
 exam_generator.exe [-h] [-ct] SETTINGSPATH [-ma] [-mp] POOLPATH [-ms]
-PROBLEMPATH
+PROBLEMPATH [-rs] SEED
 

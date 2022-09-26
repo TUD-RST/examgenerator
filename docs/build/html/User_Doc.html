@@ -125,17 +125,34 @@ have to have the exact same description following the prefix.</p>
 </section>
 <section id="file-content">
 <h4>File Content<a class="headerlink" href="#file-content" title="Permalink to this heading"></a></h4>
-<p>Subtasks of a problem should be structured in an
-enumerate-surrounding. This can be done with the <code class="docutils literal notranslate"><span class="pre">\item</span></code> key.</p>
+<p>Subtasks of a problem should be structured in the <code class="docutils literal notranslate"><span class="pre">Problem</span></code> surrounding.
+The problem text has to be written between <code class="docutils literal notranslate"><span class="pre">\begin{Problem}</span></code>, <code class="docutils literal notranslate"><span class="pre">\end{Problem}</span></code>.
+Every subtask starts with the <code class="docutils literal notranslate"><span class="pre">\item</span></code> key.</p>
 <p>Within the solution files the solution text has
-to be written in between <code class="docutils literal notranslate"><span class="pre">\begin{Loesung}</span></code>, <code class="docutils literal notranslate"><span class="pre">\end{Loesung}</span></code>.
+to be written in between <code class="docutils literal notranslate"><span class="pre">\begin{Solution}</span></code>, <code class="docutils literal notranslate"><span class="pre">\end{Solution}</span></code>.
 The solution of every subtask starts with the key
-<code class="docutils literal notranslate"><span class="pre">\lsgitem</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">\solitem</span></code>.</p>
 <p>It is possible to assign points to problems and
-solutions with the macro <code class="docutils literal notranslate"><span class="pre">\Pkte{n}</span></code>. Where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of points given at that exact spot.
+solutions with the macro <code class="docutils literal notranslate"><span class="pre">\Pts{n}</span></code>. Where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of points given at that exact spot.
 During the compiling process the given points will be added automatically for the entire test.
 Please be aware that if you would like to show points both on the exam and the solutions,
 you will have to manually input points in the problem and solution file.</p>
+<p>Problem example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>This is an example problem.
+\begin{Problem}
+\item What is 2+2? \Pts{1}
+\item Are you happy? \Pts{10}
+\end{Problem}
+</pre></div>
+</div>
+<p>Solution example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>The solution is the following:
+\begin{Solution}
+\solitem 2+2=4 \Pts{1}
+\solitem Are you happy? - Yes \Pts{10}
+\end{Solution}
+</pre></div>
+</div>
 </section>
 </section>
 </section>
@@ -144,8 +161,7 @@ you will have to manually input points in the problem and solution file.</p>
 <p>There are the following options for the exam creation, which can be configured
 in a json settings file:</p>
 <ul class="simple">
-<li><p><em>group_pairs</em>: Determines the amount of group pairs for example: 6 =&gt;
-group pairs 01-12</p></li>
+<li><p><em>group_pairs</em>: Determines the number of groups.</p></li>
 <li><p><em>variant_name</em>: Typically the name of the degree/ lab the exam is created for.
 This will only show in the created file names, not on the actual exams.</p></li>
 <li><p><em>semester</em>: Current Semester for example: “WS 2022/23”</p></li>
@@ -169,7 +185,7 @@ final and will not have to be corrected afterwards.</p>
 <li><p><em>delete_temp_data</em>: Should temporary data be deleted (true; false) true
 is recommended unless there is issues during the compiling process</p></li>
 <li><dl class="simple">
-<dt><em>test_types</em>: This is where you will be able to build your exams out of your pools.</dt><dd><p>For example: “TestExam”: [“A1”, “B”, “CV03”] will create an exam called TestExam concisting out
+<dt><em>test_types</em>: This is where you will be able to build your exams out of your pools.</dt><dd><p>For example: “TestExam”: [“A1”, “B”, “CV03”] will create an exam called TestExam consisting
 of 3 problems randomly newly drawn from the given pools for each group_pair. A more detailed
 example of how to create exams is provided in the tutorial.</p>
 </dd>
@@ -206,6 +222,15 @@ directory. With these it is now possible to easily create exams:</p>
 the chosen settings file]) creates a folder in which the created
 tests, based on the provided settings, are saved</p></li>
 </ul>
+<p>If you would like to select a new random seed, allowing for different results
+when creating the same exam:</p>
+<ul class="simple">
+<li><p><em>-rs</em> [seed]</p></li>
+</ul>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>This only works in combination with creating an exam (-ct).</p>
+</div>
 <p>Additionally, the script can help with the creation/ review of problems/
 solutions:</p>
 <ul class="simple">
@@ -213,7 +238,7 @@ solutions:</p>
 preview for every problem/ solution is displayed</p></li>
 <li><p><em>-mp</em> [Pool] (–make_pool [POOLPATH]) creates a preview file for all
 problems/ solutions for the given pool</p></li>
-<li><p><em>-ms</em> [name of the problem] (–make_specific [PROBLEMPATH])
+<li><p><em>-ms</em> [PROBLEMPATH] (–make_specific [PROBLEMPATH])
 creates a preview file for the given problem name of the problem</p></li>
 <li><p><em>-h</em> (–help) for help</p></li>
 </ul>
@@ -228,10 +253,10 @@ The repository contains all necessary directories and a few more examples on top
 <p>At the root directory you can now call:</p>
 <p><strong>Syntax when using a python interpreter</strong></p>
 <p>exam_generator [-h] [-ct] SETTINGSPATH [-ma] [-mp] POOLPATH
-[-ms] PROBLEMPATH</p>
+[-ms] PROBLEMPATH [-rs] SEED</p>
 <p><strong>Syntax for the stand-alone application</strong></p>
 <p>exam_generator.exe [-h] [-ct] SETTINGSPATH [-ma] [-mp] POOLPATH [-ms]
-PROBLEMPATH</p>
+PROBLEMPATH [-rs] SEED</p>
 </section>
 </section>
 
