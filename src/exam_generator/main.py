@@ -277,8 +277,9 @@ def main():
     elif args.random_seed is not None and args.create_test is None:
         parser.error("You can only select a random seed when creating an exam.")
 
-    elif args.random_seed <= 0:
-        parser.error("Please select a positive integer as your random seed.")
+    elif args.random_seed is not None:
+        if args.random_seed <= 0:
+            parser.error("Please select a positive integer as your random seed.")
 
     else:
         exam_generator(args)

@@ -1,0 +1,112 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{german}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{subfigure}
+\usepackage{tabularx}
+\usepackage{cancel}
+\usepackage{enumitem}
+\usepackage{units}
+\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcounter{PartialPoints}
+\newcounter{ProblemPoints}
+\newcounter{TotalPoints}
+\setcounter{TotalPoints}{0}
+
+% Benutzung: \Pkte{2} vergibt 2 Punkte
+%            \Pkte[6]{2} zeigt 2-Punkte-Kasten, aber vergibt 6 Punkte
+\newcommand{\Pts}[2][-999]{
+    \fbox{\textcolor{black}{\textbf{#2\,P.}}}
+    \ifnum#1>-999
+    \addtocounter{PartialPoints}{#1}
+    \addtocounter{ProblemPoints}{#1}
+    \addtocounter{TotalPoints}{#1}
+    \else
+    \ifnum#2>0
+    \addtocounter{PartialPoints}{#2}
+    \addtocounter{ProblemPoints}{#2}
+    \addtocounter{TotalPoints}{#2}
+    \fi
+    \fi
+}
+\newcommand{\SumPts}{
+    \dotfill \textcolor{black}{$\mathbf{\Sigma}$: \textbf{\arabic{PartialPoints}\,P.}}
+    \setcounter{PartialPoints}{0}
+}
+\newcommand{\ProblemPts}{
+    \hrulefill \textcolor{black}{\large $\mathbf{\Sigma}$ Problem: \textbf{\arabic{ProblemPoints}\,P.}}\\[2ex]
+    \setcounter{PartialPoints}{0}
+    \setcounter{ProblemPoints}{0}
+}
+\newcommand{\TotalPts}{
+    \hfill \fbox{\textcolor{black}{\Large Total Score: \textbf{\arabic{TotalPoints}\,P.}}}
+}
+
+\newenvironment{Problem}{
+    \setcounter{PartialPoints}{0}
+    \setcounter{ProblemPoints}{0}
+    \begin{enumerate}
+}{
+    \end{enumerate}
+    
+    \ProblemPts
+    \setcounter{ProblemPoints}{0}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setlength{\parskip}{2ex}
+\setlength{\parindent}{0ex}
+\setlength{\leftmargin}{0ex}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} %Kommando zum mittigen platzieren des Textes in Zellen
+
+\newcommand{\diff}[3][]{\frac{\mathrm{d}^{#1}#2}{\mathrm{d}{#3}^{#1}}}
+
+\newcommand{\abb}{\\[0,5cm]}
+\newcommand{\ds}{\displaystyle}
+
+\begin{document}
+\begin{center}
+\textbf{\large __PRAKTIKUM__}
+
+\textbf{\large  __VERSUCH__ (__SEMESTER__)}
+
+\small (__GRUPPE__)
+\end{center}
+
+\vspace{0.5cm}
+
+\fbox{\parbox{\textwidth}{
+\vspace{4ex}
+
+Name: \rule{7cm}{1pt} \hspace{2ex} Group: \rule{2cm}{1pt} \hfill Date: \rule{3cm}{1pt}
+
+\vspace{1cm}
+
+\hfill Points: \rule{1.9cm}{1pt}/\rule{1.9cm}{1pt} \hspace{1cm} Grade: \rule{2cm}{1pt} \hspace{1cm} Signum: \rule{2.5cm}{1pt}
+}}
+
+\vspace{0.5cm}
+
+
+\begin{enumerate}[leftmargin=*]
+
+__AUFGABEN__
+
+\end{enumerate}
+
+\TotalPts
+
+\end{document}
