@@ -6,9 +6,11 @@ Exam_generator is a script which is designed to create exams/ tests from
 pools of problems while ensuring that there will be no repetition amongst
 different groups.
 
-## Current Status 
+## Current Status and Issues
 
 This project is currently in the development process and is set to release at the end of October 2022.
+
+You can find the current issues [here](https://github.com/TUD-RST/examgenerator/issues)
 
 ## Documentation
 
@@ -75,7 +77,7 @@ in combination with these *settings*...
 
 we can easily create an exam, looking like this:
 
-![Problem](./examples/readme/problem.png)
+![Problem](./docs/readme/problem.png)
 
 
 
