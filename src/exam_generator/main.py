@@ -54,7 +54,11 @@ def exam_generator(args):
     # Settings are adjusted in the settings json files in the settings directory and then loaded into Python
     # No change of settings in this program!
 
-    random.seed()
+    if args.random_seed is not None:
+        seed = args.random_seed
+        initializeRandomNumberGenerator(seed)
+    else:
+        initializeRandomNumberGenerator()
 
     settings_path = args.create_test
 
@@ -105,7 +109,9 @@ def exam_generator(args):
     # Directory where the tests will be saved in (for example: Exams-ET1-WS201920)
     test_directory = os.path.join(
         root_directory,
-        "Exams-{}-{}".format(settings.variant_name, settings.semester).replace(" ", "").replace("/", ""),
+        "Exams-{}-{}".format(settings.variant_name, settings.semester)
+        .replace(" ", "")
+        .replace("/", ""),
     )
 
     pool_files = pullPoolData(latex_directory)
@@ -232,7 +238,7 @@ def main():
     parser.add_argument(
         "-ct",
         "--create_test",
-        help="Creates a test based on the provided json settings file",
+        help="Creates a test based on the provided json settings file. Provide the path to the settings file of your liking.",
     )
     parser.add_argument(
         "-ma",
@@ -243,13 +249,19 @@ def main():
     parser.add_argument(
         "-mp",
         "--make_pool",
-        help="Creates a Preview for all problems of the given pool",
+        help="Creates a preview for all problems of the given pool. Provide the Path to the pool.",
     )
     parser.add_argument(
         "-ms",
         "--make_specific",
-        help="Creates a Preview for only the given problem\
-                            you will need to provide them problem´s name (without .tex)",
+        help="Creates a Preview for only the given problem you will need to provide the path to the problem",
+    )
+
+    parser.add_argument(
+        "-rs",
+        "--random_seed",
+        type=int,
+        help="Set a new random seed, allowing the same exam to be created, yet with different problems pulled. Provide a positive integer of your liking.",
     )
 
     args = parser.parse_args()
@@ -261,6 +273,13 @@ def main():
         and (args.make_specific is None)
     ):
         parser.error("Please choose at least one of the options. For help type: -h")
+
+    elif args.random_seed is not None and args.create_test is None:
+        parser.error("You can only select a random seed when creating an exam.")
+
+    elif args.random_seed is not None:
+        if args.random_seed <= 0:
+            parser.error("Please select a positive integer as your random seed.")
 
     else:
         exam_generator(args)

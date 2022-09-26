@@ -7,6 +7,7 @@
 /.vscode
 /src/exam_generator/__pycache__
 /src/*.egg-info
+/__pycache__*
 
 !/settings/settings_template.json
 !/settings/settings_ET1.json

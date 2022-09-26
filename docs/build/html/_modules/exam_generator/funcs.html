@@ -70,7 +70,6 @@
 <span class="sd">This module contains all functions relevant for the exam-generator.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">genericpath</span> <span class="kn">import</span> <span class="n">isfile</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">platform</span> <span class="kn">import</span> <span class="n">platform</span>
 <span class="kn">from</span> <span class="nn">PyPDF2</span> <span class="kn">import</span> <span class="n">PdfFileReader</span><span class="p">,</span> <span class="n">PdfFileWriter</span>
@@ -271,7 +270,6 @@
             <span class="k">for</span> <span class="n">prob_sol</span> <span class="ow">in</span> <span class="n">tests_per_group</span><span class="p">[</span><span class="n">group</span><span class="p">][</span><span class="n">test_index</span><span class="p">]:</span>
                 <span class="n">solution_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">item</span><span class="se">\n</span><span class="s2">&quot;</span>
 
-
                 <span class="n">pool_name</span> <span class="o">=</span> <span class="n">prob_sol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
                 <span class="n">solution_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="si">{</span><span class="n">pool_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prob_sol</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="se">}}\n\n</span><span class="s2">&quot;</span>
 
@@ -406,9 +404,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">abs_path</span><span class="p">):</span>
             <span class="n">abs_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pool_path</span><span class="p">,</span> <span class="s2">&quot;problem*.tex&quot;</span><span class="p">)</span>
 
-        <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">abs_path</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">abs_path</span><span class="p">))</span>
 
         <span class="n">pool</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">pool_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -419,13 +415,11 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">abs_path</span><span class="p">):</span>
             <span class="n">abs_path</span> <span class="o">=</span> <span class="n">problem_path</span>
-            
-        <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">abs_path</span><span class="p">)</span>
-        <span class="p">)</span>
+
+        <span class="n">filenames_problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">abs_path</span><span class="p">))</span>
 
         <span class="n">problem</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">abs_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
-        
+
         <span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">&quot;Preview_&quot;</span> <span class="o">+</span> <span class="n">problem</span>
 
     <span class="c1"># if make_all is selected the preview creation list contains all problems</span>
@@ -577,7 +571,7 @@
         <span class="p">]</span>
 
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">pool_data_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;problem&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">file</span> <span class="ow">and</span>  <span class="s2">&quot;solution&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;problem&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">file</span> <span class="ow">and</span> <span class="s2">&quot;solution&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> File name </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> does not follow the </span><span class="se">\</span>
 <span class="s2">                    naming pattern given in the instructions.&quot;</span>
@@ -593,6 +587,7 @@
 
     <span class="k">return</span> <span class="n">pool_info</span></div>
 
+
 <div class="viewcode-block" id="combineFileNames"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.combineFileNames">[docs]</a><span class="k">def</span> <span class="nf">combineFileNames</span><span class="p">(</span><span class="n">pool_files</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combines the problems of all individual pools into one.</span>
@@ -607,6 +602,7 @@
     <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pool_files</span><span class="p">:</span>
         <span class="n">file_names_tex</span> <span class="o">+=</span> <span class="n">pool</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">file_names_tex</span></div>
+
 
 <div class="viewcode-block" id="createCustomTestList"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.createCustomTestList">[docs]</a><span class="k">def</span> <span class="nf">createCustomTestList</span><span class="p">(</span><span class="n">test_types_dictionary</span><span class="p">,</span> <span class="n">pool_info</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -671,7 +667,17 @@
 
     <span class="k">return</span> <span class="n">custom_test_list</span></div>
 
+
 <div class="viewcode-block" id="checkSettings"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.checkSettings">[docs]</a><span class="k">def</span> <span class="nf">checkSettings</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">settings_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks the json settings file for user input errors.</span>
+
+<span class="sd">    :param settings: settings input from user.</span>
+<span class="sd">    :type settings: Dict from  addict</span>
+
+<span class="sd">    :param settings_file: name of the used settings file.</span>
+<span class="sd">    :type settings_file: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">group_pairs</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> group_pairs in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type int. </span><span class="se">\</span>
@@ -708,7 +714,6 @@
 <span class="s2">             Please make sure all types match the ones given in the instructions.&quot;</span>
         <span class="p">)</span>
 
-
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_solution</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> pages_per_sheet_solution in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type int. </span><span class="se">\</span>
@@ -721,13 +726,11 @@
 <span class="s2">             Please make sure all types match the ones given in the instructions.&quot;</span>
         <span class="p">)</span>
 
-
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">generate_single_pdfs</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> generate_single_pdfs in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type bool. </span><span class="se">\</span>
 <span class="s2">             Please make sure all types match the ones given in the instructions.&quot;</span>
         <span class="p">)</span>
-
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">generate_sumo_pdf</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
@@ -746,13 +749,17 @@
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> You have to have at least one copy for each test/ solution in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_test</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_test</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_test</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_test</span> <span class="o">!=</span> <span class="mi">4</span>
+    <span class="p">):</span>
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages </span><span class="se">\</span>
 <span class="s2">            per sheet for your sumo problem/ solution files in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
-    
-    <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_solution</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_solution</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_solution</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">sumo</span><span class="o">.</span><span class="n">pages_per_sheet_solution</span> <span class="o">!=</span> <span class="mi">4</span>
+    <span class="p">):</span>
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages </span><span class="se">\</span>
 <span class="s2">            per sheet for your sumo problem/ solution files in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
@@ -762,9 +769,9 @@
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> You have to have at least one group_pair in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span></div>
-    
 
-<div class="viewcode-block" id="deleteCommand"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.deleteCommand">[docs]</a><span class="k">def</span> <span class="nf">deleteCommand</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="deleteCommand"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.deleteCommand">[docs]</a><span class="k">def</span> <span class="nf">deleteCommand</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Deletes temporary data with commands based on OS.</span>
 
@@ -774,14 +781,16 @@
     <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>
         <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;del /Q *.dvi *.ps *.aux *.log *.tex&quot;</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-           <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;del </span><span class="si">{0}</span><span class="s2">.aux </span><span class="si">{0}</span><span class="s2">.log </span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;del </span><span class="si">{0}</span><span class="s2">.aux </span><span class="si">{0}</span><span class="s2">.log </span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Linux&quot;</span><span class="p">:</span>
         <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;rm -f *.dvi *.ps *.aux *.log *.tex&quot;</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;rm -f </span><span class="si">{0}</span><span class="s2">.aux </span><span class="si">{0}</span><span class="s2">.log </span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Your operating system is not supported. Please try again on Windows or Linux.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Your operating system is not supported. Please try again on Windows or Linux.&quot;</span>
+        <span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
     <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -789,6 +798,15 @@
     <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Temporary data could not be deleted.&quot;</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="initializeRandomNumberGenerator"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.initializeRandomNumberGenerator">[docs]</a><span class="k">def</span> <span class="nf">initializeRandomNumberGenerator</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes random seed.</span>
+
+<span class="sd">    :param seed: seed. Defaults to 1024 for debugging purposes.</span>
+<span class="sd">    :type seed: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

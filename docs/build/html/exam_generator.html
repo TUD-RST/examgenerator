@@ -191,7 +191,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="exam_generator.funcs.checkSettings">
 <span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">checkSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#checkSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.checkSettings" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Checks the json settings file for user input errors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>settings</strong> (<em>Dict from  addict</em>) – settings input from user.</p></li>
+<li><p><strong>settings_file</strong> (<em>str</em>) – name of the used settings file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exam_generator.funcs.check_directory">
@@ -317,6 +326,17 @@ by the setting and returns the names of the according pdf files.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list[tuple]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exam_generator.funcs.initializeRandomNumberGenerator">
+<span class="sig-prename descclassname"><span class="pre">exam_generator.funcs.</span></span><span class="sig-name descname"><span class="pre">initializeRandomNumberGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1024</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exam_generator/funcs.html#initializeRandomNumberGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#exam_generator.funcs.initializeRandomNumberGenerator" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes random seed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> (<em>int</em>) – seed. Defaults to 1024 for debugging purposes.</p>
 </dd>
 </dl>
 </dd></dl>

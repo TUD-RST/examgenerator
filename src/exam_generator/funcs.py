@@ -2,7 +2,6 @@
 This module contains all functions relevant for the exam-generator.
 """
 
-from genericpath import isfile
 import os
 from platform import platform
 from PyPDF2 import PdfFileReader, PdfFileWriter
@@ -203,7 +202,6 @@ def generateTexFiles(
             for prob_sol in tests_per_group[group][test_index]:
                 solution_string += f"\\item\n"
 
-
                 pool_name = prob_sol[2]
                 solution_string += f"\\input{{{pool_name}/{prob_sol[1]}}}\n\n"
 
@@ -338,9 +336,7 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
         if not os.path.isfile(abs_path):
             abs_path = os.path.join(pool_path, "problem*.tex")
 
-        filenames_problems.extend(
-            glob.glob(abs_path)
-        )
+        filenames_problems.extend(glob.glob(abs_path))
 
         pool = os.path.normpath(pool_path).split(os.sep)[-1]
 
@@ -351,13 +347,11 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
 
         if not os.path.isfile(abs_path):
             abs_path = problem_path
-            
-        filenames_problems.extend(
-            glob.glob(abs_path)
-        )
+
+        filenames_problems.extend(glob.glob(abs_path))
 
         problem = os.path.normpath(abs_path).split(os.sep)[-1].removesuffix(".tex")
-        
+
         FILENAME = "Preview_" + problem
 
     # if make_all is selected the preview creation list contains all problems
@@ -509,7 +503,7 @@ def pullPoolData(latex_directory):
         ]
 
         for file in pool_data_list:
-            if "problem" not in file and  "solution" not in file:
+            if "problem" not in file and "solution" not in file:
                 raise CompilingError(
                     f"{errorInfo()} File name {file} does not follow the \
                     naming pattern given in the instructions."
@@ -525,6 +519,7 @@ def pullPoolData(latex_directory):
 
     return pool_info
 
+
 def combineFileNames(pool_files):
     """
     Combines the problems of all individual pools into one.
@@ -539,6 +534,7 @@ def combineFileNames(pool_files):
     for pool in pool_files:
         file_names_tex += pool[0]
     return file_names_tex
+
 
 def createCustomTestList(test_types_dictionary, pool_info):
     """
@@ -603,7 +599,17 @@ def createCustomTestList(test_types_dictionary, pool_info):
 
     return custom_test_list
 
+
 def checkSettings(settings, settings_file):
+    """
+    Checks the json settings file for user input errors.
+
+    :param settings: settings input from user.
+    :type settings: Dict from  addict
+
+    :param settings_file: name of the used settings file.
+    :type settings_file: str
+    """
     if not isinstance(settings.group_pairs, int):
         raise SettingsError(
             f"{errorInfo()} group_pairs in {settings_file} is not of the required type int. \
@@ -640,7 +646,6 @@ def checkSettings(settings, settings_file):
              Please make sure all types match the ones given in the instructions."
         )
 
-
     if not isinstance(settings.sumo.pages_per_sheet_solution, int):
         raise SettingsError(
             f"{errorInfo()} pages_per_sheet_solution in {settings_file} is not of the required type int. \
@@ -653,13 +658,11 @@ def checkSettings(settings, settings_file):
              Please make sure all types match the ones given in the instructions."
         )
 
-
     if not isinstance(settings.data.generate_single_pdfs, bool):
         raise SettingsError(
             f"{errorInfo()} generate_single_pdfs in {settings_file} is not of the required type bool. \
              Please make sure all types match the ones given in the instructions."
         )
-
 
     if not isinstance(settings.data.generate_sumo_pdf, bool):
         raise SettingsError(
@@ -678,13 +681,17 @@ def checkSettings(settings, settings_file):
             f"{errorInfo()} You have to have at least one copy for each test/ solution in {settings_file}."
         )
 
-    if (settings.sumo.pages_per_sheet_test != 2) and (settings.sumo.pages_per_sheet_test != 4):
+    if (settings.sumo.pages_per_sheet_test != 2) and (
+        settings.sumo.pages_per_sheet_test != 4
+    ):
         raise SettingsError(
             f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \
             per sheet for your sumo problem/ solution files in {settings_file}."
         )
-    
-    if (settings.sumo.pages_per_sheet_solution != 2) and (settings.sumo.pages_per_sheet_solution != 4):
+
+    if (settings.sumo.pages_per_sheet_solution != 2) and (
+        settings.sumo.pages_per_sheet_solution != 4
+    ):
         raise SettingsError(
             f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \
             per sheet for your sumo problem/ solution files in {settings_file}."
@@ -694,9 +701,9 @@ def checkSettings(settings, settings_file):
         raise SettingsError(
             f"{errorInfo()} You have to have at least one group_pair in {settings_file}."
         )
-    
 
-def deleteCommand(filename = None):
+
+def deleteCommand(filename=None):
     """
     Deletes temporary data with commands based on OS.
 
@@ -706,14 +713,16 @@ def deleteCommand(filename = None):
     if platform.system() == "Windows":
         command = "del /Q *.dvi *.ps *.aux *.log *.tex"
         if filename is not None:
-           command = "del {0}.aux {0}.log {0}.tex".format(filename)
+            command = "del {0}.aux {0}.log {0}.tex".format(filename)
 
     elif platform.system() == "Linux":
         command = "rm -f *.dvi *.ps *.aux *.log *.tex"
         if filename is not None:
             command = "rm -f {0}.aux {0}.log {0}.tex".format(filename)
     else:
-        raise CompilingError(f"{errorInfo()} Your operating system is not supported. Please try again on Windows or Linux.")
+        raise CompilingError(
+            f"{errorInfo()} Your operating system is not supported. Please try again on Windows or Linux."
+        )
 
     print(command)
     process = subprocess.Popen(command, shell=True)
@@ -721,3 +730,12 @@ def deleteCommand(filename = None):
     if process.returncode != 0:
         raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
 
+
+def initializeRandomNumberGenerator(seed=1024):
+    """
+    Initializes random seed.
+
+    :param seed: seed. Defaults to 1024 for debugging purposes.
+    :type seed: int
+    """
+    random.seed(seed)

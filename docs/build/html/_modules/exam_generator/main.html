@@ -122,7 +122,11 @@
     <span class="c1"># Settings are adjusted in the settings json files in the settings directory and then loaded into Python</span>
     <span class="c1"># No change of settings in this program!</span>
 
-    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">random_seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">seed</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">random_seed</span>
+        <span class="n">initializeRandomNumberGenerator</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">initializeRandomNumberGenerator</span><span class="p">()</span>
 
     <span class="n">settings_path</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">create_test</span>
 
@@ -173,7 +177,9 @@
     <span class="c1"># Directory where the tests will be saved in (for example: Exams-ET1-WS201920)</span>
     <span class="n">test_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="n">root_directory</span><span class="p">,</span>
-        <span class="s2">&quot;Exams-</span><span class="si">{}</span><span class="s2">-</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">semester</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;Exams-</span><span class="si">{}</span><span class="s2">-</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">semester</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
     <span class="p">)</span>
 
     <span class="n">pool_files</span> <span class="o">=</span> <span class="n">pullPoolData</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">)</span>
@@ -300,7 +306,7 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;-ct&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--create_test&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Creates a test based on the provided json settings file&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Creates a test based on the provided json settings file. Provide the path to the settings file of your liking.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;-ma&quot;</span><span class="p">,</span>
@@ -311,13 +317,19 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;-mp&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--make_pool&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Creates a Preview for all problems of the given pool&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Creates a preview for all problems of the given pool. Provide the Path to the pool.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;-ms&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--make_specific&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Creates a Preview for only the given problem</span><span class="se">\</span>
-<span class="s2">                            you will need to provide them problem´s name (without .tex)&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Creates a Preview for only the given problem you will need to provide the path to the problem&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-rs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--random_seed&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Set a new random seed, allowing the same exam to be created, yet with different problems pulled. Provide a positive integer of your liking.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
@@ -329,6 +341,13 @@
         <span class="ow">and</span> <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">make_specific</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
     <span class="p">):</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Please choose at least one of the options. For help type: -h&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">random_seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">create_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;You can only select a random seed when creating an exam.&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">random_seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">random_seed</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Please select a positive integer as your random seed.&quot;</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">exam_generator</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
