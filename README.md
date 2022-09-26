@@ -6,6 +6,12 @@ Exam_generator is a script which is designed to create exams/ tests from
 pools of problems while ensuring that there will be no repetition amongst
 different groups.
 
+## Installation
+
+
+- clone the repository
+- run `pip install -e .` (run from where the `settings` directory lives).
+
 ## Current Status and Issues
 
 This project is currently in the development process and is set to release at the end of October 2022.
@@ -74,6 +80,9 @@ in combination with these *settings*...
     }
     }
 ```
+with...
+
+exam_generator -ct [path to settings file]
 
 we can easily create an exam, looking like this:
 
