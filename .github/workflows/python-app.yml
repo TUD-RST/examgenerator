@@ -5,9 +5,13 @@ name: Python application
 
 on:
   push:
-    branches: [ main ], [ development ]
+    branches: 
+    - main
+    - develop
   pull_request:
-    branches: [ main ], [ development ]
+    branches:
+    - main
+    - develop
 
 jobs:
   build:
@@ -34,13 +38,13 @@ jobs:
 
     - name: Lint with black
       run: |
-        black src/exam_generator/
+        black ./src/exam_generator/
 
     - name: Update documentation 
       run: |
         sphinx-build -b html docs/source  docs/build/html
-
+    	
     - name: Test with pytest
       run: |
-        cd /test/
+        cd ./test
         pytest
