@@ -5,7 +5,7 @@
   "semester": "WS 2022/23",
   "sumo": {
     "pages_per_sheet_test": 2,
-    "sumo_problem_copies": 1,
+    "sumo_problem_copies": 5,
     "pages_per_sheet_solution": 2,
     "sumo_solution_copies": 1
   },

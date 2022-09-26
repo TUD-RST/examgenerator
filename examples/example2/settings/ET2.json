@@ -5,27 +5,28 @@
   "semester": "WS 2022/23",
   "sumo": {
     "pages_per_sheet_test": 4,
-    "sumo_problem_copies": 10,
+    "sumo_problem_copies": 15,
     "pages_per_sheet_solution": 2,
     "sumo_solution_copies": 1
   },
   "data": {
-    "generate_single_pdfs": false,
+    "generate_single_pdfs": true,
     "generate_sumo_pdf": true,
     "delete_temp_data": true
   },
   "test_types": {
-    "V03": [
+    "Lab03": [
       "A2",
       "B2",
       "CV03"
     ],
-    "V08": [
+    "Lab08": [
       "A2",
       "B2",
-      "CV08"
+      "CV08",
+      "DV08"
     ],
-    "V15": [
+    "Lab15": [
       "A2",
       "B2",
       "CV15",
