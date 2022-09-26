@@ -59,7 +59,9 @@ Our requirements result in the following structure:
     ├───settings                        
     │       Math1.json                  ← Settings file 
     │
-    └───templates                       ← LaTeX Templates 
+    └───templates                       ← LaTeX Templates
+            template_problem.tex
+            template_solution.tex 
 
 
 Settings
@@ -68,30 +70,34 @@ Settings
 Now it is time to configure our settings in ``Math1.json``.
 
 ::
-                   
+
+    {            
     "group_pairs": 3,                   ← Let's choose our maximum amount of possible groups                   
     "title": "Exam for Math 1 (MA1)",   ← The title that will be displayed on the exam
     "variant_name": "Math1",            ← Short handle displayed in the file names
     "semester": "WS 2022/23",           ← Current semester
 
-    "sumo":                           
-    "pages_per_sheet_test": 2,          ← Students will get their tests printed out in A4 format      
-    "sumo_problem_copies": 5,           ← Amount of copies of each group, total here is 5 copies *3 groups -> 15 students
-    "pages_per_sheet_solution": 2,      ← Solution will be printed in A4 as well
-    "sumo_solution_copies": 1           ← There is only one solution copy required
+    "sumo":{                           
+        "pages_per_sheet_test": 2,       ← Students will get their tests printed out in A4 format      
+        "sumo_problem_copies": 5,        ← Amount of copies of each group, total here is 5 copies *3 groups -> 15 students
+        "pages_per_sheet_solution": 2,   ← Solution will be printed in A4 as well
+        "sumo_solution_copies": 1        ← There is only one solution copy required
+    },
 
-    "data":
-    "generate_single_pdfs": true,       ← We would like the option to look at the problems for each group seperately
-    "generate_sumo_pdf": true,          ← We would like a sumo file
-    "delete_temp_data": true            ← Deleteing temporary data is always usefull
-    
-    "test_types":                       ← Our exam is created here
-    "MathExam": [                       ← Name of the exam
-    "MC_easy",                          ← Pool for first problem
-    "proofs",                           ← Pool for second problem
-    "MC_hard"                           ← Pool for last problem
-    ]
+    "data":{
+        "generate_single_pdfs": true,    ← We would like the option to look at the problems for each group seperately
+        "generate_sumo_pdf": true,       ← We would like a sumo file
+        "delete_temp_data": true         ← Deleteing temporary data is always usefull
+    },
 
+    "test_types":{                       ← Our exam is created here
+        "MathExam": [                    ← Name of the exam
+        "MC_easy",                       ← Pool for first problem
+        "proofs",                        ← Pool for second problem
+        "MC_hard"                        ← Pool for last problem
+        ]
+    }
+    }
 
 
 Creating the Exam
@@ -187,41 +193,45 @@ that leaves us with 15 copies for our sumo file.
 
 ::
 
+    {
     "group_pairs": 2,
     "title": "Lab Control Theory 2 (ET)",
     "variant_name": "ET2",
     "semester": "WS 2022/23",
 
-    "sumo": 
-    "pages_per_sheet_test": 4,              ← Students will receive their exams in A5 format
-    "sumo_problem_copies": 15,              ← 15*2 -> 30 total copies
-    "pages_per_sheet_solution": 2,          ← Solutions in A4 format
-    "sumo_solution_copies": 1
+    "sumo":{ 
+        "pages_per_sheet_test": 4,          ← Students will receive their exams in A5 format
+        "sumo_problem_copies": 15,          ← 15*2 -> 30 total copies
+        "pages_per_sheet_solution": 2,      ← Solutions in A4 format
+        "sumo_solution_copies": 1
+    },
     
-    "data": 
-    "generate_single_pdfs": false,          ← We do not need the tests for each group separately
-    "generate_sumo_pdf": true,
-    "delete_temp_data": true
+    "data":{ 
+        "generate_single_pdfs": false,      ← We do not need the tests for each group separately
+        "generate_sumo_pdf": true,
+        "delete_temp_data": true
+    },
 
-    "test_types": 
-    "Lab03": [                              ← First exam
-    "A2",
-    "B2",
-    "CV03"
-    ],
-    "Lab08": [                              ← Second exam
-    "A2",
-    "B2",
-    "CV08",
-    "DV08"
-    ],
-    "Lab15": [      	                    ← Third exam
-    "A2",
-    "B2",
-    "CV15",
-    "DV15"
-    ]
-
+    "test_types":{ 
+        "Lab03": [                          ← First exam
+        "A2",
+        "B2",
+        "CV03"
+        ],
+        "Lab08": [                          ← Second exam
+        "A2",
+        "B2",
+        "CV08",
+        "DV08"
+        ],
+        "Lab15": [      	                ← Third exam
+        "A2",
+        "B2",
+        "CV15",
+        "DV15"
+        ]
+    }
+    }
 
 You could add exams to your liking as long as you follow the json file format structure.
 
@@ -235,7 +245,7 @@ Lastly, all there is left to do again is execute the following command in the co
 Our exam directory will be created and the result is the following:
 
 ::  
-    
+
     C:.
     ├───Exams-ET2-WS202223
     │       Sumo-ET2-Problems.pdf

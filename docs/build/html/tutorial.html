@@ -133,34 +133,41 @@ Lastly, we create our <code class="docutils literal notranslate"><span class="pr
 │       Math1.json                  ← Settings file
 │
 └───templates                       ← LaTeX Templates
+        template_problem.tex
+        template_solution.tex
 </pre></div>
 </div>
 </section>
 <section id="settings">
 <h3>Settings<a class="headerlink" href="#settings" title="Permalink to this heading"></a></h3>
 <p>Now it is time to configure our settings in <code class="docutils literal notranslate"><span class="pre">Math1.json</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&quot;group_pairs&quot;: 3,                   ← Let&#39;s choose our maximum amount of possible groups
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+&quot;group_pairs&quot;: 3,                   ← Let&#39;s choose our maximum amount of possible groups
 &quot;title&quot;: &quot;Exam for Math 1 (MA1)&quot;,   ← The title that will be displayed on the exam
 &quot;variant_name&quot;: &quot;Math1&quot;,            ← Short handle displayed in the file names
 &quot;semester&quot;: &quot;WS 2022/23&quot;,           ← Current semester
 
-&quot;sumo&quot;:
-&quot;pages_per_sheet_test&quot;: 2,          ← Students will get their tests printed out in A4 format
-&quot;sumo_problem_copies&quot;: 5,           ← Amount of copies of each group, total here is 5 copies *3 groups -&gt; 15 students
-&quot;pages_per_sheet_solution&quot;: 2,      ← Solution will be printed in A4 as well
-&quot;sumo_solution_copies&quot;: 1           ← There is only one solution copy required
+&quot;sumo&quot;:{
+    &quot;pages_per_sheet_test&quot;: 2,       ← Students will get their tests printed out in A4 format
+    &quot;sumo_problem_copies&quot;: 5,        ← Amount of copies of each group, total here is 5 copies *3 groups -&gt; 15 students
+    &quot;pages_per_sheet_solution&quot;: 2,   ← Solution will be printed in A4 as well
+    &quot;sumo_solution_copies&quot;: 1        ← There is only one solution copy required
+},
 
-&quot;data&quot;:
-&quot;generate_single_pdfs&quot;: true,       ← We would like the option to look at the problems for each group seperately
-&quot;generate_sumo_pdf&quot;: true,          ← We would like a sumo file
-&quot;delete_temp_data&quot;: true            ← Deleteing temporary data is always usefull
+&quot;data&quot;:{
+    &quot;generate_single_pdfs&quot;: true,    ← We would like the option to look at the problems for each group seperately
+    &quot;generate_sumo_pdf&quot;: true,       ← We would like a sumo file
+    &quot;delete_temp_data&quot;: true         ← Deleteing temporary data is always usefull
+},
 
-&quot;test_types&quot;:                       ← Our exam is created here
-&quot;MathExam&quot;: [                       ← Name of the exam
-&quot;MC_easy&quot;,                          ← Pool for first problem
-&quot;proofs&quot;,                           ← Pool for second problem
-&quot;MC_hard&quot;                           ← Pool for last problem
-]
+&quot;test_types&quot;:{                       ← Our exam is created here
+    &quot;MathExam&quot;: [                    ← Name of the exam
+    &quot;MC_easy&quot;,                       ← Pool for first problem
+    &quot;proofs&quot;,                        ← Pool for second problem
+    &quot;MC_hard&quot;                        ← Pool for last problem
+    ]
+}
+}
 </pre></div>
 </div>
 </section>
@@ -239,40 +246,45 @@ Each pool contains at least two problem/ solution pairs.</p>
 - There needs to be at least one lab specific problem</p>
 <p>Furthermore, we need copies for 30 students. With two groups for each test,
 that leaves us with 15 copies for our sumo file.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&quot;group_pairs&quot;: 2,
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+&quot;group_pairs&quot;: 2,
 &quot;title&quot;: &quot;Lab Control Theory 2 (ET)&quot;,
 &quot;variant_name&quot;: &quot;ET2&quot;,
 &quot;semester&quot;: &quot;WS 2022/23&quot;,
 
-&quot;sumo&quot;:
-&quot;pages_per_sheet_test&quot;: 4,              ← Students will receive their exams in A5 format
-&quot;sumo_problem_copies&quot;: 15,              ← 15*2 -&gt; 30 total copies
-&quot;pages_per_sheet_solution&quot;: 2,          ← Solutions in A4 format
-&quot;sumo_solution_copies&quot;: 1
+&quot;sumo&quot;:{
+    &quot;pages_per_sheet_test&quot;: 4,          ← Students will receive their exams in A5 format
+    &quot;sumo_problem_copies&quot;: 15,          ← 15*2 -&gt; 30 total copies
+    &quot;pages_per_sheet_solution&quot;: 2,      ← Solutions in A4 format
+    &quot;sumo_solution_copies&quot;: 1
+},
 
-&quot;data&quot;:
-&quot;generate_single_pdfs&quot;: false,          ← We do not need the tests for each group separately
-&quot;generate_sumo_pdf&quot;: true,
-&quot;delete_temp_data&quot;: true
+&quot;data&quot;:{
+    &quot;generate_single_pdfs&quot;: false,      ← We do not need the tests for each group separately
+    &quot;generate_sumo_pdf&quot;: true,
+    &quot;delete_temp_data&quot;: true
+},
 
-&quot;test_types&quot;:
-&quot;Lab03&quot;: [                              ← First exam
-&quot;A2&quot;,
-&quot;B2&quot;,
-&quot;CV03&quot;
-],
-&quot;Lab08&quot;: [                              ← Second exam
-&quot;A2&quot;,
-&quot;B2&quot;,
-&quot;CV08&quot;,
-&quot;DV08&quot;
-],
-&quot;Lab15&quot;: [                              ← Third exam
-&quot;A2&quot;,
-&quot;B2&quot;,
-&quot;CV15&quot;,
-&quot;DV15&quot;
-]
+&quot;test_types&quot;:{
+    &quot;Lab03&quot;: [                          ← First exam
+    &quot;A2&quot;,
+    &quot;B2&quot;,
+    &quot;CV03&quot;
+    ],
+    &quot;Lab08&quot;: [                          ← Second exam
+    &quot;A2&quot;,
+    &quot;B2&quot;,
+    &quot;CV08&quot;,
+    &quot;DV08&quot;
+    ],
+    &quot;Lab15&quot;: [                              ← Third exam
+    &quot;A2&quot;,
+    &quot;B2&quot;,
+    &quot;CV15&quot;,
+    &quot;DV15&quot;
+    ]
+}
+}
 </pre></div>
 </div>
 <p>You could add exams to your liking as long as you follow the json file format structure.</p>
