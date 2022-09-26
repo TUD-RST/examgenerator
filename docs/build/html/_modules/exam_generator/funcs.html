@@ -220,7 +220,8 @@
         <span class="k">for</span> <span class="n">test_index</span><span class="p">,</span> <span class="n">test_typ</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">test_list_variant</span><span class="p">):</span>
             <span class="c1"># Problem</span>
             <span class="c1"># Setting file name and path</span>
-            <span class="n">file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Exam-</span><span class="si">{</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">.tex&quot;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Exam-</span><span class="si">{</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">.tex&quot;</span>
             <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
 
             <span class="c1"># Replacing the parameters in the LaTeX file</span>
@@ -251,7 +252,7 @@
 
             <span class="c1"># Solution</span>
             <span class="c1"># Setting file name and path</span>
-            <span class="n">file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Exam-</span><span class="si">{</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">test_typ</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">-Solution.tex&quot;</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Exam-</span><span class="si">{</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">-Solution.tex&quot;</span>
             <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
 
             <span class="c1"># Replacing parameters in LaTeX file</span>
@@ -326,7 +327,7 @@
     <span class="k">return</span> <span class="n">tests_per_group</span></div>
 
 
-<div class="viewcode-block" id="compile"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.compile">[docs]</a><span class="k">def</span> <span class="nf">compile</span><span class="p">(</span><span class="n">test_directory</span><span class="p">,</span> <span class="n">latex_directory</span><span class="p">,</span> <span class="n">generate_single_pdfs</span><span class="p">,</span> <span class="n">delete_temp_data</span><span class="p">):</span>
+<div class="viewcode-block" id="compile"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.compile">[docs]</a><span class="k">def</span> <span class="nf">compile</span><span class="p">(</span><span class="n">test_directory</span><span class="p">,</span> <span class="n">latex_directory</span><span class="p">,</span> <span class="n">delete_temp_data</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function compiles the tex files and turns them into pdf format and moves them to</span>
@@ -338,9 +339,6 @@
 <span class="sd">    :param latex_directory: Working directory of latex compiler</span>
 <span class="sd">    :type latex_directory: str</span>
 
-<span class="sd">    :param generate_single_pdfs: Should individual PDFs be created</span>
-<span class="sd">    :type generate_single_pdfs: bool</span>
-
 <span class="sd">    :param delete_temp_data: Should temporary data be deleted</span>
 <span class="sd">    :type delete_temp_data: bool</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -349,30 +347,29 @@
     <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">test_directory</span><span class="p">)</span>
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">generate_single_pdfs</span><span class="p">:</span>
-        <span class="n">tex_files</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">)</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
-        <span class="p">]</span>
+    <span class="n">tex_files</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">)</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
+    <span class="p">]</span>
 
-        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tex_files</span><span class="p">:</span>
-            <span class="c1"># execute pdflatex twice to resolve references</span>
-            <span class="n">command</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;pdflatex -interaction=batchmode </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> &amp;&amp; &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;pdflatex -interaction=batchmode </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tex_files</span><span class="p">:</span>
+        <span class="c1"># execute pdflatex twice to resolve references</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;pdflatex -interaction=batchmode </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> &amp;&amp; &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;pdflatex -interaction=batchmode </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+            <span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span>
+        <span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">delete_temp_data</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Problem while compiling </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">. </span><span class="se">\</span>
+<span class="s2">                temporary data will not be deleted.&quot;</span>
             <span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-            <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
-                <span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span>
-            <span class="p">)</span>
-            <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">delete_temp_data</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Problem while compiling </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">. </span><span class="se">\</span>
-<span class="s2">                    temporary data will not be deleted.&quot;</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">),</span> <span class="n">test_directory</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">),</span> <span class="n">test_directory</span><span class="p">)</span>
 
     <span class="c1"># Delete temporary data</span>
     <span class="k">if</span> <span class="n">delete_temp_data</span><span class="p">:</span>
@@ -798,6 +795,22 @@
     <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Temporary data could not be deleted.&quot;</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="deletePDF"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.deletePDF">[docs]</a><span class="k">def</span> <span class="nf">deletePDF</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deletes a pdf file based on os.</span>
+
+<span class="sd">    :param filename: name of the file to be deleted.</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;del /Q </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">elif</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Linux&quot;</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;rm -f </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+    
+    <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Single PDFs could not be deleted.&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="initializeRandomNumberGenerator"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.initializeRandomNumberGenerator">[docs]</a><span class="k">def</span> <span class="nf">initializeRandomNumberGenerator</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

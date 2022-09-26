@@ -3,16 +3,16 @@
   "title": "Praktikum Regelung Steuerung (MT)",
   "variant_name": "MT",
   "semester": "WS 2021/22",
+  "data": {
+    "generate_single_pdfs": true,
+    "generate_sumo_pdf": true,
+    "delete_temp_data": true
+  },
   "sumo": {
     "pages_per_sheet_test": 4,
     "sumo_problem_copies": 4,
     "pages_per_sheet_solution": 4,
     "sumo_solution_copies": 1
-  },
-  "data": {
-    "generate_single_pdfs": true,
-    "generate_sumo_pdf": true,
-    "delete_temp_data": true
   },
   "test_types": {
     "testV21": [

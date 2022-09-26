@@ -77,6 +77,12 @@ Now it is time to configure our settings in ``Math1.json``.
     "variant_name": "Math1",            ← Short handle displayed in the file names
     "semester": "WS 2022/23",           ← Current semester
 
+    "data":{
+        "generate_single_pdfs": true,    ← We would like the option to look at the problems for each group seperately
+        "generate_sumo_pdf": true,       ← We would like a sumo file
+        "delete_temp_data": true         ← Deleteing temporary data is always usefull
+    },
+
     "sumo":{                           
         "pages_per_sheet_test": 2,       ← Students will get their tests printed out in A4 format      
         "sumo_problem_copies": 5,        ← Amount of copies of each group, total here is 5 copies *3 groups -> 15 students
@@ -84,11 +90,6 @@ Now it is time to configure our settings in ``Math1.json``.
         "sumo_solution_copies": 1        ← There is only one solution copy required
     },
 
-    "data":{
-        "generate_single_pdfs": true,    ← We would like the option to look at the problems for each group seperately
-        "generate_sumo_pdf": true,       ← We would like a sumo file
-        "delete_temp_data": true         ← Deleteing temporary data is always usefull
-    },
 
     "test_types":{                       ← Our exam is created here
         "MathExam": [                    ← Name of the exam
@@ -199,6 +200,12 @@ that leaves us with 15 copies for our sumo file.
     "variant_name": "ET2",
     "semester": "WS 2022/23",
 
+    "data":{ 
+        "generate_single_pdfs": false,      ← We do not need the tests for each group separately
+        "generate_sumo_pdf": true,
+        "delete_temp_data": true
+    },
+    
     "sumo":{ 
         "pages_per_sheet_test": 4,          ← Students will receive their exams in A5 format
         "sumo_problem_copies": 15,          ← 15*2 -> 30 total copies
@@ -206,11 +213,6 @@ that leaves us with 15 copies for our sumo file.
         "sumo_solution_copies": 1
     },
     
-    "data":{ 
-        "generate_single_pdfs": false,      ← We do not need the tests for each group separately
-        "generate_sumo_pdf": true,
-        "delete_temp_data": true
-    },
 
     "test_types":{ 
         "Lab03": [                          ← First exam

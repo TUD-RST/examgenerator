@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install addict pytest PyPDF2 pathlib platform black
+        pip install addict pytest PyPDF2 pathlib platform black sphinx
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: Installing package
@@ -34,7 +34,11 @@ jobs:
 
     - name: Lint with black
       run: |
-        black src/exam_generator/ 
+        black src/exam_generator/
+
+    - name: Update documentation 
+      run: |
+        sphinx-build -b html docs/source  docs/build/html
 
     - name: Test with pytest
       run: |
