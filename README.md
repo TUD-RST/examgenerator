@@ -75,7 +75,7 @@ in combination with these *settings*...
 
 we can easily create an exam, looking like this:
 
-![Problem](./examples/readme/problem.png)
+![Problem](./docs/readme/problem.png)
 
 
 
