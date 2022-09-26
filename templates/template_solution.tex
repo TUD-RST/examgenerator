@@ -15,56 +15,56 @@
 \usepackage{units}
 \usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
 
-\newcounter{TeilPunkte}
-\newcounter{AufgabePunkte}
-\newcounter{GesamtPunkte}
-\setcounter{GesamtPunkte}{0}
+\newcounter{PartialPoints}
+\newcounter{ProblemPoints}
+\newcounter{TotalPoints}
+\setcounter{TotalPoints}{0}
 
 
 % Benutzung: \Pkte{2} vergibt 2 Punkte
 %            \Pkte[6]{2} zeigt 2-Punkte-Kasten, aber vergibt 6 Punkte
-\newcommand{\Pkte}[2][-999]{
+\newcommand{\Pts}[2][-999]{
     \fbox{\textcolor{red}{\textbf{#2\,P.}}}
     \ifnum#1>-999
-    \addtocounter{TeilPunkte}{#1}
-    \addtocounter{AufgabePunkte}{#1}
-    \addtocounter{GesamtPunkte}{#1}
+    \addtocounter{PartialPoints}{#1}
+    \addtocounter{ProblemPoints}{#1}
+    \addtocounter{TotalPoints}{#1}
     \else
     \ifnum#2>0
-    \addtocounter{TeilPunkte}{#2}
-    \addtocounter{AufgabePunkte}{#2}
-    \addtocounter{GesamtPunkte}{#2}
+    \addtocounter{PartialPoints}{#2}
+    \addtocounter{ProblemPoints}{#2}
+    \addtocounter{TotalPoints}{#2}
     \fi
     \fi
 }
-\newcommand{\SumPkte}{
-    \dotfill \textcolor{red}{$\mathbf{\Sigma}$: \textbf{\arabic{TeilPunkte}\,P.}}
-    \setcounter{TeilPunkte}{0}
+\newcommand{\SumPts}{
+    \dotfill \textcolor{red}{$\mathbf{\Sigma}$: \textbf{\arabic{PartialPoints}\,P.}}
+    \setcounter{PartialPoints}{0}
 }
-\newcommand{\AufgabePkte}{
-    \hrulefill \textcolor{red}{\large $\mathbf{\Sigma}$ Aufgabe: \textbf{\arabic{AufgabePunkte}\,P.}}\\[2ex]
-    \setcounter{TeilPunkte}{0}
-    \setcounter{AufgabePunkte}{0}
+\newcommand{\ProblemPts}{
+    \hrulefill \textcolor{red}{\large $\mathbf{\Sigma}$  \textbf{\arabic{ProblemPoints}\,P.}}\\[2ex]
+    \setcounter{PartialPoints}{0}
+    \setcounter{ProblemPoints}{0}
 }
-\newcommand{\GesamtPkte}{
-    \hfill \fbox{\textcolor{red}{\Large Gesamtpunktzahl Eingangstest: \textbf{\arabic{GesamtPunkte}\,P.}}}
+\newcommand{\TotalPts}{
+    \hfill \fbox{\textcolor{red}{\Large Total Points: \textbf{\arabic{TotalPoints}\,P.}}}
 }
 
-\newenvironment{Loesung}{
-    \setcounter{TeilPunkte}{0}
-    \setcounter{AufgabePunkte}{0}
+\newenvironment{Solution}{
+    \setcounter{PartialPoints}{0}
+    \setcounter{ProblemPoints}{0}
     \begin{enumerate}
 }{
-    \SumPkte
+    \SumPts
     \end{enumerate}
     
-    \AufgabePkte
-    \setcounter{AufgabePunkte}{0}
+    \ProblemPts
+    \setcounter{ProblemPoints}{0}
 }
 
-\newcommand{\lsgitem}{
-\ifnum\value{TeilPunkte}>0
-\SumPkte
+\newcommand{\solitem}{
+\ifnum\value{PartialPoints}>0
+\SumPts
 \fi
 \item
 }
@@ -84,7 +84,7 @@
 \begin{center}
 \textbf{\large __PRAKTIKUM__}
 
-\textbf{\large Eingangstest zum Versuch __VERSUCH__ (__SEMESTER__): Lösung}
+\textbf{\large __VERSUCH__ (__SEMESTER__): Solution}
 
 \small (__GRUPPE__)
 \end{center}
@@ -98,6 +98,6 @@ __AUFGABEN__
 
 \end{enumerate}
 
-\GesamtPkte
+\TotalPts
 
 \end{document}
