@@ -489,14 +489,14 @@ def pullPoolData(latex_directory):
     """
     pool_info = []
 
-    for pool_name in os.listdir(latex_directory):
+    for pool_name in sorted(os.listdir(latex_directory)):
         pool_dir = os.path.join(latex_directory, pool_name)
 
         if not os.path.isdir(pool_dir):
             continue
 
         pool_data_list = [
-            os.path.basename(fn) for fn in glob.iglob(os.path.join(pool_dir, "*.tex"))
+            os.path.basename(fn) for fn in sorted(glob.iglob(os.path.join(pool_dir, "*.tex")))
         ]
 
         for file in pool_data_list:
