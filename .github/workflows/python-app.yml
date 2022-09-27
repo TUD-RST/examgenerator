@@ -43,7 +43,7 @@ jobs:
     - name: Update documentation 
       run: |
         sphinx-build -b html docs/source  docs/build/html
-    	
+        
     - name: Test with pytest
       run: |
         cd ./test
