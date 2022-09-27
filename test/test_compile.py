@@ -33,7 +33,7 @@ def test_compile():
         exam_name,
     )
 
-    funcs.compile(test_directory, pool_path, settings.data.generate_single_pdfs, settings.data.delete_temp_data)
+    funcs.compile(test_directory, pool_path, settings.data.delete_temp_data)
 
     # deleting temporary data
     os.chdir(root_path)
