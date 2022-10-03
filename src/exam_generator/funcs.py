@@ -174,7 +174,7 @@ def generateTexFiles(
             file_name_prob = f"Exam-{variant_name}-{name}-{group_name}.tex"
             file_path_problem = os.path.join(latex_directory, file_name_prob)
 
-            file_content = createFileContent(
+            file_content_prob = createFileContent(
                 template_problem,
                 title,
                 semester,
@@ -187,7 +187,7 @@ def generateTexFiles(
             )
 
             with open(file_path_problem, "w+") as d:
-                d.write(file_content)
+                d.write(file_content_prob)
 
             # LaTeX file of the problem is converted to PDF
 
@@ -199,7 +199,7 @@ def generateTexFiles(
             file_name_sol = f"Exam-{variant_name}-{name}-{group_name}-Solution.tex"
             file_path_sol = os.path.join(latex_directory, file_name_sol)
 
-            file_content = createFileContent(
+            file_content_sol = createFileContent(
                 template_solution,
                 title,
                 semester,
@@ -212,7 +212,7 @@ def generateTexFiles(
             )
 
             with open(file_path_sol, "w+") as d:
-                d.write(file_content)
+                d.write(file_content_sol)
 
             # LaTeX file of the solution converted to pdf
             if file_name_sol.replace(".tex", ".pdf") not in file_names_solutions_pdf:
