@@ -3,6 +3,7 @@
   "title": "Exam for ET1",
   "variant_name": "ET1",
   "semester": "WS 2021/22",
+  "copies": 24,
   "data": {
     "generate_single_pdfs": true,
     "generate_sumo_pdf": true,

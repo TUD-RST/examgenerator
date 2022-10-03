@@ -136,6 +136,8 @@ def exam_generator(args):
     # --- Generating the TeX-Files ---
     # ==================================
 
+    copies_per_group = determineCopiesPerGroup(settings.group_pairs, settings.copies)
+
     names_prob_sol_pdf = generateTexFiles(
         latex_directory,
         template_directory,
@@ -145,6 +147,7 @@ def exam_generator(args):
         settings.title,
         settings.semester,
         tests_per_group,
+        copies_per_group,
     )
 
     # ===================
@@ -182,7 +185,7 @@ def exam_generator(args):
             settings.sumo.pages_per_sheet_solution,
             settings.sumo.sumo_solution_copies,
         )
-    
+
     if not settings.data.generate_single_pdfs:
         files = os.listdir(test_directory)
 

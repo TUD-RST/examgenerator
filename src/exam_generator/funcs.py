@@ -11,6 +11,7 @@ import shutil
 from pathlib import Path
 from addict import Dict
 import platform
+import math
 
 from .classes import *
 from .customExceptions import *
@@ -71,6 +72,22 @@ def buildSumo(test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_f
         d.close()
 
 
+def determineCopiesPerGroup(number_groups, copies):
+    """
+    Calculates copies per group
+
+    Args:
+        number_groups (int): group count
+        copies (int): number of total copies
+
+    Returns:
+        int: number of copies for each group
+    """
+    copies_per_group = math.ceil(copies / number_groups)
+
+    return copies_per_group
+
+
 def generateTexFiles(
     latex_directory,
     template_directory,
@@ -80,6 +97,7 @@ def generateTexFiles(
     title,
     semester,
     tests_per_group,
+    copies_per_group,
 ):
 
     """
@@ -152,69 +170,96 @@ def generateTexFiles(
         for test_index, test_typ in enumerate(test_list_variant):
             # Problem
             # Setting file name and path
-            name = test_typ.name.replace(" ","")
-            file_name = f"Exam-{variant_name}-{name}-{group_name}.tex"
-            file_path = os.path.join(latex_directory, file_name)
+            name = test_typ.name.replace(" ", "")
+            file_name_prob = f"Exam-{variant_name}-{name}-{group_name}.tex"
+            file_path_problem = os.path.join(latex_directory, file_name_prob)
 
-            # Replacing the parameters in the LaTeX file
-            file_content = template_problem
-            file_content = file_content.replace("__PRAKTIKUM__", title)
-            file_content = file_content.replace("__SEMESTER__", semester)
-            file_content = file_content.replace("__VERSUCH__", test_typ.name)
-            file_content = file_content.replace("__GRUPPE__", group_name)
+            file_content = createFileContent(
+                template_problem,
+                title,
+                semester,
+                test_typ,
+                group_name,
+                tests_per_group,
+                group,
+                test_index,
+                0,
+            )
 
-            # Creation of the problem strings + implementation in the LaTeX file
-            # String has to  be adjusted for every pool, so that the correct
-            # directory for each file is given
-            # This could probably be solved more elegantly, but it works for now
-
-            problem_string = ""
-            for prob_sol in tests_per_group[group][test_index]:
-                problem_string += f"\\item\n"
-                pool_name = prob_sol[2]
-                problem_string += f"\\input{{{pool_name}/{prob_sol[0]}}}\n\n"
-
-            file_content = file_content.replace("__AUFGABEN__", problem_string)
-
-            with open(file_path, "w+") as d:
+            with open(file_path_problem, "w+") as d:
                 d.write(file_content)
 
             # LaTeX file of the problem is converted to PDF
-            file_names_problems_pdf.append(file_name.replace(".tex", ".pdf"))
+
+            if file_name_prob.replace(".tex", ".pdf") not in file_names_problems_pdf:
+                file_names_problems_pdf.append(file_name_prob.replace(".tex", ".pdf"))
 
             # Solution
             # Setting file name and path
-            file_name = f"Exam-{variant_name}-{name}-{group_name}-Solution.tex"
-            file_path = os.path.join(latex_directory, file_name)
+            file_name_sol = f"Exam-{variant_name}-{name}-{group_name}-Solution.tex"
+            file_path_sol = os.path.join(latex_directory, file_name_sol)
 
-            # Replacing parameters in LaTeX file
-            file_content = template_solution
-            file_content = file_content.replace("__PRAKTIKUM__", title)
-            file_content = file_content.replace("__SEMESTER__", semester)
-            file_content = file_content.replace("__VERSUCH__", test_typ.name)
-            file_content = file_content.replace("__GRUPPE__", group_name)
+            file_content = createFileContent(
+                template_solution,
+                title,
+                semester,
+                test_typ,
+                group_name,
+                tests_per_group,
+                group,
+                test_index,
+                1,
+            )
 
-            # Creation of the solution strings + implementation in the LaTeX file
-            # String has to  be adjusted for every pool, so that the correct
-            # directory for each file is given
-            # This could probably be solved more elegantly, but it works for now
-            solution_string = ""
-
-            for prob_sol in tests_per_group[group][test_index]:
-                solution_string += f"\\item\n"
-
-                pool_name = prob_sol[2]
-                solution_string += f"\\input{{{pool_name}/{prob_sol[1]}}}\n\n"
-
-            file_content = file_content.replace("__AUFGABEN__", solution_string)
-
-            with open(file_path, "w+") as d:
+            with open(file_path_sol, "w+") as d:
                 d.write(file_content)
 
             # LaTeX file of the solution converted to pdf
-            file_names_solutions_pdf.append(file_name.replace(".tex", ".pdf"))
+            if file_name_sol.replace(".tex", ".pdf") not in file_names_solutions_pdf:
+                file_names_problems_pdf.append(file_name_sol.replace(".tex", ".pdf"))
 
     return file_names_problems_pdf, file_names_solutions_pdf
+
+
+def createFileContent(
+    template,
+    title,
+    semester,
+    test_typ,
+    group_name,
+    tests_per_group,
+    group,
+    test_index,
+    prob_sol_index,
+):
+    # Replacing the parameters in the LaTeX file
+    file_content = template
+    file_content = file_content.replace("__PRAKTIKUM__", title)
+    file_content = file_content.replace("__SEMESTER__", semester)
+    file_content = file_content.replace("__VERSUCH__", test_typ.name)
+    file_content = file_content.replace("__GRUPPE__", group_name)
+
+    # Creation of the problem strings + implementation in the LaTeX file
+    # String has to  be adjusted for every pool, so that the correct
+    # directory for each file is given
+    # This could probably be solved more elegantly, but it works for now
+
+    problem_string = ""
+    for prob_sol in tests_per_group[group][test_index]:
+        problem_string += f"\\item\n"
+        pool_name = prob_sol[2]
+        with open(
+            os.path.join(
+                os.getcwd(), "pool_data", pool_name, prob_sol[prob_sol_index]
+            ).replace("\\", "/"),
+            "r",
+        ) as d:
+            problem_str = d.read()
+        problem_string += f"{problem_str}\n\n"
+
+    file_content = file_content.replace("__AUFGABEN__", problem_string)
+
+    return file_content
 
 
 def combiningProblems(number_group_pairs, test_list_variant):
@@ -279,14 +324,12 @@ def compile(test_directory, latex_directory, delete_temp_data):
     os.mkdir(test_directory)
     os.chdir(latex_directory)
 
-    tex_files = [
-        file for file in os.listdir(latex_directory) if file.endswith(".tex")
-    ]
+    tex_files = [file for file in os.listdir(latex_directory) if file.endswith(".tex")]
 
     for file in tex_files:
         # execute pdflatex twice to resolve references
         command = (
-            f"pdflatex -interaction=batchmode {file} && "
+            # f"pdflatex -interaction=batchmode {file} && "
             f"pdflatex -interaction=batchmode {file}"
         )
         print(command)
@@ -496,7 +539,8 @@ def pullPoolData(latex_directory):
             continue
 
         pool_data_list = [
-            os.path.basename(fn) for fn in sorted(glob.iglob(os.path.join(pool_dir, "*.tex")))
+            os.path.basename(fn)
+            for fn in sorted(glob.iglob(os.path.join(pool_dir, "*.tex")))
         ]
 
         for file in pool_data_list:
@@ -727,6 +771,7 @@ def deleteCommand(filename=None):
     if process.returncode != 0:
         raise CompilingError(f"{errorInfo()} Temporary data could not be deleted.")
 
+
 def deletePDF(filename):
     """
     Deletes a pdf file based on os.
@@ -738,11 +783,12 @@ def deletePDF(filename):
         command = f"del /Q {filename}"
     elif platform.system() == "Linux":
         command = f"rm -f {filename}"
-    
+
     process = subprocess.Popen(command, shell=True)
     process.wait()
     if process.returncode != 0:
         raise CompilingError(f"{errorInfo()} Single PDFs could not be deleted.")
+
 
 def initializeRandomNumberGenerator(seed=1024):
     """
