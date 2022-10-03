@@ -160,6 +160,14 @@ def exam_generator(args):
         settings.data.delete_temp_data,
     )
 
+    combineGroupFiles(
+        test_directory,
+        latex_directory,
+        settings.group_pairs,
+        custom_test_list,
+        settings.variant_name,
+    )
+
     # ==================================
     # --- Sumo-Files ---
     # ==================================

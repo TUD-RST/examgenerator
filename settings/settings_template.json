@@ -3,10 +3,10 @@
   "title": "Exam for ET1",
   "variant_name": "ET1",
   "semester": "WS 2021/22",
-  "copies": 24,
+  "copies": 4,
   "data": {
     "generate_single_pdfs": true,
-    "generate_sumo_pdf": true,
+    "generate_sumo_pdf": false,
     "delete_temp_data": true
   },
   "sumo": {
@@ -19,18 +19,7 @@
     "test1": [
       "A1",
       "B1",
-      "B2",
-      "CV03"
-    ],
-    "test2": [
-      "A1",
-      "B1",
-      "B1"
-    ],
-    "test3": [
-      "B2",
-      "B1",
-      "CV03"
+      "B2"
     ]
   }
 }

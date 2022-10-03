@@ -17,12 +17,12 @@ from .classes import *
 from .customExceptions import *
 
 
-def buildSumo(test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file):
+def buildSumo(directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file):
 
     """
     This function creates the sumo file which contains all problems/ solutions for all groups.
 
-    :param test_directory: Directory in which the created tests are saved
+    :param directory: Directory where to be combined problems lie
     :type test_directory: str
 
     :param sumo_name: Name of the Sumo file either for the problems or solutions
@@ -43,7 +43,7 @@ def buildSumo(test_directory, sumo_name, pdf_list, pages_per_sheet, copies_per_f
 
     """
 
-    os.chdir(test_directory)
+    os.chdir(directory)
     writer = PdfFileWriter()
 
     open_files = []
@@ -165,58 +165,74 @@ def generateTexFiles(
     file_names_solutions_pdf = []
 
     for group in range(number_group_pairs):
-        group_name = f"{group*2 + 1:02d}{group*2+2:02d}"
+        group_name = f"{group + 1}"
 
         for test_index, test_typ in enumerate(test_list_variant):
             # Problem
             # Setting file name and path
             name = test_typ.name.replace(" ", "")
-            file_name_prob = f"Exam-{variant_name}-{name}-{group_name}.tex"
-            file_path_problem = os.path.join(latex_directory, file_name_prob)
+            # file_name_prob = f"Exam-{variant_name}-{name}-{group_name}-{i}.tex"
+            # file_path_problem = os.path.join(latex_directory, file_name_prob)
 
-            file_content_prob = createFileContent(
-                template_problem,
-                title,
-                semester,
-                test_typ,
-                group_name,
-                tests_per_group,
-                group,
-                test_index,
-                0,
-            )
+            for i in range(copies_per_group):
 
-            with open(file_path_problem, "w+") as d:
-                d.write(file_content_prob)
+                file_name_prob = f"Exam-{variant_name}-{name}-{group_name}-{i}.tex"
+                file_path_problem = os.path.join(latex_directory, file_name_prob)
+                file_content_prob = createFileContent(
+                    template_problem,
+                    title,
+                    semester,
+                    test_typ,
+                    group_name,
+                    tests_per_group,
+                    group,
+                    test_index,
+                    0,
+                )
 
-            # LaTeX file of the problem is converted to PDF
+                with open(file_path_problem, "w+") as d:
+                    d.write(file_content_prob)
 
-            if file_name_prob.replace(".tex", ".pdf") not in file_names_problems_pdf:
-                file_names_problems_pdf.append(file_name_prob.replace(".tex", ".pdf"))
+                # LaTeX file of the problem is converted to PDF
 
-            # Solution
-            # Setting file name and path
-            file_name_sol = f"Exam-{variant_name}-{name}-{group_name}-Solution.tex"
-            file_path_sol = os.path.join(latex_directory, file_name_sol)
+                if (
+                    file_name_prob.replace(".tex", ".pdf")
+                    not in file_names_problems_pdf
+                ):
+                    file_names_problems_pdf.append(
+                        file_name_prob.replace(".tex", ".pdf")
+                    )
 
-            file_content_sol = createFileContent(
-                template_solution,
-                title,
-                semester,
-                test_typ,
-                group_name,
-                tests_per_group,
-                group,
-                test_index,
-                1,
-            )
+                # Solution
+                # Setting file name and path
+                file_name_sol = (
+                    f"Exam-{variant_name}-{name}-{group_name}-Solution-{i}.tex"
+                )
+                file_path_sol = os.path.join(latex_directory, file_name_sol)
 
-            with open(file_path_sol, "w+") as d:
-                d.write(file_content_sol)
+                file_content_sol = createFileContent(
+                    template_solution,
+                    title,
+                    semester,
+                    test_typ,
+                    group_name,
+                    tests_per_group,
+                    group,
+                    test_index,
+                    1,
+                )
 
-            # LaTeX file of the solution converted to pdf
-            if file_name_sol.replace(".tex", ".pdf") not in file_names_solutions_pdf:
-                file_names_problems_pdf.append(file_name_sol.replace(".tex", ".pdf"))
+                with open(file_path_sol, "w+") as d:
+                    d.write(file_content_sol)
+
+                # LaTeX file of the solution converted to pdf
+                if (
+                    file_name_sol.replace(".tex", ".pdf")
+                    not in file_names_solutions_pdf
+                ):
+                    file_names_problems_pdf.append(
+                        file_name_sol.replace(".tex", ".pdf")
+                    )
 
     return file_names_problems_pdf, file_names_solutions_pdf
 
@@ -343,12 +359,61 @@ def compile(test_directory, latex_directory, delete_temp_data):
                 f"{errorInfo()} Problem while compiling {file}. \
                 temporary data will not be deleted."
             )
-        else:
-            shutil.move(file.replace(".tex", ".pdf"), test_directory)
 
     # Delete temporary data
     if delete_temp_data:
         deleteCommand()
+
+
+def combineGroupFiles(
+    test_directory, latex_directory, groups, test_list_variant, variant_name
+):
+    pdf_files = [file for file in os.listdir(latex_directory) if file.endswith(".pdf")]
+
+    for test in test_list_variant:
+        name = test.name.replace(" ", "")
+        for group in range(groups):
+            group_name = f"{group + 1}"
+            group_prob_files = [
+                file
+                for file in pdf_files
+                if f"Exam-{variant_name}-{name}-{group_name}" in file
+                and not "Solution" in file
+            ]
+
+            group_file_prob_name = f"Exam-{variant_name}-{name}-{group_name}.pdf"
+
+            buildSumo(
+                latex_directory,
+                group_file_prob_name,
+                group_prob_files,
+                2,
+                1,
+            )
+
+            shutil.move(group_file_prob_name, test_directory)
+
+            group_sol_files = [
+                file
+                for file in pdf_files
+                if (
+                    f"Exam-{variant_name}-{name}-{group_name}" in file
+                    and "Solution" in file
+                )
+            ]
+
+            group_file_sol_name = (
+                f"Exam-{variant_name}-{name}-{group_name}-Solution.pdf"
+            )
+            buildSumo(
+                latex_directory,
+                group_file_sol_name,
+                group_sol_files,
+                2,
+                1,
+            )
+
+            shutil.move(group_file_sol_name, test_directory)
 
 
 def make_specific(make_all, pool_path, problem_path, root_directory):
