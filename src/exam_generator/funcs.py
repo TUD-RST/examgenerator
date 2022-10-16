@@ -118,12 +118,13 @@ def generateKeys(file_content: str, test, group, student):
     # adds unique keys
     unique_keys = {}
     for index, key in enumerate(keys):
-        unique_keys[key] = f"{test}-{group}-{student}-{index+1}"
+        unique_keys[key] = f"\"{test}-{group}-{student}-{index+1}\""
 
     return unique_keys
 
-def replaceKeys(file_content: str, keys: dict):
-    print(keys)
+def replaceKeys(file_content: str, test, group, student):
+
+    keys = generateKeys(file_content, test, group, student)
     for key, unique_key in keys.items():
         file_content = file_content.replace(key, unique_key)
     
@@ -156,8 +157,9 @@ def curly_braces_wrapper(arg: str):
     """
     return "{%s}" % arg
 
+# CACHE used for keys -> random numbers
 CACHE = {}
-def get_random_number(CACHE, key: str, lower_bound, upper_bound):
+def get_random_number(key: str, lower_bound, upper_bound):
     """
     Return a number from the CACHE or key is yet unknown, randomly create a new one.
 
@@ -175,17 +177,23 @@ def get_random_number(CACHE, key: str, lower_bound, upper_bound):
     CACHE[key] = res
     return res
 
-def applyJinjaTemplate(jin_env: Environment, filename):
+def applyJinjaTemplate(latex_directory, file):
+    jin_env = Environment(
+        loader=FileSystemLoader(latex_directory),
+        # autoescape=select_autoescape(['html', 'xml']),
+    )
+
     context = {
         # pass this function to the template to allow the template-engine to access CACHE
         "get_random_number": get_random_number,
     }
-    template = jin_env.get_template(filename)
+
+    template = jin_env.get_template(file)
 
     file_content = template.render(context=context, cbw=curly_braces_wrapper)
 
-    with open(filename, "w") as resfile:
-            resfile.write(file_content)
+    with open(file, "w") as resfile:
+        resfile.write(file_content)
 
 
 def generateTexFiles(
@@ -234,11 +242,6 @@ def generateTexFiles(
 
     """
 
-    # setting up jinja environment
-    jin_env = Environment(
-        loader=FileSystemLoader(latex_directory),
-        # autoescape=select_autoescape(['html', 'xml']),
-    )
 
     # Deletes all temporary files in the pool_data directory
     for file in glob.glob(os.path.join(latex_directory, "*.*")):
@@ -293,15 +296,17 @@ def generateTexFiles(
                     group,
                     test_index,
                     0,
+                    i,
+                    name
                 )
 
-                keys = generateKeys(file_content_prob, name, group_name, i)
+                #keys = generateKeys(file_content_prob, name, group_name, i)
 
-                file_content_prob = replaceKeys(file_content_prob, keys)
+                #file_content_prob = replaceKeys(file_content_prob, keys)
 
                 with open(file_path_problem, "w+") as d:
                     d.write(file_content_prob)
-                
+                                
                 # LaTeX file of the problem is converted to PDF
 
                 if (
@@ -328,10 +333,12 @@ def generateTexFiles(
                     tests_per_group,
                     group,
                     test_index,
-                    1
+                    1,
+                    i,
+                    name
                 )
 
-                file_content_sol = replaceKeys(file_content_sol, keys)
+                #file_content_sol = replaceKeys(file_content_sol, keys)
 
                 with open(file_path_sol, "w+") as d:
                     d.write(file_content_sol)
@@ -358,6 +365,8 @@ def createFileContent(
     group,
     test_index,
     prob_sol_index,
+    student,
+    test
 ):
 
     # Replacing the parameters in the LaTeX file
@@ -374,6 +383,18 @@ def createFileContent(
     for prob_sol in tests_per_group[group][test_index]:
         problem_string += f"\\item\n"
         pool_name = prob_sol[2]
+        
+        problem_string = createProblemContent(tests_per_group, group, test_index, prob_sol_index, student, test)
+
+    file_content = file_content.replace("__AUFGABEN__", problem_string)
+
+    return file_content
+
+def createProblemContent(tests_per_group, group, test_index, prob_sol_index, student, test):
+    problem_string = ""
+    for prob_sol in tests_per_group[group][test_index]:
+        problem_string += f"\\item\n"
+        pool_name = prob_sol[2]
         with open(
             os.path.join(
                 os.getcwd(), "pool_data", pool_name, prob_sol[prob_sol_index]
@@ -382,11 +403,22 @@ def createFileContent(
         ) as d:
             problem_str = d.read()
         problem_string += f"{problem_str}\n\n"
+    
+    problem_string = replaceKeys(problem_string, test, group, student)
+    
+    temp_file = "temp_file.tex"
+    with open(temp_file, "w") as temp:
+        temp.write(problem_string)
+    
+    applyJinjaTemplate(os.getcwd(), temp_file)
 
-    file_content = file_content.replace("__AUFGABEN__", problem_string)
+    with open(temp_file, "r") as d:
+        problem_string = d.read()
+    
+    deleteCommand("temp_file")
 
-    return file_content
-
+    return problem_string
+    
 
 def combiningProblems(number_group_pairs, test_list_variant):
 
@@ -466,8 +498,7 @@ def compile(test_directory, latex_directory, delete_temp_data):
         if process.returncode != 0:
             delete_temp_data = False
             raise CompilingError(
-                f"{errorInfo()} Problem while compiling {file}. \
-                temporary data will not be deleted."
+                f"{errorInfo()} Problem while compiling {file}. Temporary data will not be deleted."
             )
 
     # Delete temporary data
@@ -524,7 +555,8 @@ def combineGroupFiles(
             )
 
             shutil.move(group_file_sol_name, test_directory)
-
+    for file in [file for file in os.listdir() if os.path.isfile(file) and file.endswith(".pdf")]:
+        deletePDF(file)
 
 def make_specific(make_all, pool_path, problem_path, root_directory):
     """
@@ -779,19 +811,6 @@ def createCustomTestList(test_types_dictionary, pool_info):
 
         for pool_name in pool_list:
 
-            # checking if there is any problems/ solutions for the given pools
-            # unnecessary because now done when initialising a pool instance
-            """pool_files_exist = False
-            for file in file_names_tex:
-                if pool_name in file:
-                    pool_files_exist = True
-
-            if not pool_files_exist:
-                raise SettingsError(
-                    f"{errorInfo()} The pool {pool_name} does not have any \
-                    problem/ solution files."
-                )"""
-
             # selects the correct file list for the pool
             pool_file_list = []
             for pool in pool_info:
@@ -929,18 +948,18 @@ def deleteCommand(filename=None):
     if platform.system() == "Windows":
         command = "del /Q *.dvi *.ps *.aux *.log *.tex"
         if filename is not None:
-            command = "del {0}.aux {0}.log {0}.tex".format(filename)
+            command = "del {0}.aux {0}.log {0}.tex {0}.pdf".format(filename)
 
     elif platform.system() == "Linux":
         command = "rm -f *.dvi *.ps *.aux *.log *.tex"
         if filename is not None:
-            command = "rm -f {0}.aux {0}.log {0}.tex".format(filename)
+            command = "rm -f {0}.aux {0}.log {0}.tex {0}.pdf".format(filename)
     else:
         raise CompilingError(
             f"{errorInfo()} Your operating system is not supported. Please try again on Windows or Linux."
         )
 
-    print(command)
+    #print(command)
     process = subprocess.Popen(command, shell=True)
     process.wait()
     if process.returncode != 0:
