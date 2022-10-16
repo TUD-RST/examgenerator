@@ -16,9 +16,8 @@ import math
 from jinja2 import Environment, FileSystemLoader
 import random
 import re
-import jinja2
 
-from .classes import *
+from .classes import TestType, Pool
 from .customExceptions import *
 
 
@@ -109,6 +108,9 @@ def generateKeys(file_content: str, test, group, student):
 
     :param student: number of student
     :type student: str
+
+    :returns: old key -> unique key
+    :rtype: dict{str: str}
     """
 
     # creates list with different keys in file
@@ -123,7 +125,24 @@ def generateKeys(file_content: str, test, group, student):
     return unique_keys
 
 def replaceKeys(file_content: str, test, group, student):
+    """
+    Replaces __KEY{int}__ in latex files with custom keys for later usage.
 
+    :param file_content: content of file to be edited
+    :type file_conten: str
+
+    :param test: name of test
+    :type test: str
+
+    :param group: group name
+    :type group: str
+
+    :param student: number of student
+    :type student: int
+
+    :returns: file content with replaced keys
+    :rtype: str
+    """
     keys = generateKeys(file_content, test, group, student)
     for key, unique_key in keys.items():
         file_content = file_content.replace(key, unique_key)
@@ -163,10 +182,17 @@ def get_random_number(key: str, lower_bound, upper_bound):
     """
     Return a number from the CACHE or key is yet unknown, randomly create a new one.
 
-    :param key:             key to uniquely identify this number for later usages, e.g. in the
-                            solution
-    :param lower_bound:
-    :param upper_bound:
+    :param key: key to uniquely identify this number for later usages, e.g. in the solution
+    :type key: str
+
+    :param lower_bound: lower bound
+    :type lower_bound: int
+
+    :param upper_bound: upper bound
+    :type upper_bound: int
+
+    :returns: random number
+    :rtype: int
     """
 
     if key in CACHE:
@@ -178,6 +204,15 @@ def get_random_number(key: str, lower_bound, upper_bound):
     return res
 
 def applyJinjaTemplate(latex_directory, file):
+    """
+    Applies jinja template to a file.
+
+    :param latex_directory: directory where template lives
+    :type latex_directory: str
+
+    :param file: name of file
+    :type file. str
+    """
     jin_env = Environment(
         loader=FileSystemLoader(latex_directory),
         # autoescape=select_autoescape(['html', 'xml']),
@@ -368,7 +403,39 @@ def createFileContent(
     student,
     test
 ):
+    """
+    Replaces template variables and adds problem string.
 
+    :param template: file content of template
+    :type template: str
+
+    :param title: title of exam
+    :type title: str
+
+    :param semester: semester
+    :type semester: str
+
+    :param test_typ: test type out of test list
+    :type test_typ: TestType
+
+    :param group_name: name of group
+    :type group_name: str
+
+    :param test_index: index of test in test_list_variant
+    :type test_index: int
+
+    :param prob_sol_index: determines compilation for prob[0]/ sol[1]
+    :type prob_sol_index: int
+
+    :param student: number of student
+    :type student: int
+
+    :param test: name of test
+    :type test: str
+
+    :returns: file content
+    :rtype: str
+    """
     # Replacing the parameters in the LaTeX file
     file_content = template
     file_content = file_content.replace("__PRAKTIKUM__", title)
@@ -377,20 +444,38 @@ def createFileContent(
     file_content = file_content.replace("__GRUPPE__", group_name)
 
 
-    # Creation of the problem strings + implementation in the LaTeX file
-
-    problem_string = ""
-    for prob_sol in tests_per_group[group][test_index]:
-        problem_string += f"\\item\n"
-        pool_name = prob_sol[2]
-        
-        problem_string = createProblemContent(tests_per_group, group, test_index, prob_sol_index, student, test)
+    # Creation of the problem strings + implementation in the LaTeX file   
+    problem_string = createProblemContent(tests_per_group, group, test_index, prob_sol_index, student, test)
 
     file_content = file_content.replace("__AUFGABEN__", problem_string)
 
     return file_content
 
 def createProblemContent(tests_per_group, group, test_index, prob_sol_index, student, test):
+    """
+    Combines problem files, replaces KEYs and applies jinja templates.
+
+    :param tests_per_group: number of tests per group
+    :type tests_per_group: int
+
+    :param group: name of group
+    :type group: str
+
+    :param test_index: index of test in test_list_variant
+    :type test_index: int
+
+    :param prob_sol_index: determines compilation for prob[0]/ sol[1]
+    :type prob_sol_index: int
+
+    :param student: number of student
+    :type student: int
+
+    :param test: name of test
+    :type test: str
+
+    :returns: string concisting of all problems for a student
+    :rtype: str
+    """
     problem_string = ""
     for prob_sol in tests_per_group[group][test_index]:
         problem_string += f"\\item\n"
@@ -509,6 +594,24 @@ def compile(test_directory, latex_directory, delete_temp_data):
 def combineGroupFiles(
     test_directory, latex_directory, groups, test_list_variant, variant_name
 ):
+    """
+    Combines the separate group pdf files into one file and moves it to the test directory.
+
+    :param test_directory: directory where generated exam is stored
+    :type test_directory: str
+
+    :param latex_directory: directory of latex compiler
+    :type latex_directory: str
+    
+    :param groups: number of different groups
+    :type groups: int
+
+    :param test_list_variant: List of test variants belonging to chosen variant
+    :type test_list_variant: list[TestType] 
+
+    :param variant_name: name of the variant
+    :type variant_name: str
+    """
     pdf_files = [file for file in os.listdir(latex_directory) if file.endswith(".pdf")]
 
     for test in test_list_variant:
