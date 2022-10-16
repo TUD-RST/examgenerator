@@ -2,6 +2,7 @@
 This module contains all functions relevant for the exam-generator.
 """
 
+from enum import unique
 import os
 from platform import platform
 from PyPDF2 import PdfFileReader, PdfFileWriter
@@ -12,9 +13,14 @@ from pathlib import Path
 from addict import Dict
 import platform
 import math
+from jinja2 import Environment, FileSystemLoader
+import random
+import re
+import jinja2
 
 from .classes import *
 from .customExceptions import *
+
 
 
 def buildSumo(directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file):
@@ -87,6 +93,100 @@ def determineCopiesPerGroup(number_groups, copies):
 
     return copies_per_group
 
+def generateKeys(file_content: str, test, group, student):
+    """
+    Searches for all variants of __KEY{int}__ and adds them
+    with a uniquely generated key to dict.
+
+    :param file_content: content of working file
+    :type file_content: str
+
+    :param test: name of test
+    :type test. str
+
+    :param group: group name
+    :type group: str
+
+    :param student: number of student
+    :type student: str
+    """
+
+    # creates list with different keys in file
+    keys = re.findall(r"__KEY+\d__", file_content)
+    keys = list(dict.fromkeys(keys))
+    
+    # adds unique keys
+    unique_keys = {}
+    for index, key in enumerate(keys):
+        unique_keys[key] = f"{test}-{group}-{student}-{index+1}"
+
+    return unique_keys
+
+def replaceKeys(file_content: str, keys: dict):
+    print(keys)
+    for key, unique_key in keys.items():
+        file_content = file_content.replace(key, unique_key)
+    
+    return file_content
+
+def curly_braces_wrapper(arg: str):
+    r"""
+    Return a string like "{" + arg + "}".
+
+    Motivation: the templating engine uses curly braces as variable-section delimiter. Also, TeX
+    syntax uses curly braces on many occassion. This makes it hard to denote e.g.
+
+    ```
+    \emph{XYZ}
+    ```
+
+    where XYZ should be an expression like {{contex.myvariable}}. The following results in an
+    error of the templating engine:
+
+
+    ```
+    \emph{{{contex.myvariable}}}
+    ```
+
+    With this function one can use:
+
+    \emph{{cbw(context["myvariable"])}}
+
+
+    """
+    return "{%s}" % arg
+
+CACHE = {}
+def get_random_number(CACHE, key: str, lower_bound, upper_bound):
+    """
+    Return a number from the CACHE or key is yet unknown, randomly create a new one.
+
+    :param key:             key to uniquely identify this number for later usages, e.g. in the
+                            solution
+    :param lower_bound:
+    :param upper_bound:
+    """
+
+    if key in CACHE:
+        return CACHE[key]
+
+    # key is yet unknown → create new entry
+    res = random.randint(lower_bound, upper_bound)
+    CACHE[key] = res
+    return res
+
+def applyJinjaTemplate(jin_env: Environment, filename):
+    context = {
+        # pass this function to the template to allow the template-engine to access CACHE
+        "get_random_number": get_random_number,
+    }
+    template = jin_env.get_template(filename)
+
+    file_content = template.render(context=context, cbw=curly_braces_wrapper)
+
+    with open(filename, "w") as resfile:
+            resfile.write(file_content)
+
 
 def generateTexFiles(
     latex_directory,
@@ -134,6 +234,12 @@ def generateTexFiles(
 
     """
 
+    # setting up jinja environment
+    jin_env = Environment(
+        loader=FileSystemLoader(latex_directory),
+        # autoescape=select_autoescape(['html', 'xml']),
+    )
+
     # Deletes all temporary files in the pool_data directory
     for file in glob.glob(os.path.join(latex_directory, "*.*")):
         os.remove(file)
@@ -175,7 +281,6 @@ def generateTexFiles(
             # file_path_problem = os.path.join(latex_directory, file_name_prob)
 
             for i in range(copies_per_group):
-
                 file_name_prob = f"Exam-{variant_name}-{name}-{group_name}-{i}.tex"
                 file_path_problem = os.path.join(latex_directory, file_name_prob)
                 file_content_prob = createFileContent(
@@ -190,9 +295,13 @@ def generateTexFiles(
                     0,
                 )
 
+                keys = generateKeys(file_content_prob, name, group_name, i)
+
+                file_content_prob = replaceKeys(file_content_prob, keys)
+
                 with open(file_path_problem, "w+") as d:
                     d.write(file_content_prob)
-
+                
                 # LaTeX file of the problem is converted to PDF
 
                 if (
@@ -219,8 +328,10 @@ def generateTexFiles(
                     tests_per_group,
                     group,
                     test_index,
-                    1,
+                    1
                 )
+
+                file_content_sol = replaceKeys(file_content_sol, keys)
 
                 with open(file_path_sol, "w+") as d:
                     d.write(file_content_sol)
@@ -248,6 +359,7 @@ def createFileContent(
     test_index,
     prob_sol_index,
 ):
+
     # Replacing the parameters in the LaTeX file
     file_content = template
     file_content = file_content.replace("__PRAKTIKUM__", title)
@@ -255,10 +367,8 @@ def createFileContent(
     file_content = file_content.replace("__VERSUCH__", test_typ.name)
     file_content = file_content.replace("__GRUPPE__", group_name)
 
+
     # Creation of the problem strings + implementation in the LaTeX file
-    # String has to  be adjusted for every pool, so that the correct
-    # directory for each file is given
-    # This could probably be solved more elegantly, but it works for now
 
     problem_string = ""
     for prob_sol in tests_per_group[group][test_index]:
