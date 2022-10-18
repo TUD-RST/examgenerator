@@ -21,7 +21,6 @@ from .classes import TestType, Pool
 from .customExceptions import *
 
 
-
 def buildSumo(directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file):
 
     """
@@ -92,6 +91,7 @@ def determineCopiesPerGroup(number_groups, copies):
 
     return copies_per_group
 
+
 def generateKeys(file_content: str, test, group, student):
     """
     Searches for all variants of __KEY{int}__ and adds them
@@ -116,13 +116,14 @@ def generateKeys(file_content: str, test, group, student):
     # creates list with different keys in file
     keys = re.findall(r"__KEY+\d__", file_content)
     keys = list(dict.fromkeys(keys))
-    
+
     # adds unique keys
     unique_keys = {}
     for index, key in enumerate(keys):
-        unique_keys[key] = f"\"{test}-{group}-{student}-{index+1}\""
+        unique_keys[key] = f'"{test}-{group}-{student}-{index+1}"'
 
     return unique_keys
+
 
 def replaceKeys(file_content: str, test, group, student):
     """
@@ -146,8 +147,9 @@ def replaceKeys(file_content: str, test, group, student):
     keys = generateKeys(file_content, test, group, student)
     for key, unique_key in keys.items():
         file_content = file_content.replace(key, unique_key)
-    
+
     return file_content
+
 
 def curly_braces_wrapper(arg: str):
     r"""
@@ -176,8 +178,11 @@ def curly_braces_wrapper(arg: str):
     """
     return "{%s}" % arg
 
+
 # CACHE used for keys -> random numbers
 CACHE = {}
+
+
 def get_random_number(key: str, lower_bound, upper_bound):
     """
     Return a number from the CACHE or key is yet unknown, randomly create a new one.
@@ -202,6 +207,7 @@ def get_random_number(key: str, lower_bound, upper_bound):
     res = random.randint(lower_bound, upper_bound)
     CACHE[key] = res
     return res
+
 
 def applyJinjaTemplate(latex_directory, file):
     """
@@ -277,7 +283,6 @@ def generateTexFiles(
 
     """
 
-
     # Deletes all temporary files in the pool_data directory
     for file in glob.glob(os.path.join(latex_directory, "*.*")):
         os.remove(file)
@@ -332,16 +337,16 @@ def generateTexFiles(
                     test_index,
                     0,
                     i,
-                    name
+                    name,
                 )
 
-                #keys = generateKeys(file_content_prob, name, group_name, i)
+                # keys = generateKeys(file_content_prob, name, group_name, i)
 
-                #file_content_prob = replaceKeys(file_content_prob, keys)
+                # file_content_prob = replaceKeys(file_content_prob, keys)
 
                 with open(file_path_problem, "w+") as d:
                     d.write(file_content_prob)
-                                
+
                 # LaTeX file of the problem is converted to PDF
 
                 if (
@@ -370,10 +375,10 @@ def generateTexFiles(
                     test_index,
                     1,
                     i,
-                    name
+                    name,
                 )
 
-                #file_content_sol = replaceKeys(file_content_sol, keys)
+                # file_content_sol = replaceKeys(file_content_sol, keys)
 
                 with open(file_path_sol, "w+") as d:
                     d.write(file_content_sol)
@@ -401,7 +406,7 @@ def createFileContent(
     test_index,
     prob_sol_index,
     student,
-    test
+    test,
 ):
     """
     Replaces template variables and adds problem string.
@@ -443,15 +448,19 @@ def createFileContent(
     file_content = file_content.replace("__VERSUCH__", test_typ.name)
     file_content = file_content.replace("__GRUPPE__", group_name)
 
-
-    # Creation of the problem strings + implementation in the LaTeX file   
-    problem_string = createProblemContent(tests_per_group, group, test_index, prob_sol_index, student, test)
+    # Creation of the problem strings + implementation in the LaTeX file
+    problem_string = createProblemContent(
+        tests_per_group, group, test_index, prob_sol_index, student, test
+    )
 
     file_content = file_content.replace("__AUFGABEN__", problem_string)
 
     return file_content
 
-def createProblemContent(tests_per_group, group, test_index, prob_sol_index, student, test):
+
+def createProblemContent(
+    tests_per_group, group, test_index, prob_sol_index, student, test
+):
     """
     Combines problem files, replaces KEYs and applies jinja templates.
 
@@ -488,22 +497,22 @@ def createProblemContent(tests_per_group, group, test_index, prob_sol_index, stu
         ) as d:
             problem_str = d.read()
         problem_string += f"{problem_str}\n\n"
-    
+
     problem_string = replaceKeys(problem_string, test, group, student)
-    
+
     temp_file = "temp_file.tex"
     with open(temp_file, "w") as temp:
         temp.write(problem_string)
-    
+
     applyJinjaTemplate(os.getcwd(), temp_file)
 
     with open(temp_file, "r") as d:
         problem_string = d.read()
-    
+
     deleteCommand("temp_file")
 
     return problem_string
-    
+
 
 def combiningProblems(number_group_pairs, test_list_variant):
 
@@ -602,12 +611,12 @@ def combineGroupFiles(
 
     :param latex_directory: directory of latex compiler
     :type latex_directory: str
-    
+
     :param groups: number of different groups
     :type groups: int
 
     :param test_list_variant: List of test variants belonging to chosen variant
-    :type test_list_variant: list[TestType] 
+    :type test_list_variant: list[TestType]
 
     :param variant_name: name of the variant
     :type variant_name: str
@@ -658,8 +667,11 @@ def combineGroupFiles(
             )
 
             shutil.move(group_file_sol_name, test_directory)
-    for file in [file for file in os.listdir() if os.path.isfile(file) and file.endswith(".pdf")]:
+    for file in [
+        file for file in os.listdir() if os.path.isfile(file) and file.endswith(".pdf")
+    ]:
         deletePDF(file)
+
 
 def make_specific(make_all, pool_path, problem_path, root_directory):
     """
@@ -1062,7 +1074,7 @@ def deleteCommand(filename=None):
             f"{errorInfo()} Your operating system is not supported. Please try again on Windows or Linux."
         )
 
-    #print(command)
+    # print(command)
     process = subprocess.Popen(command, shell=True)
     process.wait()
     if process.returncode != 0:
