@@ -4,15 +4,15 @@
   "semester": "WS 2021/22",
   "copies": 2,
   "number_of_groups": 2,
+  "page_format_exam": "A4",
+  "page_format_solution": "A5",
   "options": {
     "generate_single_pdfs": true,
     "generate_sumo_pdf": true,
     "delete_temp_data": true
   },
   "sumo_options": {
-    "page_format_exam": "A4",
     "exam_copies": 1,
-    "page_format_solution": "A4",
     "solution_copies": 1
   },
   "exams": {

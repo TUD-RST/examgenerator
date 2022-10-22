@@ -576,7 +576,7 @@ def compile(test_directory, latex_directory, delete_temp_data):
 
 
 def combineGroupFiles(
-    test_directory, latex_directory, groups, test_list_variant, variant_name
+    test_directory, latex_directory, groups, test_list_variant, variant_name, exam_format, solution_format
 ):
     """
     Combines the separate group pdf files into one file and moves it to the test directory.
@@ -615,7 +615,7 @@ def combineGroupFiles(
                 latex_directory,
                 group_file_prob_name,
                 group_prob_files,
-                2,
+                exam_format,
                 1,
             )
 
@@ -637,7 +637,7 @@ def combineGroupFiles(
                 latex_directory,
                 group_file_sol_name,
                 group_sol_files,
-                2,
+                solution_format,
                 1,
             )
 
@@ -957,7 +957,7 @@ def checkSettings(settings, settings_file):
             f"{errorInfo()} semester in {settings_file} is not of the required type string. Please make sure all types match the ones given in the instructions."
         )
 
-    if not isinstance(settings.sumo_options.page_format_exam, str):
+    if not isinstance(settings.page_format_exam, str):
         raise SettingsError(
             f"{errorInfo()} pages_per_sheet_test in {settings_file} is not of the required type string. Please make sure all types match the ones given in the instructions."
         )
@@ -967,7 +967,7 @@ def checkSettings(settings, settings_file):
             f"{errorInfo()} sumo_number_copies in {settings_file} is not of the required type int. Please make sure all types match the ones given in the instructions."
         )
 
-    if not isinstance(settings.sumo_options.page_format_solution, str):
+    if not isinstance(settings.page_format_solution, str):
         raise SettingsError(
             f"{errorInfo()} pages_per_sheet_solution in {settings_file} is not of the required type string. Please make sure all types match the ones given in the instructions."
         )
@@ -1000,16 +1000,16 @@ def checkSettings(settings, settings_file):
             f"{errorInfo()} You have to have at least one copy for each test/ solution in {settings_file}."
         )
 
-    if (settings.sumo_options.page_format_exam != "A4") and (
-        settings.sumo_options.pages_format_exam != "A5"
+    if (settings.page_format_exam != "A4") and (
+        settings.pages_format_exam != "A5"
     ):
         raise SettingsError(
             f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \
             per sheet for your sumo problem/ solution files in {settings_file}."
         )
 
-    if (settings.sumo_options.page_format_solution != "A4") and (
-        settings.sumo_options.page_format_solution != "A5"
+    if (settings.page_format_solution != "A4") and (
+        settings.page_format_solution != "A5"
     ):
         raise SettingsError(
             f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \

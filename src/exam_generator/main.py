@@ -85,15 +85,15 @@ def exam_generator(args):
     checkSettings(settings, settings_name)
 
     # assigning int values to string decleration of pages_per_sheet for usage in sumo func
-    if settings.sumo_options.page_format_exam == "A4":
-        settings.sumo_options.page_format_exam = 2
-    elif settings.sumo_options.page_format_exam == "A5":
-        settings.sumo_options.page_format_exam = 4
+    if settings.page_format_exam == "A4":
+        settings.page_format_exam = 2
+    elif settings.page_format_exam == "A5":
+        settings.page_format_exam = 4
     
-    if settings.sumo_options.page_format_solution == "A4":
-        settings.sumo_options.page_format_solution = 2
-    elif settings.sumo_options.page_format_solution == "A5":
-        settings.sumo_options.page_format_solution = 4
+    if settings.page_format_solution == "A4":
+        settings.page_format_solution = 2
+    elif settings.page_format_solution == "A5":
+        settings.page_format_solution = 4
 
     # ==================================
     # --- Configuration ---
@@ -177,6 +177,8 @@ def exam_generator(args):
         settings.number_of_groups,
         custom_test_list,
         settings.variant_name,
+        settings.page_format_exam,
+        settings.page_format_solution
     )
 
     # ==================================
@@ -195,7 +197,7 @@ def exam_generator(args):
             test_directory,
             sumo_name_problems,
             problem_files,
-            settings.sumo_options.page_format_exam,
+            settings.page_format_exam,
             settings.sumo_options.exam_copies,
         )
 
@@ -208,7 +210,7 @@ def exam_generator(args):
             test_directory,
             sumo_name_solutions,
             solution_files,
-            settings.sumo_options.page_format_solution,
+            settings.page_format_solution,
             settings.sumo_options.solution_copies,
         )
 
