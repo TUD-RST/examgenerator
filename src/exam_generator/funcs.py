@@ -2,7 +2,6 @@
 This module contains all functions relevant for the exam-generator.
 """
 
-from enum import unique
 import os
 from platform import platform
 from PyPDF2 import PdfFileReader, PdfFileWriter
@@ -418,17 +417,17 @@ def createFileContent(
     """
     # Replacing the parameters in the LaTeX file
     file_content = template
-    file_content = file_content.replace("__PRAKTIKUM__", title)
+    file_content = file_content.replace("__TITLE__", title)
     file_content = file_content.replace("__SEMESTER__", semester)
-    file_content = file_content.replace("__VERSUCH__", test_typ.name)
-    file_content = file_content.replace("__GRUPPE__", group_name)
+    file_content = file_content.replace("__EXAM__", test_typ.name)
+    file_content = file_content.replace("__GROUP__", group_name)
 
     # Creation of the problem strings + implementation in the LaTeX file
     problem_string = createProblemContent(
         tests_per_group, group, test_index, prob_sol_index, student, test
     )
 
-    file_content = file_content.replace("__AUFGABEN__", problem_string)
+    file_content = file_content.replace("__PROBLEMS__", problem_string)
 
     return file_content
 

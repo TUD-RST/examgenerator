@@ -94,6 +94,9 @@ def exam_generator(args):
         settings.page_format_solution = 2
     elif settings.page_format_solution == "A5":
         settings.page_format_solution = 4
+    
+    # ensuring variant name does not create problems while compiling
+    settings.variant_name = settings.variant_name.replace(" ","")
 
     # ==================================
     # --- Configuration ---
