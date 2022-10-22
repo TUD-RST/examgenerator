@@ -149,7 +149,7 @@ def exam_generator(args):
 
     copies_per_group = determineCopiesPerGroup(settings.number_of_groups, settings.copies)
 
-    names_prob_sol_pdf = generateTexFiles(
+    generateTexFiles(
         latex_directory,
         template_directory,
         settings.number_of_groups,

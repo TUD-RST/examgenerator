@@ -252,7 +252,7 @@ def generateTexFiles(
     """
 
     This function replaces the variables within the tex problem/ solution files with the information given
-    by the setting and returns the names of the according pdf files.
+    by the settings.
 
     :param latex_directory: Directory for the latex compiler
     :type latex_directory: str
@@ -277,9 +277,6 @@ def generateTexFiles(
 
     :param tests_per_group: List of problems/ solutions for each group
     :type tests_per_group: list[str]
-
-    :return: [0] problem pdf names, [1] solution pdf names
-    :rtype: list[tuple]
 
     """
 
@@ -309,9 +306,6 @@ def generateTexFiles(
         template_problem = d.read()
     with open(template_solution_path, "r") as d:
         template_solution = d.read()
-
-    file_names_problems_pdf = []
-    file_names_solutions_pdf = []
 
     for group in range(number_group_pairs):
         group_name = f"{group + 1}"
@@ -347,16 +341,6 @@ def generateTexFiles(
                 with open(file_path_problem, "w+") as d:
                     d.write(file_content_prob)
 
-                # LaTeX file of the problem is converted to PDF
-
-                if (
-                    file_name_prob.replace(".tex", ".pdf")
-                    not in file_names_problems_pdf
-                ):
-                    file_names_problems_pdf.append(
-                        file_name_prob.replace(".tex", ".pdf")
-                    )
-
                 # Solution
                 # Setting file name and path
                 file_name_sol = (
@@ -383,16 +367,7 @@ def generateTexFiles(
                 with open(file_path_sol, "w+") as d:
                     d.write(file_content_sol)
 
-                # LaTeX file of the solution converted to pdf
-                if (
-                    file_name_sol.replace(".tex", ".pdf")
-                    not in file_names_solutions_pdf
-                ):
-                    file_names_problems_pdf.append(
-                        file_name_sol.replace(".tex", ".pdf")
-                    )
 
-    return file_names_problems_pdf, file_names_solutions_pdf
 
 
 def createFileContent(
