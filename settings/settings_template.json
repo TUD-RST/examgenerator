@@ -1,23 +1,25 @@
 {
-  "group_pairs": 2,
   "title": "Exam for ET1",
   "variant_name": "ET1",
   "semester": "WS 2021/22",
-  "copies": 4,
-  "data": {
+  "copies": 2,
+  "number_of_groups": 2,
+  "options": {
     "generate_single_pdfs": true,
-    "generate_sumo_pdf": false,
+    "generate_sumo_pdf": true,
     "delete_temp_data": true
   },
-  "sumo": {
-    "pages_per_sheet_test": 4,
-    "sumo_problem_copies": 4,
-    "pages_per_sheet_solution": 4,
-    "sumo_solution_copies": 1
+  "sumo_options": {
+    "page_format_exam": "A4",
+    "exam_copies": 1,
+    "page_format_solution": "A4",
+    "solution_copies": 1
   },
-  "test_types": {
-    "test1": [
-      "A1"
+  "exams": {
+    "exam1": [
+      "A1",
+      "A1",
+      "DV21"
     ]
   }
 }

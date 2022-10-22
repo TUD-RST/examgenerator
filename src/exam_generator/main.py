@@ -84,6 +84,17 @@ def exam_generator(args):
 
     checkSettings(settings, settings_name)
 
+    # assigning int values to string decleration of pages_per_sheet for usage in sumo func
+    if settings.sumo_options.page_format_exam == "A4":
+        settings.sumo_options.page_format_exam = 2
+    elif settings.sumo_options.page_format_exam == "A5":
+        settings.sumo_options.page_format_exam = 4
+    
+    if settings.sumo_options.page_format_solution == "A4":
+        settings.sumo_options.page_format_solution = 2
+    elif settings.sumo_options.page_format_solution == "A5":
+        settings.sumo_options.page_format_solution = 4
+
     # ==================================
     # --- Configuration ---
     # ==================================
@@ -119,7 +130,7 @@ def exam_generator(args):
     file_names_tex = combineFileNames(pool_files)
 
     # ------------Custom Tests----------------#
-    custom_test_list = createCustomTestList(settings.test_types, pool_files)
+    custom_test_list = createCustomTestList(settings.exams, pool_files)
 
     # for debugging
     pool_all = Pool(".*", file_names_tex)
@@ -130,18 +141,18 @@ def exam_generator(args):
     # --- Combining problems ---
     # ================================
 
-    tests_per_group = combiningProblems(settings.group_pairs, custom_test_list)
+    tests_per_group = combiningProblems(settings.number_of_groups, custom_test_list)
 
     # ==================================
     # --- Generating the TeX-Files ---
     # ==================================
 
-    copies_per_group = determineCopiesPerGroup(settings.group_pairs, settings.copies)
+    copies_per_group = determineCopiesPerGroup(settings.number_of_groups, settings.copies)
 
     names_prob_sol_pdf = generateTexFiles(
         latex_directory,
         template_directory,
-        settings.group_pairs,
+        settings.number_of_groups,
         custom_test_list,
         settings.variant_name,
         settings.title,
@@ -157,13 +168,13 @@ def exam_generator(args):
     compile(
         test_directory,
         latex_directory,
-        settings.data.delete_temp_data,
+        settings.options.delete_temp_data,
     )
 
     combineGroupFiles(
         test_directory,
         latex_directory,
-        settings.group_pairs,
+        settings.number_of_groups,
         custom_test_list,
         settings.variant_name,
     )
@@ -172,29 +183,36 @@ def exam_generator(args):
     # --- Sumo-Files ---
     # ==================================
 
-    if settings.data.generate_sumo_pdf:
-        names_prob_sol_pdf[0].sort()
+    if settings.options.generate_sumo_pdf:
+        # list of all exams and solution pdf files
+        all_exam_files = os.listdir(test_directory)
+
+        # only exam pdf files
+        problem_files = [file for file in all_exam_files if not file.endswith("Solution.pdf")]
+        problem_files.sort()
         sumo_name_problems = f"Sumo-{settings.variant_name}-Problems.pdf"
         buildSumo(
             test_directory,
             sumo_name_problems,
-            names_prob_sol_pdf[0],
-            settings.sumo.pages_per_sheet_test,
-            settings.sumo.sumo_problem_copies,
+            problem_files,
+            settings.sumo_options.page_format_exam,
+            settings.sumo_options.exam_copies,
         )
 
-        names_prob_sol_pdf[1].sort()
+        # only solution pdf files
+        solution_files = [file for file in all_exam_files if file.endswith("Solution.pdf")]
+        solution_files.sort()
 
         sumo_name_solutions = f"Sumo-{settings.variant_name}-Solutions.pdf"
         buildSumo(
             test_directory,
             sumo_name_solutions,
-            names_prob_sol_pdf[1],
-            settings.sumo.pages_per_sheet_solution,
-            settings.sumo.sumo_solution_copies,
+            solution_files,
+            settings.sumo_options.page_format_solution,
+            settings.sumo_options.solution_copies,
         )
 
-    if not settings.data.generate_single_pdfs:
+    if not settings.options.generate_single_pdfs:
         files = os.listdir(test_directory)
 
         os.chdir(test_directory)
