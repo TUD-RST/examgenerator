@@ -137,21 +137,33 @@ solutions with the macro <code class="docutils literal notranslate"><span class=
 During the compiling process the given points will be added automatically for the entire test.
 Please be aware that if you would like to show points both on the exam and the solutions,
 you will have to manually input points in the problem and solution file.</p>
+<p>Furthermore, this script allows you to create problems with randomly generated paramaters.
+In order to implement a random number within given bounds, you can call <code class="docutils literal notranslate"><span class="pre">${{context.rnum(__KEY__,</span> <span class="pre">lower_bound,</span> <span class="pre">upper_bound)}}$</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">KEY</span></code> gives you the option to reuse the same number within a problem/ solution. It follows a simple structure: <code class="docutils literal notranslate"><span class="pre">__KEY{number}__</span></code>.
+Therefore, in order to reuse a number you can for example provide <code class="docutils literal notranslate"><span class="pre">__KEY1__</span></code> within all calls of the context.rnum function,
+where the same value is required. While those random values do transfer over to the according solution files, they do not affect unlinked problems.
+This paramaterization can also be used to calculate the solutions for your given problems, simply by providing your formula with the according
+random values. More information on how to implement paramaterization into your exams is given in our third tutorial.</p>
 <p>Problem example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>This is an example problem.
 \begin{Problem}
-\item What is 2+2? \Pts{1}
 \item Are you happy? \Pts{10}
+\item What is ${{context.rnum(__KEY1__, 1, 100)}} + {{context.rnum(__KEY2__, 1, 100)}}$? \Pts{5}
 \end{Problem}
 </pre></div>
 </div>
 <p>Solution example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>The solution is the following:
 \begin{Solution}
-\solitem 2+2=4 \Pts{1}
 \solitem Are you happy? - Yes \Pts{10}
+\solitem ${{context.rnum(__KEY1__, 1, 100)}} + {{context.rnum(__KEY2__, 1, 100)}} = {{context.rnum(__KEY1__, 1, 100) + context.rnum(__KEY2__, 1, 100)}}$ \Pts{5}
 \end{Solution}
 </pre></div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>This problem/ solution pair will ask the student to evaluate the sum of two random numbers between 1 and 100 and will provide
+the solution file with the correctly calculated solution.</p>
 </div>
 </section>
 </section>
@@ -161,19 +173,25 @@ you will have to manually input points in the problem and solution file.</p>
 <p>There are the following options for the exam creation, which can be configured
 in a json settings file:</p>
 <ul class="simple">
-<li><p><em>group_pairs</em>: Determines the number of groups.</p></li>
+<li><p><em>title</em>: Title of the exam</p></li>
 <li><p><em>variant_name</em>: Typically the name of the degree/ lab the exam is created for.
 This will only show in the created file names, not on the actual exams.</p></li>
 <li><p><em>semester</em>: Current Semester for example: “WS 2022/23”</p></li>
-<li><p><em>pages_per_sheet_test</em>: Set this according on the planned printing format:
-input 2 is intended for an A4 print, 4  for double a  paged A5 print.</p></li>
-<li><p><em>sumo_number_copies</em>: Number of copies per exam in the sumo file</p></li>
-<li><p><em>pages_per_page_solution</em>: Set this according on the planned printing format:
-input 2 is intended for an A4 print, 4  for double a  paged A5 print.</p></li>
-<li><p><em>sumo_solution_copies</em>: Number of solution copies in the sumo file</p></li>
+<li><p><em>number_of_groups</em>: Determines the number of different groups.</p></li>
+<li><p><em>copies</em>: When using paramaterization, this is the number of students who are taking the exam.</p></li>
+<li><p><em>page_format_exam</em>: Set this according on the planned printing format - Opions are “A4” or “A5”</p></li>
+<li><p><em>page_format_solution</em>: Set this according on the planned printing format - Opions are “A4” or “A5”</p></li>
+<li><dl class="simple">
+<dt>options</dt><dd><ul>
 <li><p><em>generate_single_pdfs</em>: Should individual pdf files be created for each
 exam (true/ false)</p></li>
 <li><p><em>generate_sumo_pdf</em>: Should a sumo-file be created (true/ false)</p></li>
+<li><p><em>delete_temp_data</em>: Should temporary data be deleted (true; false) true
+is recommended unless there is issues during the compiling process</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
@@ -182,10 +200,28 @@ one go. However, this is only useful if the problems and solutions are
 final and will not have to be corrected afterwards.</p>
 </div>
 <ul class="simple">
-<li><p><em>delete_temp_data</em>: Should temporary data be deleted (true; false) true
-is recommended unless there is issues during the compiling process</p></li>
 <li><dl class="simple">
-<dt><em>test_types</em>: This is where you will be able to build your exams out of your pools.</dt><dd><p>For example: “TestExam”: [“A1”, “B”, “CV03”] will create an exam called TestExam consisting
+<dt>sumo_options</dt><dd><ul>
+<li><p><em>solution_copies</em>: Number of solution copies in the sumo file</p></li>
+<li><p><em>exam_copies</em>: Number of copies per exam in the sumo file.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>The final amount of copies is determined by the product of <em>copies</em> and <em>exam_copies</em>.</p>
+<p>When using <em>paramaterization</em> in any of your exam problems, <code class="docutils literal notranslate"><span class="pre">copies</span></code> is determined by the total
+number of students taking the exam and <a href="#id1"><span class="problematic" id="id2">``</span></a>exam_copies```should therefore be set to 1, unless you would
+like to have more copies of the entire exam.
+On the other hand when <strong>not</strong> using paramaterization, copies should be set to 1 and exam_copies should
+be set to the total amount of students taking the exam. This allows you to print every individual exam as
+often as you like, without having to always print all questions for a predetermined amount of students.</p>
+</div>
+<ul class="simple">
+<li><dl class="simple">
+<dt><em>exams</em>: This is where you will be able to build your exams out of your pools.</dt><dd><p>For example: “TestExam”: [“A1”, “B”, “CV03”] will create an exam called TestExam consisting
 of 3 problems randomly newly drawn from the given pools for each group_pair. A more detailed
 example of how to create exams is provided in the tutorial.</p>
 </dd>

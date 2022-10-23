@@ -54,6 +54,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#id3">Creating the Exam</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#example-3-parameterization">Example 3: Parameterization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problem-solution-files">Problem/ Solution Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Creating the Exam</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="exam_generator.html">API Reference</a></li>
@@ -88,7 +95,7 @@
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>This tutorial will explain the process behind creating an exam with the exam generator.</p>
-<p>Alongside two different examples you will learn step by step how to make use of this project.</p>
+<p>Alongside three different examples you will learn step by step how to make use of this project.</p>
 </section>
 <section id="example-1-basics">
 <h2>Example 1: Basics<a class="headerlink" href="#example-1-basics" title="Permalink to this heading"></a></h2>
@@ -142,30 +149,31 @@ Lastly, we create our <code class="docutils literal notranslate"><span class="pr
 <h3>Settings<a class="headerlink" href="#settings" title="Permalink to this heading"></a></h3>
 <p>Now it is time to configure our settings in <code class="docutils literal notranslate"><span class="pre">Math1.json</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
-&quot;group_pairs&quot;: 3,                   ← Let&#39;s choose our maximum amount of possible groups
 &quot;title&quot;: &quot;Exam for Math 1 (MA1)&quot;,   ← The title that will be displayed on the exam
 &quot;variant_name&quot;: &quot;Math1&quot;,            ← Short handle displayed in the file names
 &quot;semester&quot;: &quot;WS 2022/23&quot;,           ← Current semester
+&quot;number_of_groups&quot;: 3,              ← Let&#39;s choose our maximum amount of possible groups
+&quot;copies&quot;: 1                         ← We are not using parametirization, therefore copies is set to 1
+&quot;page_format_exam&quot;: &quot;A4&quot;,           ← Students will get their tests printed out in A4 format
+&quot;page_format_solution&quot;: &quot;A5&quot;,       ← Solution will be printed in A5
 
-&quot;data&quot;:{
-    &quot;generate_single_pdfs&quot;: true,    ← We would like the option to look at the problems for each group seperately
-    &quot;generate_sumo_pdf&quot;: true,       ← We would like a sumo file
-    &quot;delete_temp_data&quot;: true         ← Deleteing temporary data is always usefull
+&quot;options&quot;:{
+    &quot;generate_single_pdfs&quot;: true,   ← We would like the option to look at the problems for each group seperately
+    &quot;generate_sumo_pdf&quot;: true,      ← We would like a sumo file
+    &quot;delete_temp_data&quot;: true        ← Deleteing temporary data is always usefull
 },
 
-&quot;sumo&quot;:{
-    &quot;pages_per_sheet_test&quot;: 2,       ← Students will get their tests printed out in A4 format
-    &quot;sumo_problem_copies&quot;: 5,        ← Amount of copies of each group, total here is 5 copies *3 groups -&gt; 15 students
-    &quot;pages_per_sheet_solution&quot;: 2,   ← Solution will be printed in A4 as well
-    &quot;sumo_solution_copies&quot;: 1        ← There is only one solution copy required
+&quot;sumo_options&quot;:{
+    &quot;exam_copies&quot;: 15,               ← Total number of students taking the exam
+    &quot;solution_copies&quot;: 1            ← There is only one solution copy required
 },
 
 
-&quot;test_types&quot;:{                       ← Our exam is created here
-    &quot;MathExam&quot;: [                    ← Name of the exam
-    &quot;MC_easy&quot;,                       ← Pool for first problem
-    &quot;proofs&quot;,                        ← Pool for second problem
-    &quot;MC_hard&quot;                        ← Pool for last problem
+&quot;exams&quot;:{                           ← Our exam is created here
+    &quot;MathExam&quot;: [                   ← Name of the exam
+    &quot;MC_easy&quot;,                      ← Pool for first problem
+    &quot;proofs&quot;,                       ← Pool for second problem
+    &quot;MC_hard&quot;                       ← Pool for last problem
     ]
 }
 }
@@ -178,7 +186,7 @@ Lastly, we create our <code class="docutils literal notranslate"><span class="pr
 Firstly, we have to ensure, we are in the correct working directory - the same
 in which our <code class="docutils literal notranslate"><span class="pre">settings</span></code>, <code class="docutils literal notranslate"><span class="pre">pool_data</span></code> and <code class="docutils literal notranslate"><span class="pre">templates</span></code> directories lie.</p>
 <p>Now in our terminal we can execute the following command:</p>
-<p>-a exam_generator -ct .\settings\Math1.json</p>
+<p>exam_generator -ct .\settings\Math1.json</p>
 <p>A new directory with all requested exams will be created:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C:.
 ├───Exams-Math1-WS202223
@@ -248,26 +256,27 @@ Each pool contains at least two problem/ solution pairs.</p>
 <p>Furthermore, we need copies for 30 students. With two groups for each test,
 that leaves us with 15 copies for our sumo file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
-&quot;group_pairs&quot;: 2,
 &quot;title&quot;: &quot;Lab Control Theory 2 (ET)&quot;,
 &quot;variant_name&quot;: &quot;ET2&quot;,
 &quot;semester&quot;: &quot;WS 2022/23&quot;,
+&quot;number_of_groups&quot;: 2,
+&quot;copies&quot;: 1                             ← No parameterization used
+&quot;page_format_exam&quot;: &quot;A5&quot;,               ← Students will receive their exams in A5 format
+&quot;page_format_solution&quot;: &quot;A4&quot;,           ← Solutions in A4 format
 
-&quot;data&quot;:{
+&quot;options&quot;:{
     &quot;generate_single_pdfs&quot;: false,      ← We do not need the tests for each group separately
     &quot;generate_sumo_pdf&quot;: true,
     &quot;delete_temp_data&quot;: true
 },
 
-&quot;sumo&quot;:{
-    &quot;pages_per_sheet_test&quot;: 4,          ← Students will receive their exams in A5 format
-    &quot;sumo_problem_copies&quot;: 15,          ← 15*2 -&gt; 30 total copies
-    &quot;pages_per_sheet_solution&quot;: 2,      ← Solutions in A4 format
+&quot;sumo_options&quot;:{
+    &quot;sumo_problem_copies&quot;: 30,          ← 30 students
     &quot;sumo_solution_copies&quot;: 1
 },
 
 
-&quot;test_types&quot;:{
+&quot;exams&quot;:{
     &quot;Lab03&quot;: [                          ← First exam
     &quot;A2&quot;,
     &quot;B2&quot;,
@@ -294,7 +303,7 @@ that leaves us with 15 copies for our sumo file.</p>
 <section id="id3">
 <h3>Creating the Exam<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
 <p>Lastly, all there is left to do again is execute the following command in the correct directory:</p>
-<p>-a exam_generator -ct .\settings\ET2.json</p>
+<p>exam_generator -ct .\settings\ET2.json</p>
 <p>Our exam directory will be created and the result is the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C:.
 ├───Exams-ET2-WS202223
@@ -310,6 +319,136 @@ that leaves us with 15 copies for our sumo file.</p>
 </div>
 <p>We created sumo files containing all exams for every lab and every group.
 Now you can simply print in your chosen format.</p>
+</section>
+</section>
+<section id="example-3-parameterization">
+<h2>Example 3: Parameterization<a class="headerlink" href="#example-3-parameterization" title="Permalink to this heading"></a></h2>
+<p>Now that you are finally familiar with the basics, we can get to the fun stuff: creating exams with paramaters.
+This example will focus on how to implement parameters in your LaTeX problem/ solution files and how you will have
+to adapt your settings to its usage.</p>
+<p>Let’s again create a very simple math exam, using paramaters.</p>
+<section id="id4">
+<h3>Setup<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<p>Our directory setup is exavtly the same as before. We only need to focus on the content of the problem/ solutions files
+in which we would like to implement randomly generated numbers.
+In this example we will look at problem_2.tex and its solution.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C:.                                 ← Our current working directory
+├───pool_data                       ← Directory for all different pool directories
+│   └───easy_calculations           ← Pool with easy multiple choice questions
+│           problem_1.tex
+│           problem_2.tex           ← Problem with parameters
+│           problem_3.tex
+│           solution_1.tex
+│           solution_2.tex          ← Solution to parameter problem
+│           solution_3.tex
+│
+├───settings
+│       Math2.json                  ← Settings file
+│
+└───templates                       ← LaTeX Templates
+        template_problem.tex
+        template_solution.tex
+</pre></div>
+</div>
+</section>
+<section id="problem-solution-files">
+<h3>Problem/ Solution Files<a class="headerlink" href="#problem-solution-files" title="Permalink to this heading"></a></h3>
+<p>Our problem will consist of three different smaller problems or <code class="docutils literal notranslate"><span class="pre">ìtems</span></code>, increasing in difficulty.
+Firstly, the students have to guess the correct number (randomly generated in the solution) between one and ten.
+Secondly, they are asked to calculate the sum of two numbers.
+Lastly, they need find the product of two large numbers.</p>
+<p>Since the both the first parameters called in the second and third item are provided with the same key and
+bounds, it will generate replace them with the same exact number.</p>
+<p>Content of problem_2.tex:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\begin{Problem}
+Answer the following problems!
+\item I am thinking of a number between 1 and 10. What is that number? \Pts{1}
+\item ${{context.rnum(__KEY1__, 1000, 2000)}} + {{context.rnum(__KEY2__, 20, 30)}}$ =   ? \Pts{2}
+\item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}}$ =    ? \Pts{2}
+\end{Problem}
+</pre></div>
+</div>
+<p>Please note that you have to include <code class="docutils literal notranslate"><span class="pre">$</span></code> at the beginning and the end of each expression in order for the compiler
+to be able to properly do its job.</p>
+<p>Now to our solution file, where we would like to not only include the question, but also the answer.</p>
+<p>Content of solution_2.tex:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\begin{Solution}
+The solution is the following:
+\item I am thinking of a number between 1 and 10. What is that number? - ${{context.rnum(__KEY4__, 1, 10)}}  \Pts{1}
+\item ${{context.rnum(__KEY1__, 1000, 2000)}} + {{context.rnum(__KEY2__, 20, 30)}} = {{context.rnum(__KEY1__, 1000, 2000)} + {context.rnum(__KEY2__, 20, 30)}}$ \Pts{2}
+\item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}} = {{context.rnum(__KEY1__, 1000, 2000)} * {context.rnum(__KEY3__, 55555, 66666)}} \Pts{2}
+\end{Problem}
+</pre></div>
+</div>
+<p>It is important to notice that when actually performing calculations with the given values the placement of the curly braces <code class="docutils literal notranslate"><span class="pre">{{}}</span></code> changes.
+One bracket pair always wraps around the <em>context.rnum</em> function call, while the other wraps around the entire ,to be calculated, expression.
+This is very well seen when looking at the third item of our solution.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Every student will have different randomly generated values in their exam. Even within groups, these values will differ.</p>
+</div>
+</section>
+<section id="id5">
+<h3>Settings<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<p>Let’s create an exam with three problems from <em>the easy_calculations</em> pool for a total of 30 students and
+three different groups. Since we only have three problem/ solution pairs, every group will have the same problems,
+but in a different order.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+&quot;title&quot;: &quot;Math for Beginners (MA)&quot;,
+&quot;variant_name&quot;: &quot;MA 2&quot;,
+&quot;semester&quot;: &quot;WS 2022/23&quot;,
+&quot;number_of_groups&quot;: 2,
+&quot;copies&quot;: 30                            ← We have 30 total students and are using parametirization
+&quot;page_format_exam&quot;: &quot;A5&quot;,               ← Students will receive their exams in A5 format
+&quot;page_format_solution&quot;: &quot;A4&quot;,           ← Solutions in A4 format
+
+&quot;options&quot;:{
+    &quot;generate_single_pdfs&quot;: true,       ← We will have the tests for each group
+    &quot;generate_sumo_pdf&quot;: true,
+    &quot;delete_temp_data&quot;: true
+},
+
+&quot;sumo_options&quot;:{
+    &quot;exam_copies&quot;: 1,                   ← When using parameterization this should be set to 1!
+    &quot;solution_copies&quot;: 1                ← We only need one copy of the solutions
+},
+
+
+&quot;exams&quot;:{
+    &quot;Math 101&quot;: [
+    &quot;easy_calculations&quot;,
+    &quot;easy_calculations&quot;,
+    &quot;easy_calculations&quot;
+    ]
+}
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>Creating the Exam<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<p>Lastly, all there is left to do again is execute the following command in the correct directory:</p>
+<p>exam_generator -ct .\settings\Math2.json</p>
+<p>Our exam directory will be created and the result is the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C:.
+├───Exams-ET2-WS202223
+│       Exam-MA2-Math101-1-Solution.pdf    ←  Solution for group one
+│       Exam-MA2-Math101-1.pdf             ←  Exams for group one
+│       Exam-MA2-Math101-2-Solution.pdf
+│       Exam-MA2-Math101-2.pdf
+│       Exam-MA2-Math101-3-Solution.pdf
+│       Exam-MA2-Math101-3.pdf
+│       Sumo-MA2-Problems.pdf              ←  Sumo with all problems with every group of the exam
+│       Sumo-MA2-Solutions.pdf             ←  Sumo with all solutions
+│
+├───pool_data
+│
+├───settings
+│
+└───templates
+</pre></div>
+</div>
+<p>We succesfully created an exam with paramaters!
+Now you can simply print everything in the format of your choice.</p>
 </section>
 </section>
 </section>

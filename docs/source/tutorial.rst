@@ -309,6 +309,7 @@ bounds, it will generate replace them with the same exact number.
 
 Content of problem_2.tex:
 ::
+
     \begin{Problem}
     Answer the following problems!
     \item I am thinking of a number between 1 and 10. What is that number? \Pts{1}
@@ -323,6 +324,7 @@ Now to our solution file, where we would like to not only include the question, 
 
 Content of solution_2.tex:
 ::
+
     \begin{Solution}
     The solution is the following:
     \item I am thinking of a number between 1 and 10. What is that number? - ${{context.rnum(__KEY4__, 1, 10)}}  \Pts{1}
@@ -335,6 +337,7 @@ One bracket pair always wraps around the *context.rnum* function call, while the
 This is very well seen when looking at the third item of our solution.
 
 .. hint::
+    
     Every student will have different randomly generated values in their exam. Even within groups, these values will differ.
 
 Settings
