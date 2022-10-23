@@ -225,7 +225,7 @@ def applyJinjaTemplate(latex_directory, file):
 
     context = {
         # pass this function to the template to allow the template-engine to access CACHE
-        "get_random_number": get_random_number,
+        "rnum": get_random_number,
     }
 
     template = jin_env.get_template(file)
