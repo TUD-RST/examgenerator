@@ -1019,7 +1019,16 @@ def checkSettings(settings, settings_file):
         raise SettingsError(
             f"{errorInfo()} You have to have at least one group_pair in {settings_file}."
         )
+    
+    if not isinstance(settings.copies, int):
+        raise SettingsError(
+            f"{errorInfo()} copies in {settings_file} is not of the required type int. Please make sure all types match the ones given in the instructions."
+        )
 
+    if settings.copies < 1:
+        raise SettingsError(
+            f"{errorInfo()} Number of copies has to be at least one in {settings_file}."
+        )
 
 def deleteCommand(filename=None):
     """
