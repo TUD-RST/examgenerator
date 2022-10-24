@@ -1,1 +1,3 @@
-
+addict
+PyPDF2
+jinja2
