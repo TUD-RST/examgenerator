@@ -4,7 +4,8 @@
 
 Exam_generator is a script which is designed to create exams/ tests from 
 pools of problems while ensuring that there will be no repetition amongst
-different groups.
+different groups. Furthermore, you can create problems with values, randomly generated within
+boundaries, provided in your LaTeX files.
 
 ## Installation
 
@@ -21,7 +22,8 @@ You can find the current issues [here](https://github.com/TUD-RST/examgenerator/
 ## Documentation
 
 Documentation for this project including a detailed user guide, tutorials and the API doc is available
-in this repository.
+on our [readthedocs page](https://exam-generator.readthedocs.io/en/latest/user_doc.html).
+Optionally, you can also view our documentation locally, by executing any of the html files in our [docs directory](https://github.com/TUD-RST/examgenerator/tree/main/docs/build/html).
 
 ## Example
 
@@ -54,26 +56,27 @@ in combination with these *settings*...
 
 ```
     {            
-    "group_pairs": 2,                   ← Let's choose our maximum amount of possible groups                   
     "title": "Exam for Math 1 (MA1)",   ← The title that will be displayed on the exam
     "variant_name": "Math1",            ← Short handle displayed in the file names
     "semester": "WS 2022/23",           ← Current semester
+    "copies": 1                         ← No parameterization used, no student specific copies needed
+    "group_pairs": 2,                   ← Let's choose our maximum amount of possible groups                   
+    "page_format_exam": "A4",           ← Students will get their exams printed out in A4 format      
+    "page_format_solution": "A5",       ← Solution will be printed in A5 format
 
-    "sumo":{                           
-        "pages_per_sheet_test": 2,       ← Students will get their tests printed out in A4 format      
-        "sumo_problem_copies": 1,        ← Amount of copies of each group
-        "pages_per_sheet_solution": 2,   ← Solution will be printed in A4 as well
-        "sumo_solution_copies": 1        ← There is only one solution copy required
-    },
-
-    "data":{
+    "options":{
         "generate_single_pdfs": true,    ← We would like the option to look at the problems for each group seperately
         "generate_sumo_pdf": true,       ← We would like a sumo file
         "delete_temp_data": true         ← Deleteing temporary data is always usefull
     },
+    "sumo_options":{                           
+        "exam_copies": 20,               ← Count of how often, we would like to print the exam
+        "solution_copies": 1            ← There is only one solution copy required
+    },
 
-    "test_types":{                       ← Our exam is created here
-        "MathExam": [                    ← Name of the exam
+
+    "exam":{                       ← Our exam is created here
+        "Math Exam": [                    ← Name of the exam
         "MC_easy",                       ← Pool for first problem
         "proofs"                         ← Pool for second problem
         ]
