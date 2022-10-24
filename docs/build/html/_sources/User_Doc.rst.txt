@@ -135,7 +135,7 @@ in a json settings file:
    The final amount of copies is determined by the product of *copies* and *exam_copies*.
 
    When using *paramaterization* in any of your exam problems, ``copies`` is determined by the total 
-   number of students taking the exam and ``exam_copies```should therefore be set to 1, unless you would
+   number of students taking the exam and ``exam_copies`` should therefore be set to 1, unless you would
    like to have more copies of the entire exam.
    On the other hand when **not** using paramaterization, copies should be set to 1 and exam_copies should 
    be set to the total amount of students taking the exam. This allows you to print every individual exam as

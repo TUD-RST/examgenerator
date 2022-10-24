@@ -124,9 +124,9 @@
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">random_seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">seed</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">random_seed</span>
-        <span class="n">initializeRandomNumberGenerator</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">initialize_random_number_generator</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">initializeRandomNumberGenerator</span><span class="p">()</span>
+        <span class="n">initialize_random_number_generator</span><span class="p">()</span>
 
     <span class="n">settings_path</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">create_test</span>
 
@@ -150,7 +150,7 @@
     <span class="c1"># converts Python dict into addict Dic</span>
     <span class="n">settings</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">(</span><span class="n">settings_dictionary</span><span class="p">)</span>
 
-    <span class="n">checkSettings</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">settings_name</span><span class="p">)</span>
+    <span class="n">check_settings</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">settings_name</span><span class="p">)</span>
 
     <span class="c1"># assigning int values to string decleration of pages_per_sheet for usage in sumo func</span>
     <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">page_format_exam</span> <span class="o">==</span> <span class="s2">&quot;A4&quot;</span><span class="p">:</span>
@@ -196,12 +196,12 @@
         <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="n">pool_files</span> <span class="o">=</span> <span class="n">pullPoolData</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">)</span>
+    <span class="n">pool_files</span> <span class="o">=</span> <span class="n">pull_pool_data</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">)</span>
 
-    <span class="n">file_names_tex</span> <span class="o">=</span> <span class="n">combineFileNames</span><span class="p">(</span><span class="n">pool_files</span><span class="p">)</span>
+    <span class="n">file_names_tex</span> <span class="o">=</span> <span class="n">combine_file_names</span><span class="p">(</span><span class="n">pool_files</span><span class="p">)</span>
 
     <span class="c1"># ------------Custom Tests----------------#</span>
-    <span class="n">custom_test_list</span> <span class="o">=</span> <span class="n">createCustomTestList</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">exams</span><span class="p">,</span> <span class="n">pool_files</span><span class="p">)</span>
+    <span class="n">custom_test_list</span> <span class="o">=</span> <span class="n">create_custom_test_list</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">exams</span><span class="p">,</span> <span class="n">pool_files</span><span class="p">)</span>
 
     <span class="c1"># for debugging</span>
     <span class="n">pool_all</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="s2">&quot;.*&quot;</span><span class="p">,</span> <span class="n">file_names_tex</span><span class="p">)</span>
@@ -212,15 +212,15 @@
     <span class="c1"># --- Combining problems ---</span>
     <span class="c1"># ================================</span>
 
-    <span class="n">tests_per_group</span> <span class="o">=</span> <span class="n">combiningProblems</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span><span class="p">,</span> <span class="n">custom_test_list</span><span class="p">)</span>
+    <span class="n">tests_per_group</span> <span class="o">=</span> <span class="n">combining_problems</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span><span class="p">,</span> <span class="n">custom_test_list</span><span class="p">)</span>
 
     <span class="c1"># ==================================</span>
     <span class="c1"># --- Generating the TeX-Files ---</span>
     <span class="c1"># ==================================</span>
 
-    <span class="n">copies_per_group</span> <span class="o">=</span> <span class="n">determineCopiesPerGroup</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">copies</span><span class="p">)</span>
+    <span class="n">copies_per_group</span> <span class="o">=</span> <span class="n">determine_copies_per_group</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">copies</span><span class="p">)</span>
 
-    <span class="n">generateTexFiles</span><span class="p">(</span>
+    <span class="n">generate_tex_files</span><span class="p">(</span>
         <span class="n">latex_directory</span><span class="p">,</span>
         <span class="n">template_directory</span><span class="p">,</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span><span class="p">,</span>
@@ -242,7 +242,7 @@
         <span class="n">settings</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">delete_temp_data</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">combineGroupFiles</span><span class="p">(</span>
+    <span class="n">combine_group_files</span><span class="p">(</span>
         <span class="n">test_directory</span><span class="p">,</span>
         <span class="n">latex_directory</span><span class="p">,</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span><span class="p">,</span>
@@ -264,7 +264,7 @@
         <span class="n">problem_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">all_exam_files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Solution.pdf&quot;</span><span class="p">)]</span>
         <span class="n">problem_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="n">sumo_name_problems</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sumo-</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-Problems.pdf&quot;</span>
-        <span class="n">buildSumo</span><span class="p">(</span>
+        <span class="n">build_sumo</span><span class="p">(</span>
             <span class="n">test_directory</span><span class="p">,</span>
             <span class="n">sumo_name_problems</span><span class="p">,</span>
             <span class="n">problem_files</span><span class="p">,</span>
@@ -277,7 +277,7 @@
         <span class="n">solution_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
         <span class="n">sumo_name_solutions</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sumo-</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-Solutions.pdf&quot;</span>
-        <span class="n">buildSumo</span><span class="p">(</span>
+        <span class="n">build_sumo</span><span class="p">(</span>
             <span class="n">test_directory</span><span class="p">,</span>
             <span class="n">sumo_name_solutions</span><span class="p">,</span>
             <span class="n">solution_files</span><span class="p">,</span>
@@ -292,7 +292,7 @@
 
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;Sumo&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
-                <span class="n">deletePDF</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                <span class="n">delete_pdf</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span></div>
 

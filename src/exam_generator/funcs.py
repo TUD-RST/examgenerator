@@ -435,7 +435,7 @@ def generate_tex_files(
 
                 # keys = generate_keys(file_content_prob, name, group_name, i)
 
-                # file_content_prob = replaceKeys(file_content_prob, keys)
+                # file_content_prob = replace_keys(file_content_prob, keys)
 
                 with open(file_path_problem, "w+") as d:
                     d.write(file_content_prob)
@@ -461,7 +461,7 @@ def generate_tex_files(
                     name,
                 )
 
-                # file_content_sol = replaceKeys(file_content_sol, keys)
+                # file_content_sol = replace_keys(file_content_sol, keys)
 
                 with open(file_path_sol, "w+") as d:
                     d.write(file_content_sol)
@@ -570,7 +570,7 @@ def create_problem_content(
             problem_str = d.read()
         problem_string += f"{problem_str}\n\n"
 
-    problem_string = replaceKeys(problem_string, test, group, student)
+    problem_string = replace_keys(problem_string, test, group, student)
 
     temp_file = "temp_file.tex"
     with open(temp_file, "w") as temp:
@@ -600,7 +600,7 @@ def generate_keys(file_content: str, test, group, student):
     :type file_content: str
 
     :param test: name of test
-    :type test. str
+    :type test: str
 
     :param group: group name
     :type group: str
@@ -624,7 +624,7 @@ def generate_keys(file_content: str, test, group, student):
     return unique_keys
 
 
-def replaceKeys(file_content: str, test, group, student):
+def replace_keys(file_content: str, test, group, student):
     """
     Replaces __KEY{int}__ in latex files with custom keys for later usage.
 
@@ -716,8 +716,9 @@ def applyJinjaTemplate(latex_directory, file):
     :type latex_directory: str
 
     :param file: name of file
-    :type file. str
+    :type file: str
     """
+
     jin_env = Environment(
         loader=FileSystemLoader(latex_directory),
         # autoescape=select_autoescape(['html', 'xml']),
