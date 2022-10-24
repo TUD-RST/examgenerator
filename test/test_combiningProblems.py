@@ -6,7 +6,7 @@ from addict import Dict
 from exam_generator import funcs
 
 
-def test_combiningProblems():
+def test_combining_problems():
     root_path = os.path.join(os.getcwd(), "test_directories", "combiningProblems")
     pool_path = os.path.join(root_path, "pool_data")
     settings_path = os.path.join(root_path, "settings", "test.json")
@@ -16,11 +16,11 @@ def test_combiningProblems():
 
     settings = Dict(settings_dictionary)
 
-    pool_info = funcs.pullPoolData(pool_path)
+    pool_info = funcs.pull_pool_data(pool_path)
 
-    test_list = funcs.createCustomTestList(settings.test_types, pool_info)
+    test_list = funcs.create_custom_test_list(settings.test_types, pool_info)
 
-    tests_per_group = funcs.combiningProblems(settings.group_pairs, test_list)
+    tests_per_group = funcs.combining_problems(settings.group_pairs, test_list)
 
     # all possible results
 

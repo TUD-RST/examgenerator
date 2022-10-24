@@ -7,14 +7,14 @@ from exam_generator import classes
 from exam_generator import customExceptions
 
 
-def test_createCustomTestList_correct():
+def test_create_custom_test_list_correct():
     """
-    Expects createCustomTestList() to compile a correct list.
+    Expects create_custom_test_list() to compile a correct list.
     """
 
     directory = os.path.join(os.getcwd(), "test_directories", "createCustomTestList_1")
 
-    pool_info = funcs.pullPoolData(directory)
+    pool_info = funcs.pull_pool_data(directory)
 
     # test_types resembling the json data
     test_types_dic = {
@@ -31,7 +31,7 @@ def test_createCustomTestList_correct():
     pool_list2 = (poolA1, poolB1)
 
     # checking the function
-    custom_test_list = funcs.createCustomTestList(test_types_dic, pool_info)
+    custom_test_list = funcs.create_custom_test_list(test_types_dic, pool_info)
 
     error = False
 
@@ -79,15 +79,15 @@ def test_createCustomTestList_correct():
     assert error == False
 
 
-def test_createCustomTestList_noEntries():
+def test_create_custom_test_list_noEntries():
     """
     Expects a SettingsError when no custom test was provided in the json data.
     """
     directory = os.path.join(os.getcwd(), "test_directories", "createCustomTestList_1")
 
-    pool_info = funcs.pullPoolData(directory)
+    pool_info = funcs.pull_pool_data(directory)
 
     # dic representing the json data
     test_types_dic = {}
     with pytest.raises(customExceptions.SettingsError):
-        funcs.createCustomTestList(test_types_dic, pool_info)
+        funcs.create_custom_test_list(test_types_dic, pool_info)

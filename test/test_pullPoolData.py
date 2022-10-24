@@ -5,7 +5,7 @@ from exam_generator import funcs
 from exam_generator import customExceptions
 
 
-def test_pullPoolData_correct():
+def test_pull_pool_data_correct():
     """
     Expects pollPoolData to work when provided with correct data.
     """
@@ -16,11 +16,11 @@ def test_pullPoolData_correct():
         (["problem_B1_1.tex", "solution_B1_1.tex"], "poolB"),
     ]
 
-    assert funcs.pullPoolData(directory1) == result
+    assert funcs.pull_pool_data(directory1) == result
 
 
 
-def test_pullPoolData_ignoringFile():
+def test_pull_pool_data_ignoringFile():
     """
     Ignores a file since it is not a directory.
     """
@@ -30,7 +30,7 @@ def test_pullPoolData_ignoringFile():
         (["problem_B1_1.tex", "solution_B1_1.tex"], "poolB"),
     ]
 
-    assert funcs.pullPoolData(directory2) == result
+    assert funcs.pull_pool_data(directory2) == result
 
 
 
@@ -40,7 +40,7 @@ def test_pullPollData_noPools():
     """
     directory3 = os.path.join(os.getcwd(), "test_directories", "pullPoolData_3")
     with pytest.raises(customExceptions.MissingDirectoryError):
-        funcs.pullPoolData(directory3)
+        funcs.pull_pool_data(directory3)
 
 
 
@@ -50,4 +50,4 @@ def test_pullPollData_notValidName():
     """
     directory4 = os.path.join(os.getcwd(), "test_directories", "pullPoolData_4")
     with pytest.raises(customExceptions.CompilingError):
-        funcs.pullPoolData(directory4)
+        funcs.pull_pool_data(directory4)

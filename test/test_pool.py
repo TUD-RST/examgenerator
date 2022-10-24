@@ -12,7 +12,7 @@ def test_pool_working():
     """
     directory = os.path.join(os.getcwd(), "test_directories", "pool_1")
 
-    pool_files_A1 = funcs.pullPoolData(directory)[0][0]
+    pool_files_A1 = funcs.pull_pool_data(directory)[0][0]
 
     test_pool = classes.Pool("A1", pool_files_A1)
 
@@ -57,7 +57,7 @@ def test_Pool_pull_working():
     """
     directory = os.path.join(os.getcwd(), "test_directories", "pool_1")
 
-    pool_files_A1 = funcs.pullPoolData(directory)[0][0]
+    pool_files_A1 = funcs.pull_pool_data(directory)[0][0]
     pool = classes.Pool("A1", pool_files_A1)
 
     prob_sol = pool.pull()

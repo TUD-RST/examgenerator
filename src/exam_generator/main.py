@@ -56,9 +56,9 @@ def exam_generator(args):
 
     if args.random_seed is not None:
         seed = args.random_seed
-        initializeRandomNumberGenerator(seed)
+        initialize_random_number_generator(seed)
     else:
-        initializeRandomNumberGenerator()
+        initialize_random_number_generator()
 
     settings_path = args.create_test
 
@@ -82,7 +82,7 @@ def exam_generator(args):
     # converts Python dict into addict Dic
     settings = Dict(settings_dictionary)
 
-    checkSettings(settings, settings_name)
+    check_settings(settings, settings_name)
 
     # assigning int values to string decleration of pages_per_sheet for usage in sumo func
     if settings.page_format_exam == "A4":
@@ -128,12 +128,12 @@ def exam_generator(args):
         .replace("/", ""),
     )
 
-    pool_files = pullPoolData(latex_directory)
+    pool_files = pull_pool_data(latex_directory)
 
-    file_names_tex = combineFileNames(pool_files)
+    file_names_tex = combine_file_names(pool_files)
 
     # ------------Custom Tests----------------#
-    custom_test_list = createCustomTestList(settings.exams, pool_files)
+    custom_test_list = create_custom_test_list(settings.exams, pool_files)
 
     # for debugging
     pool_all = Pool(".*", file_names_tex)
@@ -144,15 +144,15 @@ def exam_generator(args):
     # --- Combining problems ---
     # ================================
 
-    tests_per_group = combiningProblems(settings.number_of_groups, custom_test_list)
+    tests_per_group = combining_problems(settings.number_of_groups, custom_test_list)
 
     # ==================================
     # --- Generating the TeX-Files ---
     # ==================================
 
-    copies_per_group = determineCopiesPerGroup(settings.number_of_groups, settings.copies)
+    copies_per_group = determine_copies_per_group(settings.number_of_groups, settings.copies)
 
-    generateTexFiles(
+    generate_tex_files(
         latex_directory,
         template_directory,
         settings.number_of_groups,
@@ -174,7 +174,7 @@ def exam_generator(args):
         settings.options.delete_temp_data,
     )
 
-    combineGroupFiles(
+    combine_group_files(
         test_directory,
         latex_directory,
         settings.number_of_groups,
@@ -196,7 +196,7 @@ def exam_generator(args):
         problem_files = [file for file in all_exam_files if not file.endswith("Solution.pdf")]
         problem_files.sort()
         sumo_name_problems = f"Sumo-{settings.variant_name}-Problems.pdf"
-        buildSumo(
+        build_sumo(
             test_directory,
             sumo_name_problems,
             problem_files,
@@ -209,7 +209,7 @@ def exam_generator(args):
         solution_files.sort()
 
         sumo_name_solutions = f"Sumo-{settings.variant_name}-Solutions.pdf"
-        buildSumo(
+        build_sumo(
             test_directory,
             sumo_name_solutions,
             solution_files,
@@ -224,7 +224,7 @@ def exam_generator(args):
 
         for file in files:
             if "Sumo" not in file:
-                deletePDF(file)
+                delete_pdf(file)
 
         os.chdir(root_directory)
 

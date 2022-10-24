@@ -7,7 +7,7 @@ from exam_generator import funcs
 from exam_generator import customExceptions
 
 
-def test_checkSettings_working():
+def test_check_settings_working():
     """
     Expects no Errors from valid json.
     """
@@ -20,9 +20,9 @@ def test_checkSettings_working():
     
     settings = Dict(settings)
 
-    assert funcs.checkSettings(settings, file_name) == None
+    assert funcs.check_settings(settings, file_name) == None
 
-def test_checkSettings_groupPairs_1():
+def test_check_settings_groupPairs_1():
     """
     Expects a SettingsError: group_pair not int
     """
@@ -34,9 +34,9 @@ def test_checkSettings_groupPairs_1():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
-def test_checkSettings_groupPairs_2():
+def test_check_settings_groupPairs_2():
     """
     Expects a SettingsError: group_pair below one
     """
@@ -48,9 +48,9 @@ def test_checkSettings_groupPairs_2():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
-def test_checkSettings_title():
+def test_check_settings_title():
     """
     Expects a SettingsError: title not str
     """
@@ -62,9 +62,9 @@ def test_checkSettings_title():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
-def test_checkSettings_variantName():
+def test_check_settings_variantName():
     """
     Expects a SettingsError: variant name not str
     """
@@ -76,9 +76,9 @@ def test_checkSettings_variantName():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
-def test_checkSettings_pagesPerSheetTest_1():
+def test_check_settings_pagesPerSheetTest_1():
     """
     Expects a SettingsError: pages_per_sheet_test not int
     """
@@ -90,9 +90,9 @@ def test_checkSettings_pagesPerSheetTest_1():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
-def test_checkSettings_pagesPerSheetTest_2():
+def test_check_settings_pagesPerSheetTest_2():
     """
     Expects a SettingsError: pages_per_sheet_test not 2 or 4
     """
@@ -104,10 +104,10 @@ def test_checkSettings_pagesPerSheetTest_2():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
 
-def test_checkSettings_pagesPerSheetSolution_1():
+def test_check_settings_pagesPerSheetSolution_1():
     """
     Expects a SettingsError: pages_per_sheet_solution not int
     """
@@ -119,9 +119,9 @@ def test_checkSettings_pagesPerSheetSolution_1():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
-def test_checkSettings_pagesPerSheetSolution_2():
+def test_check_settings_pagesPerSheetSolution_2():
     """
     Expects a SettingsError: pages_per_sheet_solution not 2 or 4
     """
@@ -133,7 +133,7 @@ def test_checkSettings_pagesPerSheetSolution_2():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
 def test_sumoProblemCopies():
     """
@@ -147,7 +147,7 @@ def test_sumoProblemCopies():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
 def test_sumoSolutionCopies():
     """
@@ -161,7 +161,7 @@ def test_sumoSolutionCopies():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
 
 def test_amountOfCopies():
@@ -176,7 +176,7 @@ def test_amountOfCopies():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
 def test_generateSinglePDFs():
     """
@@ -190,7 +190,7 @@ def test_generateSinglePDFs():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
 def test_generateSumoPDF():
     """
@@ -204,7 +204,7 @@ def test_generateSumoPDF():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
 def test_deleteTempData():
     """
@@ -218,6 +218,6 @@ def test_deleteTempData():
     
     settings = Dict(settings)
     with pytest.raises(customExceptions.SettingsError):
-        funcs.checkSettings(settings, file_name)
+        funcs.check_settings(settings, file_name)
 
 

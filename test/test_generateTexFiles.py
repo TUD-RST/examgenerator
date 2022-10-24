@@ -8,14 +8,14 @@ from exam_generator import funcs, customExceptions
 
 # Currently not running since problem content creation works with os.getcwd() leading to wrong directory when testing
 """
-def test_generateTexFiles_working():
+def test_generate_tex_files_working():
     
     Tests if the correct list of PDF file names is returned.
     
 
     # setup like the main function would do normally
     current = os.getcwd()
-    root_path = os.path.join(os.getcwd(), "test_directories", "generateTexFiles_1")
+    root_path = os.path.join(os.getcwd(), "test_directories", "generate_tex_files_1")
     settings_path = os.path.join(root_path, "settings", "test.json")
     template_path = os.path.join(root_path, "templates")
     pool_path = os.path.join(root_path, "pool_data")
@@ -25,15 +25,15 @@ def test_generateTexFiles_working():
 
     settings = Dict(settings_dictionary)
 
-    pool_info = funcs.pullPoolData(pool_path)
+    pool_info = funcs.pull_pool_data(pool_path)
 
-    test_list = funcs.createCustomTestList(settings.exams, pool_info)
+    test_list = funcs.create_custom_test_list(settings.exams, pool_info)
 
-    tests_per_group = funcs.combiningProblems(settings.number_of_groups, test_list)
+    tests_per_group = funcs.combining_problems(settings.number_of_groups, test_list)
 
-    copies_per_group = funcs.determineCopiesPerGroup(settings.number_of_groups, settings.copies)
+    copies_per_group = funcs.determine_copies_per_group(settings.number_of_groups, settings.copies)
 
-    funcs.generateTexFiles(
+    funcs.generate_tex_files(
         pool_path,
         template_path,
         settings.number_of_groups,
@@ -46,18 +46,18 @@ def test_generateTexFiles_working():
     )
     # deletinjg the created files
     os.chdir(pool_path)
-    funcs.deleteCommand()
+    funcs.delete_command()
     os.chdir(current)"""
 
 
-def test_generateTexFiles_Error():
+def test_generate_tex_files_Error():
     """
     Expects a MissingFileError becaus eproblem/ solution template not found
     """
 
     # setup like the main function would do normally
     current = os.getcwd()
-    root_path = os.path.join(os.getcwd(), "test_directories", "generateTexFiles_2")
+    root_path = os.path.join(os.getcwd(), "test_directories", "generate_tex_files_2")
     settings_path = os.path.join(root_path, "settings", "test.json")
     template_path = os.path.join(root_path, "templates")
     pool_path = os.path.join(root_path, "pool_data")
@@ -67,16 +67,16 @@ def test_generateTexFiles_Error():
 
     settings = Dict(settings_dictionary)
 
-    pool_info = funcs.pullPoolData(pool_path)
+    pool_info = funcs.pull_pool_data(pool_path)
 
-    test_list = funcs.createCustomTestList(settings.exams, pool_info)
+    test_list = funcs.create_custom_test_list(settings.exams, pool_info)
 
-    tests_per_group = funcs.combiningProblems(settings.number_of_groups, test_list)
+    tests_per_group = funcs.combining_problems(settings.number_of_groups, test_list)
 
-    copies_per_group = funcs.determineCopiesPerGroup(settings.number_of_groups, settings.copies)
+    copies_per_group = funcs.determine_copies_per_group(settings.number_of_groups, settings.copies)
 
     with pytest.raises(customExceptions.MissingFileError):
-        file_names_pdf = funcs.generateTexFiles(
+        file_names_pdf = funcs.generate_tex_files(
             pool_path,
             template_path,
             settings.number_of_groups,
