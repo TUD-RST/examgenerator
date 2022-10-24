@@ -57,7 +57,7 @@ def test_generate_tex_files_Error():
 
     # setup like the main function would do normally
     current = os.getcwd()
-    root_path = os.path.join(os.getcwd(), "test_directories", "generate_tex_files_2")
+    root_path = os.path.join(os.getcwd(), "test_directories", "generateTexFiles_2")
     settings_path = os.path.join(root_path, "settings", "test.json")
     template_path = os.path.join(root_path, "templates")
     pool_path = os.path.join(root_path, "pool_data")
