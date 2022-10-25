@@ -23,7 +23,7 @@ You can find the current issues [here](https://github.com/TUD-RST/examgenerator/
 ## Documentation
 
 Documentation for this project including a detailed user guide, tutorials and the API doc is available
-on our [readthedocs page](https://exam-generator.readthedocs.io/en/latest/user_doc.html).
+on our [readthedocs page](https://exam-generator.readthedocs.io/en/latest/userdoc.html).
 Optionally, you can also view our documentation locally, by executing any of the html files in our [docs directory](https://github.com/TUD-RST/examgenerator/tree/main/docs/build/html).
 
 ## Example
