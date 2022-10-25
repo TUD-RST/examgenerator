@@ -995,49 +995,7 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
 
     # ---------------Parameterization-----------------#
 
-    # move files to temp directory
-    temp_dir = os.path.join(root_directory, "temp")
-    os.makedirs(temp_dir, exist_ok=True)
-    for file in filenames_problems:
-        # copying file into temp dir
-        shutil.copy(file, temp_dir)
-        shutil.copy(file.replace("problem", "solution"), temp_dir)
-
-        # ensuring no problems/ solutions have the same name when creating multiple pools
-        file_path_list = os.path.normpath(file).split(os.sep)
-        file_pool = file_path_list[-2]
-        name = file_path_list[-1]
-        new_name = f"{file_pool}_{name}"
-
-        os.chdir(temp_dir)
-        os.rename(name, new_name)
-        os.rename(name.replace("problem", "solution"), new_name.replace("problem", "solution"))
-        os.chdir(root_directory)
-        
-
-    files: list = glob.glob(os.path.join(temp_dir, "*.tex"))
-    # replace keys
-    for file in files:
-        with open(file, "r") as f:
-            content = f.read()
-        content = replace_keys(content)
-        
-        with open(file, "w+") as f:
-            f.write(content)
-
-    # apply jinja template
-    file_names = os.listdir(temp_dir)
-    for file in file_names:
-        applyJinjaTemplate(temp_dir, file)
-
-        # replaces not converted file with converted file which is created in root dir
-        os.chdir(temp_dir)
-        delete_command(file.removesuffix(".tex"))
-        os.chdir(root_directory)
-        shutil.move(file, temp_dir)
-
-    filenames_problems = glob.glob(os.path.join(temp_dir, "*problem_*.tex"))
-
+    filenames_problems = preview_parameterization(root_directory, filenames_problems)
  
     # -------------Creation of the PDF File-------------#
 
@@ -1107,7 +1065,67 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
 
     # removing temp files/ dirs
     delete_command(FILENAME)
-    shutil.rmtree(temp_dir)
+    shutil.rmtree(os.path.join(root_directory, "temp"))
+
+def preview_parameterization(root_directory, filenames_problems):
+    """
+    Applies parameterization to preview files.
+
+    :param root_directory: path of root directory
+    :type root_directory: str
+
+    :param filenames_problems: path to problem files
+    :type filenames_problems: list[str]
+
+    :returns: filenames_problems - temp path to parameterized problems
+    :rtype: list[str]
+    """
+    
+    # move files to temp directory
+    temp_dir = os.path.join(root_directory, "temp")
+    os.makedirs(temp_dir, exist_ok=True)
+    for file in filenames_problems:
+        # copying file into temp dir
+        shutil.copy(file, temp_dir)
+        shutil.copy(file.replace("problem", "solution"), temp_dir)
+
+        # ensuring no problems/ solutions have the same name when creating multiple pools
+        file_path_list = os.path.normpath(file).split(os.sep)
+        file_pool = file_path_list[-2]
+        name = file_path_list[-1]
+        new_name = f"{file_pool}_{name}"
+
+        os.chdir(temp_dir)
+        os.rename(name, new_name)
+        os.rename(name.replace("problem", "solution"), new_name.replace("problem", "solution"))
+        os.chdir(root_directory)
+        
+
+    files: list = glob.glob(os.path.join(temp_dir, "*.tex"))
+    # replace keys
+    for file in files:
+        with open(file, "r") as f:
+            content = f.read()
+        content = replace_keys(content)
+        
+        with open(file, "w+") as f:
+            f.write(content)
+
+    # apply jinja template
+    file_names = os.listdir(temp_dir)
+    for file in file_names:
+        applyJinjaTemplate(temp_dir, file)
+
+        # replaces not converted file with converted file which is created in root dir
+        os.chdir(temp_dir)
+        delete_command(file.removesuffix(".tex"))
+        os.chdir(root_directory)
+        shutil.move(file, temp_dir)
+
+    filenames_problems = glob.glob(os.path.join(temp_dir, "*problem_*.tex"))
+
+    return filenames_problems
+
 
 #####################################
 ###------------Helpers------------###
