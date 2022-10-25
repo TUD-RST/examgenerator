@@ -21,8 +21,6 @@
 \setcounter{TotalPoints}{0}
 
 
-% Benutzung: \Pkte{2} vergibt 2 Punkte
-%            \Pkte[6]{2} zeigt 2-Punkte-Kasten, aber vergibt 6 Punkte
 \newcommand{\Pts}[2][-999]{
     \fbox{\textcolor{red}{\textbf{#2\,P.}}}
     \ifnum#1>-999
@@ -73,7 +71,7 @@
 \setlength{\parindent}{0ex}
 
 
-\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} %Kommando zum mittigen platzieren des Textes in Zellen
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} 
 
 \newcommand{\diff}[3][]{\frac{\mathrm{d}^{#1}#2}{\mathrm{d}{#3}^{#1}}}
 
