@@ -1078,7 +1078,7 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
         # problems and solutions
         for name in filenames_problems:
             name = name.replace("\\", "/")
-            f.write("\\textbf{{{0}}}\n\n".format(name.replace("_", "\\_")))
+            f.write("\\textbf{{{0}}}\n\n".format(os.path.normpath(name).split(os.sep)[-1].replace("_", "\\_").removesuffix(".tex")))
             f.write("\\input{{{0}}}\n\n".format(name))
             f.write("\\textbf{Solution:}\\\\\n\n")
             f.write("\\input{{{0}}}\n\n".format(name.replace("problem", "solution")))
