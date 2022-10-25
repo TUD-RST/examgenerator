@@ -4,6 +4,7 @@ This module contains all functions relevant for the exam-generator.
 
 import os
 from platform import platform
+from tempfile import tempdir
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import glob
 import subprocess
@@ -624,7 +625,7 @@ def generate_keys(file_content: str, test, group, student):
     return unique_keys
 
 
-def replace_keys(file_content: str, test, group, student):
+def replace_keys(file_content: str, test=0, group=0, student=0):
     """
     Replaces __KEY{int}__ in latex files with custom keys for later usage.
 
@@ -992,8 +993,41 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
             FILENAME = FILENAME[:-1] + str(i)
         i += 1
 
-    # ---------------Settings End-----------------#
+    # ---------------Parameterization-----------------#
 
+    # move files to temp directory
+    temp_dir = os.path.join(root_directory, "temp")
+    os.makedirs(temp_dir, exist_ok=True)
+    for file in filenames_problems:
+        name = os.path.normpath(file).split(os.sep)[-1]
+        if name not in os.listdir(temp_dir):
+            shutil.copy(file, temp_dir)
+            shutil.copy(file.replace("problem", "solution"), temp_dir)
+
+    files: list = glob.glob(os.path.join(temp_dir, "*.tex"))
+    # replace keys
+    for file in files:
+        with open(file, "r") as f:
+            content = f.read()
+        content = replace_keys(content)
+        
+        with open(file, "w+") as f:
+            f.write(content)
+
+    # apply jinja template
+    file_names = os.listdir(temp_dir)
+    for file in file_names:
+        applyJinjaTemplate(temp_dir, file)
+
+        # replaces not converted file with converted file which is created in root dir
+        os.chdir(temp_dir)
+        delete_command(file.removesuffix(".tex"))
+        os.chdir(root_directory)
+        shutil.move(file, temp_dir)
+
+    filenames_problems = glob.glob(os.path.join(temp_dir, "problem_*.tex"))
+
+ 
     # -------------Creation of the PDF File-------------#
 
     with open("{0}.tex".format(FILENAME), "w", encoding="utf-8") as f:
@@ -1020,10 +1054,11 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
             "\\newcommand{\\diff}[3][]{\\frac{\\mathrm{d}^{#1}#2}{\\mathrm{d}{#3}^{#1}}}"
         )
         f.write(
-            "\\newcommand{\\Pkte}[2][-999]{\\fbox{\\textcolor{black}{\\textbf{#2\\,P.}}}}\n"
+            "\\newcommand{\\Pts}[2][-999]{\\fbox{\\textcolor{black}{\\textbf{#2\\,P.}}}}\n"
         )
-        f.write("\\newenvironment{Loesung}{\\begin{enumerate}}{\\end{enumerate}}\n")
-        f.write("\\newcommand{\\lsgitem}{\\item}\n")
+        f.write("\\newenvironment{Problem}{\\begin{enumerate}}{\\end{enumerate}}\n")
+        f.write("\\newenvironment{Solution}{\\begin{enumerate}}{\\end{enumerate}}\n")
+        f.write("\\newcommand{\\solitem}{\\item}\n")
         f.write("\\newcommand{\\abb}{\\\\[0,5cm]}\n")
         f.write("\\newcommand{\\ds}{\\displaystyle}\n")
         f.write("\\graphicspath{{Latex}}\n")
@@ -1034,7 +1069,7 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
             name = name.replace("\\", "/")
             f.write("\\textbf{{{0}}}\n\n".format(name.replace("_", "\\_")))
             f.write("\\input{{{0}}}\n\n".format(name))
-            f.write("\\textbf{Loesung:}\\\\\n\n")
+            f.write("\\textbf{Solution:}\\\\\n\n")
             f.write("\\input{{{0}}}\n\n".format(name.replace("problem", "solution")))
             f.write("\\hrulefill\n\n\n")
 
@@ -1047,9 +1082,7 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
     )
     process.wait()
 
-    if process.returncode == 0:
-        delete_command(FILENAME)
-    else:
+    if process.returncode != 0:
         raise CompilingError(
             f"{errorInfo()}, Problem while compiling the template pdf file."
         )
@@ -1060,7 +1093,8 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
 
     # moving pdf file to Previews directory
     shutil.move(FILENAME + ".pdf", specific_directory)
-
+    delete_command(FILENAME)
+    shutil.rmtree(temp_dir)
 
 #####################################
 ###------------Helpers------------###
