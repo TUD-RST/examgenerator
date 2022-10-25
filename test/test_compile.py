@@ -23,9 +23,9 @@ def test_compile():
 
     pool_info = funcs.pull_pool_data(pool_path)
 
-    test_list = funcs.create_custom_test_list(settings.test_types, pool_info)
+    test_list = funcs.create_custom_test_list(settings.exams, pool_info)
 
-    tests_per_group = funcs.combining_problems(settings.group_pairs, test_list)
+    tests_per_group = funcs.combining_problems(settings.number_of_groups, test_list)
 
     exam_name = "Exams-{}-{}".format(settings.variant_name, settings.semester).replace(" ", "").replace("/", "")
     test_directory = os.path.join(
