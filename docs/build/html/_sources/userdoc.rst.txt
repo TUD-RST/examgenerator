@@ -16,8 +16,8 @@ Content Generation
 
 LaTeX Templates
 ^^^^^^^^^^^^^^^^^^^^^^^
-There are two LaTeX templates in the ``templates`` Directory: One for the problems 
-and one for the sample solution and evaluation. In these templates there is 
+There are two LaTeX templates in the ``templates`` directory: one for problems 
+and one for sample solution and evaluation. Within the templates there are 
 placeholders, which will later be replaced by this script.
 
 Problems/ Solutions
@@ -28,8 +28,8 @@ Pools
 Problems and solutions are located in the
 ``pool_data`` directory which is furthermore separated into *pools*. 
 Pools are sets of problems/ solutions of a specfic type. They can for example differ between general
-problems, that are used in every test, and problems, that are specific for a given experiment. However,
-you may create as many pools following any category/ rule as you like. Pools are the small puzzle pieces
+problems, that are used in every test, and problems that are specific for a given experiment. 
+You may create as many pools following any category/ rule as you like. Pools are the small puzzle pieces
 that in the end will decide over the content of your exam. Names can range from *A1* to *ExperimentXYZ*.
 You have the freedom of choice.
 
