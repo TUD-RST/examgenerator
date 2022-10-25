@@ -7,7 +7,7 @@ exam_generator is a script which is designed to create exams/ tests from
 pools of problems while ensuring that there will be no repetition amongst
 different groups. 
 The exams/ tests are based off of two major components:
-the LaTeX basis (problems, solutions, templates) and user defined settings.
+LaTeX files (problems, solutions, templates) and user defined settings.
 
 
 Content Generation
@@ -31,7 +31,7 @@ Pools are sets of problems/ solutions of a specfic type. They can for example di
 problems, that are used in every test, and problems that are specific for a given experiment. 
 You may create as many pools following any category/ rule as you like. Pools are the small puzzle pieces
 that in the end will decide over the content of your exam. Names can range from *A1* to *ExperimentXYZ*.
-You have the freedom of choice.
+You have the freedom of choice. However, please refrain from including empty spaces.
 
 Naming Scheme
 """"""""""""""""""""""""
@@ -90,6 +90,7 @@ Solution example:
    \end{Solution}
 
 .. hint::
+
    This problem/ solution pair will ask the student to evaluate the sum of two random numbers between 1 and 100 and will provide
    the solution file with the correctly calculated solution.
 
@@ -123,6 +124,7 @@ in a json settings file:
       is recommended unless there is issues during the compiling process
 
 .. hint::
+
    Enabling *generate_sumo_pdf* allows creating the tests for the entire semester in
    one go. However, this is only useful if the problems and solutions are
    final and will not have to be corrected afterwards. 
@@ -132,6 +134,7 @@ in a json settings file:
    -  *exam_copies*: Number of copies per exam in the sumo file. 
 
 .. hint::
+
    The final amount of copies is determined by the product of *copies* and *exam_copies*.
 
    When using *paramaterization* in any of your exam problems, ``copies`` is determined by the total 
@@ -184,6 +187,7 @@ when creating the same exam:
 - *-rs* [seed]
 
 .. Hint::
+
    This only works in combination with creating an exam (-ct).
 
 

@@ -7,7 +7,7 @@ exam_generator is a script which is designed to create exams/ tests from
 pools of problems while ensuring that there will be no repetition amongst
 different groups. 
 The exams/ tests are based off of two major components:
-the LaTeX basis (problems, solutions, templates) and user defined settings.
+LaTeX files (problems, solutions, templates) and user defined settings.
 
 
 Content Generation
@@ -31,7 +31,7 @@ Pools are sets of problems/ solutions of a specfic type. They can for example di
 problems, that are used in every test, and problems that are specific for a given experiment. 
 You may create as many pools following any category/ rule as you like. Pools are the small puzzle pieces
 that in the end will decide over the content of your exam. Names can range from *A1* to *ExperimentXYZ*.
-You have the freedom of choice.
+You have the freedom of choice. However, please refrain from including empty spaces.
 
 Naming Scheme
 """"""""""""""""""""""""
