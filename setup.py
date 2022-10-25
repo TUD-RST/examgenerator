@@ -29,7 +29,9 @@ setup(
     license='',
     description='Script for generating exams based on selected settings/ problems',
     long_description="""
-    tba
+    Exam_generator is a script which is designed to create exams/ tests from pools of problems while 
+    ensuring that there will be no repetition amongst different groups. The exams/ tests are based off
+    of two major components: LaTeX files (problems, solutions, templates) and user defined settings.
     """,
     keywords='',
     install_requires=requirements,

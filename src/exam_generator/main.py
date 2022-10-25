@@ -241,46 +241,12 @@ def main():
     """
 
     Descr = tw.dedent(
-        """\
-                        This script creates tests based on given problems and settings
-
-                        From a pool of problems, test will be created in  a way, that there will be no
-                        repetition for all experiments and groups.
-
-                        There is two LaTeX templates in the Templates Directory:
-                        One for the problems and one for the sample solution and evaluation.
-                        In these templates there is placeholders, which will be replaced by
-                        this script.
-
-                        The problems are located in the Aufgaben directory which is furthermore separated into
-                        the main pools (PoolA, PoolB, PoolC, PoolD). They usually differ between general problems,
-                        that are used in every test, and problems, that are specific for the given experiment.
-
-                        Tests are combined via instances of the class TestType and managed via instances of the class Pool.
-                        Solutions are saved in separate files.
-                        Files for problems have the prefix "aufgabe_", solutions the prefix "loesung_".
-                        The scheme is the following: 
-                            aufgabe_A1_2.tex -> 2. problem of type A1
-                        or for an experiment:
-                            aufgabe_CV03_1.tex -> 2. problem from experiment (V) number 03 of type C
-                        for a more detailed breakdown of the nomenclature view the read.me file in the Aufgaben folder
-                        Please avoid using combinations of more than one capital letter describing your pools
-                        except for combinations with V (which stands for experiment) since this could lead to 
-                        problems during the compiling process.
-
-                        Subtasks of a problem should be structured in an enumerate-surrounding.
-
-                        Within the solution files the solution text has to be written in between
-                        \begin{Loesung} \end{Loesung}. The solution of every subtask starts with the 
-                        key \lsgitem.
-
-                        It is possible to assign points to problems and solutions with the macro \Pkte{n}.
-                        During the compiling process the given points will be added automatically for the entire test
-
-                        Optionally, all tests and sample solutions can be combined into one "sumo-file". 
-                        This allows creating the tests for the entire semester in one go. However, this
-                        is only useful if the problems and solutions are final and will not have to be corrected
-                        afterwards."""
+        """            
+                        Exam_generator is a script which is designed to create exams/ tests from pools of problems 
+                        while ensuring that there will be no repetition amongst different groups. The exams/ tests  
+                        are based off of two major components: the LaTeX basis (problems, solutions, templates) and 
+                        user defined settings.
+        """
     )
 
     parser = ap.ArgumentParser(description=Descr)
