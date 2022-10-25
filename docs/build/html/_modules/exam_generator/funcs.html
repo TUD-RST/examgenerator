@@ -645,7 +645,7 @@
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">temp</span><span class="p">:</span>
         <span class="n">temp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">problem_string</span><span class="p">)</span>
 
-    <span class="n">applyJinjaTemplate</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">temp_file</span><span class="p">)</span>
+    <span class="n">apply_jinja_template</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">temp_file</span><span class="p">)</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
         <span class="n">problem_string</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -777,7 +777,7 @@
     <span class="k">return</span> <span class="n">res</span></div>
 
 
-<div class="viewcode-block" id="applyJinjaTemplate"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.applyJinjaTemplate">[docs]</a><span class="k">def</span> <span class="nf">applyJinjaTemplate</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+<div class="viewcode-block" id="apply_jinja_template"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.apply_jinja_template">[docs]</a><span class="k">def</span> <span class="nf">apply_jinja_template</span><span class="p">(</span><span class="n">latex_directory</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Applies jinja template to a file.</span>
 
@@ -1191,7 +1191,7 @@
     <span class="c1"># apply jinja template</span>
     <span class="n">file_names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_names</span><span class="p">:</span>
-        <span class="n">applyJinjaTemplate</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">apply_jinja_template</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 
         <span class="c1"># replaces not converted file with converted file which is created in root dir</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>

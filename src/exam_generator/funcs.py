@@ -577,7 +577,7 @@ def create_problem_content(
     with open(temp_file, "w") as temp:
         temp.write(problem_string)
 
-    applyJinjaTemplate(os.getcwd(), temp_file)
+    apply_jinja_template(os.getcwd(), temp_file)
 
     with open(temp_file, "r") as d:
         problem_string = d.read()
@@ -709,7 +709,7 @@ def get_random_number(key: str, lower_bound=1, upper_bound=10):
     return res
 
 
-def applyJinjaTemplate(latex_directory, file):
+def apply_jinja_template(latex_directory, file):
     """
     Applies jinja template to a file.
 
@@ -1123,7 +1123,7 @@ def preview_parameterization(root_directory, filenames_problems):
     # apply jinja template
     file_names = os.listdir(temp_dir)
     for file in file_names:
-        applyJinjaTemplate(temp_dir, file)
+        apply_jinja_template(temp_dir, file)
 
         # replaces not converted file with converted file which is created in root dir
         os.chdir(temp_dir)
