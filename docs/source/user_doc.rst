@@ -90,6 +90,7 @@ Solution example:
    \end{Solution}
 
 .. hint::
+
    This problem/ solution pair will ask the student to evaluate the sum of two random numbers between 1 and 100 and will provide
    the solution file with the correctly calculated solution.
 
@@ -123,6 +124,7 @@ in a json settings file:
       is recommended unless there is issues during the compiling process
 
 .. hint::
+
    Enabling *generate_sumo_pdf* allows creating the tests for the entire semester in
    one go. However, this is only useful if the problems and solutions are
    final and will not have to be corrected afterwards. 
@@ -132,6 +134,7 @@ in a json settings file:
    -  *exam_copies*: Number of copies per exam in the sumo file. 
 
 .. hint::
+
    The final amount of copies is determined by the product of *copies* and *exam_copies*.
 
    When using *paramaterization* in any of your exam problems, ``copies`` is determined by the total 
@@ -184,6 +187,7 @@ when creating the same exam:
 - *-rs* [seed]
 
 .. Hint::
+
    This only works in combination with creating an exam (-ct).
 
 
