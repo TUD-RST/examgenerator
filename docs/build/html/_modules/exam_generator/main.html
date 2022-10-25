@@ -157,14 +157,14 @@
         <span class="n">settings</span><span class="o">.</span><span class="n">page_format_exam</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="k">elif</span> <span class="n">settings</span><span class="o">.</span><span class="n">page_format_exam</span> <span class="o">==</span> <span class="s2">&quot;A5&quot;</span><span class="p">:</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">page_format_exam</span> <span class="o">=</span> <span class="mi">4</span>
-    
+
     <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">page_format_solution</span> <span class="o">==</span> <span class="s2">&quot;A4&quot;</span><span class="p">:</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">page_format_solution</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="k">elif</span> <span class="n">settings</span><span class="o">.</span><span class="n">page_format_solution</span> <span class="o">==</span> <span class="s2">&quot;A5&quot;</span><span class="p">:</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">page_format_solution</span> <span class="o">=</span> <span class="mi">4</span>
-    
+
     <span class="c1"># ensuring variant name does not create problems while compiling</span>
-    <span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
     <span class="c1"># ==================================</span>
     <span class="c1"># --- Configuration ---</span>
@@ -218,7 +218,9 @@
     <span class="c1"># --- Generating the TeX-Files ---</span>
     <span class="c1"># ==================================</span>
 
-    <span class="n">copies_per_group</span> <span class="o">=</span> <span class="n">determine_copies_per_group</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">copies</span><span class="p">)</span>
+    <span class="n">copies_per_group</span> <span class="o">=</span> <span class="n">determine_copies_per_group</span><span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">copies</span>
+    <span class="p">)</span>
 
     <span class="n">generate_tex_files</span><span class="p">(</span>
         <span class="n">latex_directory</span><span class="p">,</span>
@@ -249,7 +251,7 @@
         <span class="n">custom_test_list</span><span class="p">,</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="p">,</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">page_format_exam</span><span class="p">,</span>
-        <span class="n">settings</span><span class="o">.</span><span class="n">page_format_solution</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">page_format_solution</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># ==================================</span>
@@ -261,7 +263,9 @@
         <span class="n">all_exam_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">test_directory</span><span class="p">)</span>
 
         <span class="c1"># only exam pdf files</span>
-        <span class="n">problem_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">all_exam_files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Solution.pdf&quot;</span><span class="p">)]</span>
+        <span class="n">problem_files</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">all_exam_files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Solution.pdf&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
         <span class="n">problem_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="n">sumo_name_problems</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sumo-</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-Problems.pdf&quot;</span>
         <span class="n">build_sumo</span><span class="p">(</span>
@@ -273,7 +277,9 @@
         <span class="p">)</span>
 
         <span class="c1"># only solution pdf files</span>
-        <span class="n">solution_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">all_exam_files</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Solution.pdf&quot;</span><span class="p">)]</span>
+        <span class="n">solution_files</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">all_exam_files</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Solution.pdf&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
         <span class="n">solution_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
         <span class="n">sumo_name_solutions</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sumo-</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">variant_name</span><span class="si">}</span><span class="s2">-Solutions.pdf&quot;</span>
