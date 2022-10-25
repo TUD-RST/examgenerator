@@ -996,7 +996,7 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
     # ---------------Parameterization-----------------#
 
     filenames_problems = preview_parameterization(root_directory, filenames_problems)
- 
+
     # -------------Creation of the PDF File-------------#
 
     with open("{0}.tex".format(FILENAME), "w", encoding="utf-8") as f:
@@ -1036,7 +1036,14 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
         # problems and solutions
         for name in filenames_problems:
             name = name.replace("\\", "/")
-            f.write("\\textbf{{{0}}}\n\n".format(os.path.normpath(name).split(os.sep)[-1].replace("_", "\\_").removesuffix(".tex")))
+            f.write(
+                "\\textbf{{{0}}}\n\n".format(
+                    os.path.normpath(name)
+                    .split(os.sep)[-1]
+                    .replace("_", "\\_")
+                    .removesuffix(".tex")
+                )
+            )
             f.write("\\input{{{0}}}\n\n".format(name))
             f.write("\\textbf{Solution:}\\\\\n\n")
             f.write("\\input{{{0}}}\n\n".format(name.replace("problem", "solution")))
@@ -1067,6 +1074,7 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
     delete_command(FILENAME)
     shutil.rmtree(os.path.join(root_directory, "temp"))
 
+
 def preview_parameterization(root_directory, filenames_problems):
     """
     Applies parameterization to preview files.
@@ -1080,7 +1088,7 @@ def preview_parameterization(root_directory, filenames_problems):
     :returns: filenames_problems - temp path to parameterized problems
     :rtype: list[str]
     """
-    
+
     # move files to temp directory
     temp_dir = os.path.join(root_directory, "temp")
     os.makedirs(temp_dir, exist_ok=True)
@@ -1097,9 +1105,10 @@ def preview_parameterization(root_directory, filenames_problems):
 
         os.chdir(temp_dir)
         os.rename(name, new_name)
-        os.rename(name.replace("problem", "solution"), new_name.replace("problem", "solution"))
+        os.rename(
+            name.replace("problem", "solution"), new_name.replace("problem", "solution")
+        )
         os.chdir(root_directory)
-        
 
     files: list = glob.glob(os.path.join(temp_dir, "*.tex"))
     # replace keys
@@ -1107,7 +1116,7 @@ def preview_parameterization(root_directory, filenames_problems):
         with open(file, "r") as f:
             content = f.read()
         content = replace_keys(content)
-        
+
         with open(file, "w+") as f:
             f.write(content)
 

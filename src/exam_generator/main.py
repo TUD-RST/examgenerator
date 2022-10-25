@@ -89,14 +89,14 @@ def exam_generator(args):
         settings.page_format_exam = 2
     elif settings.page_format_exam == "A5":
         settings.page_format_exam = 4
-    
+
     if settings.page_format_solution == "A4":
         settings.page_format_solution = 2
     elif settings.page_format_solution == "A5":
         settings.page_format_solution = 4
-    
+
     # ensuring variant name does not create problems while compiling
-    settings.variant_name = settings.variant_name.replace(" ","")
+    settings.variant_name = settings.variant_name.replace(" ", "")
 
     # ==================================
     # --- Configuration ---
@@ -150,7 +150,9 @@ def exam_generator(args):
     # --- Generating the TeX-Files ---
     # ==================================
 
-    copies_per_group = determine_copies_per_group(settings.number_of_groups, settings.copies)
+    copies_per_group = determine_copies_per_group(
+        settings.number_of_groups, settings.copies
+    )
 
     generate_tex_files(
         latex_directory,
@@ -181,7 +183,7 @@ def exam_generator(args):
         custom_test_list,
         settings.variant_name,
         settings.page_format_exam,
-        settings.page_format_solution
+        settings.page_format_solution,
     )
 
     # ==================================
@@ -193,7 +195,9 @@ def exam_generator(args):
         all_exam_files = os.listdir(test_directory)
 
         # only exam pdf files
-        problem_files = [file for file in all_exam_files if not file.endswith("Solution.pdf")]
+        problem_files = [
+            file for file in all_exam_files if not file.endswith("Solution.pdf")
+        ]
         problem_files.sort()
         sumo_name_problems = f"Sumo-{settings.variant_name}-Problems.pdf"
         build_sumo(
@@ -205,7 +209,9 @@ def exam_generator(args):
         )
 
         # only solution pdf files
-        solution_files = [file for file in all_exam_files if file.endswith("Solution.pdf")]
+        solution_files = [
+            file for file in all_exam_files if file.endswith("Solution.pdf")
+        ]
         solution_files.sort()
 
         sumo_name_solutions = f"Sumo-{settings.variant_name}-Solutions.pdf"
