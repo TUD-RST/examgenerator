@@ -999,10 +999,21 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
     temp_dir = os.path.join(root_directory, "temp")
     os.makedirs(temp_dir, exist_ok=True)
     for file in filenames_problems:
-        name = os.path.normpath(file).split(os.sep)[-1]
-        if name not in os.listdir(temp_dir):
-            shutil.copy(file, temp_dir)
-            shutil.copy(file.replace("problem", "solution"), temp_dir)
+        # copying file into temp dir
+        shutil.copy(file, temp_dir)
+        shutil.copy(file.replace("problem", "solution"), temp_dir)
+
+        # ensuring no problems/ solutions have the same name when creating multiple pools
+        file_path_list = os.path.normpath(file).split(os.sep)
+        file_pool = file_path_list[-2]
+        name = file_path_list[-1]
+        new_name = f"{file_pool}_{name}"
+
+        os.chdir(temp_dir)
+        os.rename(name, new_name)
+        os.rename(name.replace("problem", "solution"), new_name.replace("problem", "solution"))
+        os.chdir(root_directory)
+        
 
     files: list = glob.glob(os.path.join(temp_dir, "*.tex"))
     # replace keys
@@ -1025,7 +1036,7 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
         os.chdir(root_directory)
         shutil.move(file, temp_dir)
 
-    filenames_problems = glob.glob(os.path.join(temp_dir, "problem_*.tex"))
+    filenames_problems = glob.glob(os.path.join(temp_dir, "*problem_*.tex"))
 
  
     # -------------Creation of the PDF File-------------#
@@ -1093,6 +1104,8 @@ def make_specific(make_all, pool_path, problem_path, root_directory):
 
     # moving pdf file to Previews directory
     shutil.move(FILENAME + ".pdf", specific_directory)
+
+    # removing temp files/ dirs
     delete_command(FILENAME)
     shutil.rmtree(temp_dir)
 
