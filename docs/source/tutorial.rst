@@ -87,7 +87,7 @@ Now it is time to configure our settings in ``Math1.json``.
     },
 
     "sumo_options":{                           
-        "exam_copies": 15,               ← Total number of students taking the exam
+        "exam_copies": 15,              ← Total number of students taking the exam
         "solution_copies": 1            ← There is only one solution copy required
     },
 
@@ -299,7 +299,7 @@ In this example we will look at problem_2.tex and its solution.
 
 Problem/ Solution Files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Our problem will consist of three different smaller problems or ``ìtems``, increasing in difficulty.
+Our problem will consist of three different smaller problems or ``items``, increasing in difficulty.
 Firstly, the students have to guess the correct number (randomly generated in the solution) between one and ten.
 Secondly, they are asked to calculate the sum of two numbers.
 Lastly, they need find the product of two large numbers.
@@ -317,7 +317,7 @@ Content of problem_2.tex:
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}}$ =    ? \Pts{2}
     \end{Problem}
 
-Please note that you have to include ``$`` at the beginning and the end of each expression in order for the compiler
+Please note that you have to include ``$`` at the beginning *and* the end of each expression in order for the compiler
 to be able to properly do its job.
 
 Now to our solution file, where we would like to not only include the question, but also the answer.

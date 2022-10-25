@@ -72,6 +72,7 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">platform</span> <span class="kn">import</span> <span class="n">platform</span>
+<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">tempdir</span>
 <span class="kn">from</span> <span class="nn">PyPDF2</span> <span class="kn">import</span> <span class="n">PdfFileReader</span><span class="p">,</span> <span class="n">PdfFileWriter</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
@@ -692,7 +693,7 @@
     <span class="k">return</span> <span class="n">unique_keys</span></div>
 
 
-<div class="viewcode-block" id="replace_keys"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.replace_keys">[docs]</a><span class="k">def</span> <span class="nf">replace_keys</span><span class="p">(</span><span class="n">file_content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">student</span><span class="p">):</span>
+<div class="viewcode-block" id="replace_keys"><a class="viewcode-back" href="../../exam_generator.html#exam_generator.funcs.replace_keys">[docs]</a><span class="k">def</span> <span class="nf">replace_keys</span><span class="p">(</span><span class="n">file_content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">student</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Replaces __KEY{int}__ in latex files with custom keys for later usage.</span>
 
@@ -1060,8 +1061,52 @@
             <span class="n">FILENAME</span> <span class="o">=</span> <span class="n">FILENAME</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
         <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="c1"># ---------------Settings End-----------------#</span>
+    <span class="c1"># ---------------Parameterization-----------------#</span>
 
+    <span class="c1"># move files to temp directory</span>
+    <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_directory</span><span class="p">,</span> <span class="s2">&quot;temp&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">filenames_problems</span><span class="p">:</span>
+        <span class="c1"># copying file into temp dir</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;problem&quot;</span><span class="p">,</span> <span class="s2">&quot;solution&quot;</span><span class="p">),</span> <span class="n">temp_dir</span><span class="p">)</span>
+
+        <span class="c1"># ensuring no problems/ solutions have the same name when creating multiple pools</span>
+        <span class="n">file_path_list</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+        <span class="n">file_pool</span> <span class="o">=</span> <span class="n">file_path_list</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">file_path_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">new_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_pool</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">new_name</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;problem&quot;</span><span class="p">,</span> <span class="s2">&quot;solution&quot;</span><span class="p">),</span> <span class="n">new_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;problem&quot;</span><span class="p">,</span> <span class="s2">&quot;solution&quot;</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span>
+        
+
+    <span class="n">files</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;*.tex&quot;</span><span class="p">))</span>
+    <span class="c1"># replace keys</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">replace_keys</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+    <span class="c1"># apply jinja template</span>
+    <span class="n">file_names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">file_names</span><span class="p">:</span>
+        <span class="n">applyJinjaTemplate</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+        <span class="c1"># replaces not converted file with converted file which is created in root dir</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+        <span class="n">delete_command</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">)</span>
+
+    <span class="n">filenames_problems</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;*problem_*.tex&quot;</span><span class="p">))</span>
+
+ 
     <span class="c1"># -------------Creation of the PDF File-------------#</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.tex&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -1088,10 +1133,11 @@
             <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">diff}[3][]{</span><span class="se">\\</span><span class="s2">frac{</span><span class="se">\\</span><span class="s2">mathrm</span><span class="si">{d}</span><span class="s2">^{#1}#2}{</span><span class="se">\\</span><span class="s2">mathrm</span><span class="si">{d}</span><span class="s2">{#3}^{#1}}}&quot;</span>
         <span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">Pkte}[2][-999]{</span><span class="se">\\</span><span class="s2">fbox{</span><span class="se">\\</span><span class="s2">textcolor</span><span class="si">{black}</span><span class="s2">{</span><span class="se">\\</span><span class="s2">textbf{#2</span><span class="se">\\</span><span class="s2">,P.}}}}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">Pts}[2][-999]{</span><span class="se">\\</span><span class="s2">fbox{</span><span class="se">\\</span><span class="s2">textcolor</span><span class="si">{black}</span><span class="s2">{</span><span class="se">\\</span><span class="s2">textbf{#2</span><span class="se">\\</span><span class="s2">,P.}}}}</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newenvironment</span><span class="si">{Loesung}</span><span class="s2">{</span><span class="se">\\</span><span class="s2">begin</span><span class="si">{enumerate}</span><span class="s2">}{</span><span class="se">\\</span><span class="s2">end</span><span class="si">{enumerate}</span><span class="s2">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">lsgitem}{</span><span class="se">\\</span><span class="s2">item}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newenvironment</span><span class="si">{Problem}</span><span class="s2">{</span><span class="se">\\</span><span class="s2">begin</span><span class="si">{enumerate}</span><span class="s2">}{</span><span class="se">\\</span><span class="s2">end</span><span class="si">{enumerate}</span><span class="s2">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newenvironment</span><span class="si">{Solution}</span><span class="s2">{</span><span class="se">\\</span><span class="s2">begin</span><span class="si">{enumerate}</span><span class="s2">}{</span><span class="se">\\</span><span class="s2">end</span><span class="si">{enumerate}</span><span class="s2">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">solitem}{</span><span class="se">\\</span><span class="s2">item}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">abb}{</span><span class="se">\\\\</span><span class="s2">[0,5cm]}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newcommand{</span><span class="se">\\</span><span class="s2">ds}{</span><span class="se">\\</span><span class="s2">displaystyle}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">graphicspath{{Latex}}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1102,7 +1148,7 @@
             <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">textbf{{</span><span class="si">{0}</span><span class="s2">}}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">_&quot;</span><span class="p">)))</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input{{</span><span class="si">{0}</span><span class="s2">}}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">textbf</span><span class="si">{Loesung:}</span><span class="se">\\\\\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">textbf</span><span class="si">{Solution:}</span><span class="se">\\\\\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input{{</span><span class="si">{0}</span><span class="s2">}}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;problem&quot;</span><span class="p">,</span> <span class="s2">&quot;solution&quot;</span><span class="p">)))</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">hrulefill</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -1115,9 +1161,7 @@
     <span class="p">)</span>
     <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">delete_command</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">CompilingError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2">, Problem while compiling the template pdf file.&quot;</span>
         <span class="p">)</span>
@@ -1127,8 +1171,11 @@
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">specific_directory</span><span class="p">)</span>
 
     <span class="c1"># moving pdf file to Previews directory</span>
-    <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">FILENAME</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="n">specific_directory</span><span class="p">)</span></div>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">FILENAME</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="n">specific_directory</span><span class="p">)</span>
 
+    <span class="c1"># removing temp files/ dirs</span>
+    <span class="n">delete_command</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span></div>
 
 <span class="c1">#####################################</span>
 <span class="c1">###------------Helpers------------###</span>
