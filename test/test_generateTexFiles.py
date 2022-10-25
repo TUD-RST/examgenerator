@@ -73,7 +73,9 @@ def test_generate_tex_files_Error():
 
     tests_per_group = funcs.combining_problems(settings.number_of_groups, test_list)
 
-    copies_per_group = funcs.determine_copies_per_group(settings.number_of_groups, settings.copies)
+    copies_per_group = funcs.determine_copies_per_group(
+        settings.number_of_groups, settings.copies
+    )
 
     with pytest.raises(customExceptions.MissingFileError):
         file_names_pdf = funcs.generate_tex_files(
@@ -85,5 +87,5 @@ def test_generate_tex_files_Error():
             settings.title,
             settings.semester,
             tests_per_group,
-            copies_per_group
+            copies_per_group,
         )

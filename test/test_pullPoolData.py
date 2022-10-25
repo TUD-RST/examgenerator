@@ -19,7 +19,6 @@ def test_pull_pool_data_correct():
     assert funcs.pull_pool_data(directory1) == result
 
 
-
 def test_pull_pool_data_ignoringFile():
     """
     Ignores a file since it is not a directory.
@@ -33,7 +32,6 @@ def test_pull_pool_data_ignoringFile():
     assert funcs.pull_pool_data(directory2) == result
 
 
-
 def test_pullPollData_noPools():
     """
     Raises a MissingDirectoryError when there is no pools provided.
@@ -41,7 +39,6 @@ def test_pullPollData_noPools():
     directory3 = os.path.join(os.getcwd(), "test_directories", "pullPoolData_3")
     with pytest.raises(customExceptions.MissingDirectoryError):
         funcs.pull_pool_data(directory3)
-
 
 
 def test_pullPollData_notValidName():

@@ -7,6 +7,7 @@ from addict import Dict
 
 from exam_generator import funcs
 
+
 def test_compile():
     """
     Expects no error while compiling.
@@ -27,7 +28,11 @@ def test_compile():
 
     tests_per_group = funcs.combining_problems(settings.number_of_groups, test_list)
 
-    exam_name = "Exams-{}-{}".format(settings.variant_name, settings.semester).replace(" ", "").replace("/", "")
+    exam_name = (
+        "Exams-{}-{}".format(settings.variant_name, settings.semester)
+        .replace(" ", "")
+        .replace("/", "")
+    )
     test_directory = os.path.join(
         root_path,
         exam_name,
@@ -42,7 +47,7 @@ def test_compile():
         command = f"rmdir /s /q {test_directory}"
     elif platform.system() == "Linux":
         command = f"rm -r {test_directory}"
-    
+
     process = subprocess.Popen(command, shell=True)
     process.wait()
 

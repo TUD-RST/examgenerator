@@ -8,7 +8,7 @@ def test_combine_file_names():
     """
     Expects combine_file_names to create the correct joined list.
     """
-    
+
     directory = os.path.join(os.getcwd(), "test_directories", "combineFileNames_1")
 
     pool_info = funcs.pull_pool_data(directory)
