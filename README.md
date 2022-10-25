@@ -61,7 +61,7 @@ in combination with these *settings*...
     "variant_name": "Math1",            ← Short handle displayed in the file names
     "semester": "WS 2022/23",           ← Current semester
     "copies": 1                         ← No parameterization used, no student specific copies needed
-    "group_pairs": 2,                   ← Let's choose our maximum amount of possible groups                   
+    "number_of_groups": 2,              ← Let's choose our maximum amount of possible groups                   
     "page_format_exam": "A4",           ← Students will get their exams printed out in A4 format      
     "page_format_solution": "A5",       ← Solution will be printed in A5 format
 
@@ -72,12 +72,12 @@ in combination with these *settings*...
     },
     "sumo_options":{                           
         "exam_copies": 20,               ← Count of how often, we would like to print the exam
-        "solution_copies": 1            ← There is only one solution copy required
+        "solution_copies": 1             ← There is only one solution copy required
     },
 
 
-    "exam":{                       ← Our exam is created here
-        "Math Exam": [                    ← Name of the exam
+    "exam":{                             ← Our exam is created here
+        "Math Exam": [                   ← Name of the exam
         "MC_easy",                       ← Pool for first problem
         "proofs"                         ← Pool for second problem
         ]
