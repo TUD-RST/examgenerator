@@ -7,7 +7,7 @@ Welcome to exam-generator's documentation!
 ==========================================
 
 .. toctree::
-   userdoc
+   user_doc
    tutorial
    exam_generator
 
