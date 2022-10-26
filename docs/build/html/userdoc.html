@@ -128,10 +128,12 @@ have to have the exact same description following the prefix.</p>
 <p>Subtasks of a problem should be structured in the <code class="docutils literal notranslate"><span class="pre">Problem</span></code> surrounding.
 The problem text has to be written between <code class="docutils literal notranslate"><span class="pre">\begin{Problem}</span></code>, <code class="docutils literal notranslate"><span class="pre">\end{Problem}</span></code>.
 Every subtask starts with the <code class="docutils literal notranslate"><span class="pre">\item</span></code> key.</p>
-<p>Within the solution files the solution text has
+<p>Within the solution files the solution sub-task-text has
 to be written in between <code class="docutils literal notranslate"><span class="pre">\begin{Solution}</span></code>, <code class="docutils literal notranslate"><span class="pre">\end{Solution}</span></code>.
 The solution of every subtask starts with the key
 <code class="docutils literal notranslate"><span class="pre">\solitem</span></code>.</p>
+<p>For both the problem and solution files problem instructions, not part of a subtask should
+be written above their respective surroundings (see example below - text above <code class="docutils literal notranslate"><span class="pre">\begin</span></code>).</p>
 <p>It is possible to assign points to problems and
 solutions with the macro <code class="docutils literal notranslate"><span class="pre">\Pts{n}</span></code>. Where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of points given at that exact spot.
 During the compiling process the given points will be added automatically for the entire test.

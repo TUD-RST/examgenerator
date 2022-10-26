@@ -50,10 +50,13 @@ Subtasks of a problem should be structured in the ``Problem`` surrounding.
 The problem text has to be written between ``\begin{Problem}``, ``\end{Problem}``.
 Every subtask starts with the ``\item`` key. 
 
-Within the solution files the solution text has
+Within the solution files the solution sub-task-text has
 to be written in between ``\begin{Solution}``, ``\end{Solution}``. 
 The solution of every subtask starts with the key
-``\solitem``. 
+``\solitem``.
+
+For both the problem and solution files problem instructions, not part of a subtask should
+be written above their respective surroundings (see example below - text above ``\begin``). 
 
 It is possible to assign points to problems and
 solutions with the macro ``\Pts{n}``. Where ``n`` is the number of points given at that exact spot.
