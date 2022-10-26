@@ -23,8 +23,6 @@
 \newcounter{TotalPoints}
 \setcounter{TotalPoints}{0}
 
-% Benutzung: \Pkte{2} vergibt 2 Punkte
-%            \Pkte[6]{2} zeigt 2-Punkte-Kasten, aber vergibt 6 Punkte
 \newcommand{\Pts}[2][-999]{
     \fbox{\textcolor{black}{\textbf{#2\,P.}}}
     \ifnum#1>-999
@@ -70,7 +68,7 @@
 \setlength{\parindent}{0ex}
 \setlength{\leftmargin}{0ex}
 
-\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} %Kommando zum mittigen platzieren des Textes in Zellen
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} 
 
 \newcommand{\diff}[3][]{\frac{\mathrm{d}^{#1}#2}{\mathrm{d}{#3}^{#1}}}
 
@@ -79,11 +77,11 @@
 
 \begin{document}
 \begin{center}
-\textbf{\large __PRAKTIKUM__}
+\textbf{\large __TITLE__}
 
-\textbf{\large  __VERSUCH__ (__SEMESTER__)}
+\textbf{\large  __EXAM__ (__SEMESTER__)}
 
-\small (__GRUPPE__)
+\small (__GROUP__)
 \end{center}
 
 \vspace{0.5cm}
@@ -103,7 +101,7 @@ Name: \rule{7cm}{1pt} \hspace{2ex} Group: \rule{2cm}{1pt} \hfill Date: \rule{3cm
 
 \begin{enumerate}[leftmargin=*]
 
-__AUFGABEN__
+__PROBLEMS__
 
 \end{enumerate}
 

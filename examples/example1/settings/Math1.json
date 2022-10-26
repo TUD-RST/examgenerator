@@ -1,20 +1,21 @@
 {
-  "group_pairs": 3,
   "title": "Exam for Math 1 (MA1)",
   "variant_name": "Math1",
   "semester": "WS 2022/23",
-  "data": {
+  "number_of_groups": 3,
+  "copies": 1,
+  "page_format_exam": "A4",
+  "page_format_solution": "A4",
+  "options": {
     "generate_single_pdfs": true,
     "generate_sumo_pdf": true,
     "delete_temp_data": true
   },
-  "sumo": {
-    "pages_per_sheet_test": 2,
-    "sumo_problem_copies": 5,
-    "pages_per_sheet_solution": 2,
-    "sumo_solution_copies": 1
+  "sumo_options": {
+    "exam_copies": 5,
+    "solution_copies": 1
   },
-  "test_types": {
+  "exams": {
     "PracticeExam": [
       "MC_easy",
       "proofs",

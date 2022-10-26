@@ -1,20 +1,21 @@
 {
-  "group_pairs": 2,
   "title": "Lab Control Theory 2 (ET)",
   "variant_name": "ET2",
   "semester": "WS 2022/23",
-  "data": {
+  "number_of_groups": 2,
+  "copies": 1,
+  "page_format_exam": "A4",
+  "page_format_solution": "A4",
+  "options": {
     "generate_single_pdfs": true,
     "generate_sumo_pdf": true,
     "delete_temp_data": true
   },
-  "sumo": {
-    "pages_per_sheet_test": 4,
-    "sumo_problem_copies": 15,
-    "pages_per_sheet_solution": 2,
-    "sumo_solution_copies": 1
+  "sumo_options": {
+    "exam_copies": 30,
+    "solution_copies": 1
   },
-  "test_types": {
+  "exams": {
     "Lab03": [
       "A2",
       "B2",
