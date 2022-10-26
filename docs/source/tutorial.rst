@@ -314,8 +314,8 @@ bounds, it will generate replace them with the same exact number.
 Content of problem_2.tex:
 ::
 
-    \begin{Problem}
     Answer the following problems!
+    \begin{Problem}
     \item I am thinking of a number between 1 and 10. What is that number? \Pts{1}
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} + {{context.rnum(__KEY2__, 20, 30)}}$ =   ? \Pts{2}
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}}$ =    ? \Pts{2}
@@ -329,8 +329,8 @@ Now to our solution file, where we would like to not only include the question, 
 Content of solution_2.tex:
 ::
 
-    \begin{Solution}
     The solution is the following:
+    \begin{Solution}
     \item I am thinking of a number between 1 and 10. What is that number? - ${{context.rnum(__KEY4__, 1, 10)}}$  \Pts{1}
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} + {{context.rnum(__KEY2__, 20, 30)}} = {{context.rnum(__KEY1__, 1000, 2000)} + {context.rnum(__KEY2__, 20, 30)}}$ \Pts{2}
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}} = {{context.rnum(__KEY1__, 1000, 2000) * {context.rnum(__KEY3__, 55555, 66666)}$ \Pts{2}
