@@ -1,0 +1,25 @@
+{
+  "title": "Math for Beginners (MA)",
+  "variant_name": "MA 2",
+  "semester": "WS 2022/23",
+  "number_of_groups": 2,
+  "copies": 30,
+  "page_format_exam": "A5",
+  "page_format_solution": "A4",
+  "options": {
+    "generate_single_pdfs": true,
+    "generate_sumo_pdf": true,
+    "delete_temp_data": true
+  },
+  "sumo_options": {
+    "exam_copies": 1,
+    "solution_copies": 1
+  },
+  "exams": {
+    "Math 101": [
+      "easy_calculations",
+      "easy_calculations",
+      "easy_calculations"
+    ]
+  }
+}

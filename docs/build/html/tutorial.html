@@ -96,6 +96,8 @@
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>This tutorial will explain the process behind creating an exam with the exam generator.</p>
 <p>Alongside three different examples you will learn step by step how to make use of this project.</p>
+<p>If you would like to execute these examples, follow along and do not forgot to switch to the <code class="docutils literal notranslate"><span class="pre">root</span> <span class="pre">directory</span></code>
+of each example (example1 or example2 folder) before starting them in your command prompt.</p>
 </section>
 <section id="example-1-basics">
 <h2>Example 1: Basics<a class="headerlink" href="#example-1-basics" title="Permalink to this heading"></a></h2>
@@ -374,14 +376,14 @@ to be able to properly do its job.</p>
 <p>Content of solution_2.tex:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\begin{Solution}
 The solution is the following:
-\item I am thinking of a number between 1 and 10. What is that number? - ${{context.rnum(__KEY4__, 1, 10)}}  \Pts{1}
+\item I am thinking of a number between 1 and 10. What is that number? - ${{context.rnum(__KEY4__, 1, 10)}}$  \Pts{1}
 \item ${{context.rnum(__KEY1__, 1000, 2000)}} + {{context.rnum(__KEY2__, 20, 30)}} = {{context.rnum(__KEY1__, 1000, 2000)} + {context.rnum(__KEY2__, 20, 30)}}$ \Pts{2}
-\item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}} = {{context.rnum(__KEY1__, 1000, 2000)} * {context.rnum(__KEY3__, 55555, 66666)}} \Pts{2}
-\end{Problem}
+\item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}} = {{context.rnum(__KEY1__, 1000, 2000) * {context.rnum(__KEY3__, 55555, 66666)}$ \Pts{2}
+\end{Solution}
 </pre></div>
 </div>
 <p>It is important to notice that when actually performing calculations with the given values the placement of the curly braces <code class="docutils literal notranslate"><span class="pre">{{}}</span></code> changes.
-One bracket pair always wraps around the <em>context.rnum</em> function call, while the other wraps around the entire ,to be calculated, expression.
+Both brackets always wraps around the the entire part of the calculation / expression.
 This is very well seen when looking at the third item of our solution.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>

@@ -208,18 +208,16 @@
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> You have to have at least one copy for each test/ solution in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">page_format_exam</span> <span class="o">!=</span> <span class="s2">&quot;A4&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">pages_format_exam</span> <span class="o">!=</span> <span class="s2">&quot;A5&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">page_format_exam</span> <span class="o">!=</span> <span class="s2">&quot;A4&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">page_format_exam</span> <span class="o">!=</span> <span class="s2">&quot;A5&quot;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages </span><span class="se">\</span>
-<span class="s2">            per sheet for your sumo problem/ solution files in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Please choose between A4 (print problems in A4) or A5 (print problems in A5) pages per sheet for your sumo problem/ solution files in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">page_format_solution</span> <span class="o">!=</span> <span class="s2">&quot;A4&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
         <span class="n">settings</span><span class="o">.</span><span class="n">page_format_solution</span> <span class="o">!=</span> <span class="s2">&quot;A5&quot;</span>
     <span class="p">):</span>
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages </span><span class="se">\</span>
-<span class="s2">            per sheet for your sumo problem/ solution files in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> Please choose between A4 (print problems in A4) or A5 (print problems in A5) pages per sheet for your sumo problem/ solution files in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>

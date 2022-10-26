@@ -140,18 +140,16 @@ def check_settings(settings, settings_file):
             f"{errorInfo()} You have to have at least one copy for each test/ solution in {settings_file}."
         )
 
-    if (settings.page_format_exam != "A4") and (settings.pages_format_exam != "A5"):
+    if (settings.page_format_exam != "A4") and (settings.page_format_exam != "A5"):
         raise SettingsError(
-            f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \
-            per sheet for your sumo problem/ solution files in {settings_file}."
+            f"{errorInfo()} Please choose between A4 (print problems in A4) or A5 (print problems in A5) pages per sheet for your sumo problem/ solution files in {settings_file}."
         )
 
     if (settings.page_format_solution != "A4") and (
         settings.page_format_solution != "A5"
     ):
         raise SettingsError(
-            f"{errorInfo()} Please choose between 2 (print problems in A4) or 4 (print problems in A5) pages \
-            per sheet for your sumo problem/ solution files in {settings_file}."
+            f"{errorInfo()} Please choose between A4 (print problems in A4) or A5 (print problems in A5) pages per sheet for your sumo problem/ solution files in {settings_file}."
         )
 
     if settings.number_of_groups < 1:

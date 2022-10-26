@@ -330,13 +330,13 @@ Content of solution_2.tex:
 
     \begin{Solution}
     The solution is the following:
-    \item I am thinking of a number between 1 and 10. What is that number? - ${{context.rnum(__KEY4__, 1, 10)}}  \Pts{1}
+    \item I am thinking of a number between 1 and 10. What is that number? - ${{context.rnum(__KEY4__, 1, 10)}}$  \Pts{1}
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} + {{context.rnum(__KEY2__, 20, 30)}} = {{context.rnum(__KEY1__, 1000, 2000)} + {context.rnum(__KEY2__, 20, 30)}}$ \Pts{2}
-    \item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}} = {{context.rnum(__KEY1__, 1000, 2000)} * {context.rnum(__KEY3__, 55555, 66666)}} \Pts{2}
-    \end{Problem}
+    \item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}} = {{context.rnum(__KEY1__, 1000, 2000) * {context.rnum(__KEY3__, 55555, 66666)}$ \Pts{2}
+    \end{Solution}
 
 It is important to notice that when actually performing calculations with the given values the placement of the curly braces ``{{}}`` changes.
-One bracket pair always wraps around the *context.rnum* function call, while the other wraps around the entire ,to be calculated, expression.
+Both brackets always wraps around the the entire part of the calculation / expression.
 This is very well seen when looking at the third item of our solution.
 
 .. hint::

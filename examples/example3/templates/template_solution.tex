@@ -1,0 +1,101 @@
+\documentclass[a4paper,12pt]{article}
+
+%\usepackage[ansinew]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{german}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{subfigure}
+\usepackage{tabularx}
+\usepackage{cancel}
+\usepackage{units}
+\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
+
+\newcounter{PartialPoints}
+\newcounter{ProblemPoints}
+\newcounter{TotalPoints}
+\setcounter{TotalPoints}{0}
+
+
+\newcommand{\Pts}[2][-999]{
+    \fbox{\textcolor{red}{\textbf{#2\,P.}}}
+    \ifnum#1>-999
+    \addtocounter{PartialPoints}{#1}
+    \addtocounter{ProblemPoints}{#1}
+    \addtocounter{TotalPoints}{#1}
+    \else
+    \ifnum#2>0
+    \addtocounter{PartialPoints}{#2}
+    \addtocounter{ProblemPoints}{#2}
+    \addtocounter{TotalPoints}{#2}
+    \fi
+    \fi
+}
+\newcommand{\SumPts}{
+    \dotfill \textcolor{red}{$\mathbf{\Sigma}$: \textbf{\arabic{PartialPoints}\,P.}}
+    \setcounter{PartialPoints}{0}
+}
+\newcommand{\ProblemPts}{
+    \hrulefill \textcolor{red}{\large $\mathbf{\Sigma}$  \textbf{\arabic{ProblemPoints}\,P.}}\\[2ex]
+    \setcounter{PartialPoints}{0}
+    \setcounter{ProblemPoints}{0}
+}
+\newcommand{\TotalPts}{
+    \hfill \fbox{\textcolor{red}{\Large Total Points: \textbf{\arabic{TotalPoints}\,P.}}}
+}
+
+\newenvironment{Solution}{
+    \setcounter{PartialPoints}{0}
+    \setcounter{ProblemPoints}{0}
+    \begin{enumerate}
+}{
+    \SumPts
+    \end{enumerate}
+    
+    \ProblemPts
+    \setcounter{ProblemPoints}{0}
+}
+
+\newcommand{\solitem}{
+\ifnum\value{PartialPoints}>0
+\SumPts
+\fi
+\item
+}
+
+\setlength{\parskip}{2ex}
+\setlength{\parindent}{0ex}
+
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} 
+
+\newcommand{\diff}[3][]{\frac{\mathrm{d}^{#1}#2}{\mathrm{d}{#3}^{#1}}}
+
+\newcommand{\abb}{\\[0,5cm]}
+\newcommand{\ds}{\displaystyle}
+
+\begin{document}
+\begin{center}
+\textbf{\large __TITLE__}
+
+\textbf{\large __EXAM__ (__SEMESTER__): Solution}
+
+\small (__GROUP__)
+\end{center}
+
+
+\vspace{0.5cm}
+
+\begin{enumerate}
+
+__PROBLEMS__
+
+\end{enumerate}
+
+\TotalPts
+
+\end{document}
