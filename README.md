@@ -30,6 +30,9 @@ Optionally, you can also view our documentation locally, by executing any of the
 ## Example
 
 The exam generator allows quick creation of tests and exams.
+Now following is a short insight on an exam demo. For a detailed tutorial,
+please read the [user doc](https://exam-generator.readthedocs.io/en/latest/userdoc.html) and
+learn along with detailed [tutorials](https://exam-generator.readthedocs.io/en/latest/tutorial.html)
 
 With the following *directory setup*...
 
@@ -92,6 +95,8 @@ exam_generator -ct [path of settings file]
 we can easily create an exam, looking like this:
 
 ![Problem](./docs/readme/problem.png)
+
+
 
 
 

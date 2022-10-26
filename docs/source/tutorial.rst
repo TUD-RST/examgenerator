@@ -9,7 +9,8 @@ This tutorial will explain the process behind creating an exam with the exam gen
 Alongside three different examples you will learn step by step how to make use of this project.
 
 If you would like to execute these examples, follow along and do not forgot to switch to the ``root directory``
-of each example (example1 or example2 folder) before starting them in your command prompt.
+of each example (``examples/example1`` or ``examples/example2`` directory) with your command
+prompt before starting them according to the instructions given in your shell.
 
 
 Example 1: Basics
