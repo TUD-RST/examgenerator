@@ -74,7 +74,7 @@ def check_settings(settings, settings_file):
     """
     if not isinstance(settings.number_of_groups, int):
         raise SettingsError(
-            f"{errorInfo()} group_pairs in {settings_file} is not of the required type int. \
+            f"{errorInfo()} number_of_groups in {settings_file} is not of the required type int. \
             Please make sure all types match the ones given in the instructions."
         )
 
@@ -286,7 +286,7 @@ def combining_problems(number_group_pairs, test_list_variant):
     problems and their according solutions from given pools
     depending on the test variant.
 
-    :param number_group_pairs: Number of group pairs
+    :param number_group_pairs: Number of groups
     :type number_group_pairs: int
 
     :param test_list_variant: List of test variants belonging to chosen variant
@@ -360,7 +360,7 @@ def generate_tex_files(
     :param template_directory: Directory of the problem/ solution templates
     :type template_directory: int
 
-    :param number_group_pairs: Number of group pairs
+    :param number_group_pairs: Number of groups
     :type number_group_pairs: int
 
     :param test_list_variant: List of test variants belonging to chosen variant

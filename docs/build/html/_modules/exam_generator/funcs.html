@@ -142,7 +142,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">number_of_groups</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">SettingsError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> group_pairs in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type int. </span><span class="se">\</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errorInfo</span><span class="p">()</span><span class="si">}</span><span class="s2"> number_of_groups in </span><span class="si">{</span><span class="n">settings_file</span><span class="si">}</span><span class="s2"> is not of the required type int. </span><span class="se">\</span>
 <span class="s2">            Please make sure all types match the ones given in the instructions.&quot;</span>
         <span class="p">)</span>
 
@@ -354,7 +354,7 @@
 <span class="sd">    problems and their according solutions from given pools</span>
 <span class="sd">    depending on the test variant.</span>
 
-<span class="sd">    :param number_group_pairs: Number of group pairs</span>
+<span class="sd">    :param number_group_pairs: Number of groups</span>
 <span class="sd">    :type number_group_pairs: int</span>
 
 <span class="sd">    :param test_list_variant: List of test variants belonging to chosen variant</span>
@@ -428,7 +428,7 @@
 <span class="sd">    :param template_directory: Directory of the problem/ solution templates</span>
 <span class="sd">    :type template_directory: int</span>
 
-<span class="sd">    :param number_group_pairs: Number of group pairs</span>
+<span class="sd">    :param number_group_pairs: Number of groups</span>
 <span class="sd">    :type number_group_pairs: int</span>
 
 <span class="sd">    :param test_list_variant: List of test variants belonging to chosen variant</span>

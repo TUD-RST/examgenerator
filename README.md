@@ -10,9 +10,10 @@ boundaries, provided in your LaTeX files.
 
 ## Installation
 
-
+- install [python](https://www.python.org/downloads/) on your device (version > 3.7)
 - clone the repository
-- run `pip install -e .` (run from where the `settings` directory lives).
+- open your command prompt in the directory where the `setup.py` file is located
+- run `pip install -e .` in your command line 
 
 ## Current Status and Issues
 
@@ -86,7 +87,7 @@ in combination with these *settings*...
 ```
 with...
 
-exam_generator -ct [path to settings file]
+exam_generator -ct [path of settings file]
 
 we can easily create an exam, looking like this:
 
