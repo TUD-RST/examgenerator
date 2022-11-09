@@ -43,7 +43,7 @@ class Pool:
         # [(filename_problem, filename_solution)]; problems which were pulled by last group
 
         # Creates a list with all problems of required pool
-        problem_regex = re.compile(f"^problem_\\d+\\.tex$")
+        problem_regex = re.compile(f"^problem_.+\\.tex$")
         file_names_pool_problems = [
             file for file in pool_files if re.match(problem_regex, file) is not None
         ]
