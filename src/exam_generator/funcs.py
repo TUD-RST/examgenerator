@@ -520,10 +520,11 @@ def create_file_content(
     file_content = file_content.replace("__GROUP__", group_name)
 
     # Creation of the problem strings + implementation in the LaTeX file
-    problem_string = create_problem_content(
+    problem_string, graphics_path = create_problem_content(
         tests_per_group, group, test_index, prob_sol_index, student, test
     )
 
+    file_content = file_content.replace("__GRAPHICS_PATH__", graphics_path)
     file_content = file_content.replace("__PROBLEMS__", problem_string)
 
     return file_content
@@ -553,21 +554,27 @@ def create_problem_content(
     :param test: name of test
     :type test: str
 
-    :returns: string concisting of all problems for a student
-    :rtype: str
+    :returns: 2-element tuple: string consisting of all problems for a student
+                               and a string the graphicspath
+    :rtype: (str, str)
     """
     problem_string = ""
+    graphics_dirs = ""
     for prob_sol in tests_per_group[group][test_index]:
         problem_string += f"\\item\n"
         pool_name = prob_sol[2]
+        problem_dir = os.path.join(os.getcwd(), "pool_data", pool_name)
         with open(
-            os.path.join(os.getcwd(), "pool_data", pool_name, prob_sol[prob_sol_index]),
+            os.path.join(problem_dir, prob_sol[prob_sol_index]),
             "r", encoding="utf8"
         ) as d:
             problem_str = d.read()
         problem_string += f"{problem_str}\n\n"
+        problem_dir = problem_dir.replace("\\", "/")
+        graphics_dirs += f"{{{problem_dir}}}"
 
     problem_string = replace_keys(problem_string, test, group, student)
+    graphics_dirs = f"\\graphicspath{{{graphics_dirs}}}"
 
     temp_file = "temp_file.tex"
     with open(temp_file, "w", encoding="utf8") as temp:
@@ -580,7 +587,7 @@ def create_problem_content(
 
     delete_command("temp_file")
 
-    return problem_string
+    return problem_string, graphics_dirs
 
 
 ##############################################
