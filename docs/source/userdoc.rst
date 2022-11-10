@@ -46,12 +46,12 @@ Additionally, please refrain from using "\\" or "/" in your filenames since this
 
 File Content
 """"""""""""""""""""""""
-Subtasks of a problem should be structured in the ``Problem`` surrounding.
-The problem text has to be written between ``\begin{Problem}``, ``\end{Problem}``.
-Every subtask starts with the ``\item`` key. 
+Subtasks of a problem should be structured in the ``problem`` environment.
+The problem text has to be written between ``\begin{problem}``, ``\end{problem}``.
+Every subtask starts with the ``\item`` keyword.
 
 Within the solution files the solution sub-task-text has
-to be written in between ``\begin{Solution}``, ``\end{Solution}``. 
+to be written in between ``\begin{solution}``, ``\end{solution}``.
 The solution of every subtask starts with the key
 ``\solitem``.
 
@@ -77,20 +77,20 @@ Problem example:
 ::
    
    This is an example problem.
-   \begin{Problem}
+   \begin{problem}
    \item Are you happy? \Pts{10}
    \item What is ${{context.rnum(__KEY1__, 1, 100)}} + {{context.rnum(__KEY2__, 1, 100)}}$? \Pts{5}
-   \end{Problem}
+   \end{problem}
 
 
 Solution example:
 ::
 
    The solution is the following:
-   \begin{Solution}
+   \begin{solution}
    \solitem Are you happy? - Yes \Pts{10}
    \solitem ${{context.rnum(__KEY1__, 1, 100)}} + {{context.rnum(__KEY2__, 1, 100)}} = {{context.rnum(__KEY1__, 1, 100) + context.rnum(__KEY2__, 1, 100)}}$ \Pts{5}
-   \end{Solution}
+   \end{solution}
 
 .. hint::
 
