@@ -561,9 +561,7 @@ def create_problem_content(
         problem_string += f"\\item\n"
         pool_name = prob_sol[2]
         with open(
-            os.path.join(
-                os.getcwd(), "pool_data", pool_name, prob_sol[prob_sol_index]
-            ).replace("\\", "/"),
+            os.path.join(os.getcwd(), "pool_data", pool_name, prob_sol[prob_sol_index]),
             "r", encoding="utf8"
         ) as d:
             problem_str = d.read()
