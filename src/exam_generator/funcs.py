@@ -400,9 +400,9 @@ def generate_tex_files(
              the settings directory. Please make sure your file structure follows the directions."
         )
 
-    with open(template_problem_path, "r") as d:
+    with open(template_problem_path, "r", encoding="utf8") as d:
         template_problem = d.read()
-    with open(template_solution_path, "r") as d:
+    with open(template_solution_path, "r", encoding="utf8") as d:
         template_solution = d.read()
 
     for group in range(number_group_pairs):
@@ -436,7 +436,7 @@ def generate_tex_files(
 
                 # file_content_prob = replace_keys(file_content_prob, keys)
 
-                with open(file_path_problem, "w+") as d:
+                with open(file_path_problem, "w+", encoding="utf8") as d:
                     d.write(file_content_prob)
 
                 # Solution
@@ -462,7 +462,7 @@ def generate_tex_files(
 
                 # file_content_sol = replace_keys(file_content_sol, keys)
 
-                with open(file_path_sol, "w+") as d:
+                with open(file_path_sol, "w+", encoding="utf8") as d:
                     d.write(file_content_sol)
 
 
@@ -561,10 +561,8 @@ def create_problem_content(
         problem_string += f"\\item\n"
         pool_name = prob_sol[2]
         with open(
-            os.path.join(
-                os.getcwd(), "pool_data", pool_name, prob_sol[prob_sol_index]
-            ).replace("\\", "/"),
-            "r",
+            os.path.join(os.getcwd(), "pool_data", pool_name, prob_sol[prob_sol_index]),
+            "r", encoding="utf8"
         ) as d:
             problem_str = d.read()
         problem_string += f"{problem_str}\n\n"
@@ -572,12 +570,12 @@ def create_problem_content(
     problem_string = replace_keys(problem_string, test, group, student)
 
     temp_file = "temp_file.tex"
-    with open(temp_file, "w") as temp:
+    with open(temp_file, "w", encoding="utf8") as temp:
         temp.write(problem_string)
 
     apply_jinja_template(os.getcwd(), temp_file)
 
-    with open(temp_file, "r") as d:
+    with open(temp_file, "r", encoding="utf8") as d:
         problem_string = d.read()
 
     delete_command("temp_file")
@@ -732,7 +730,7 @@ def apply_jinja_template(latex_directory, file):
 
     file_content = template.render(context=context, cbw=curly_braces_wrapper)
 
-    with open(file, "w") as resfile:
+    with open(file, "w", encoding="utf8") as resfile:
         resfile.write(file_content)
 
 
@@ -1111,11 +1109,11 @@ def preview_parameterization(root_directory, filenames_problems):
     files: list = glob.glob(os.path.join(temp_dir, "*.tex"))
     # replace keys
     for file in files:
-        with open(file, "r") as f:
+        with open(file, "r", encoding="utf8") as f:
             content = f.read()
         content = replace_keys(content)
 
-        with open(file, "w+") as f:
+        with open(file, "w+", encoding="utf8") as f:
             f.write(content)
 
     # apply jinja template

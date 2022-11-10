@@ -76,7 +76,7 @@ def exam_generator(args):
         )
 
     # Loading the json settings into a Python dictionary
-    with open(path_settings, "r") as json_datei:
+    with open(path_settings, "r", encoding="utf8") as json_datei:
         settings_dictionary = json.load(json_datei)
 
     # converts Python dict into addict Dic
