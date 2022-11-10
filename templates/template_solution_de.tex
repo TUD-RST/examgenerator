@@ -1,5 +1,6 @@
 \documentclass[a4paper,12pt]{article}
 
+%\usepackage[ansinew]{inputenc}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{siunitx}
@@ -12,19 +13,16 @@
 \usepackage{subfigure}
 \usepackage{tabularx}
 \usepackage{cancel}
-\usepackage{enumitem}
 \usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcounter{PartialPoints}
 \newcounter{ProblemPoints}
 \newcounter{TotalPoints}
 \setcounter{TotalPoints}{0}
 
+
 \newcommand{\Pts}[2][-999]{
-    \fbox{\textcolor{black}{\textbf{#2\,P.}}}
+    \fbox{\textcolor{red}{\textbf{#2\,P.}}}
     \ifnum#1>-999
     \addtocounter{PartialPoints}{#1}
     \addtocounter{ProblemPoints}{#1}
@@ -38,39 +36,40 @@
     \fi
 }
 \newcommand{\SumPts}{
-    \dotfill \textcolor{black}{$\mathbf{\Sigma}$: \textbf{\arabic{PartialPoints}\,P.}}
+    \dotfill \textcolor{red}{$\mathbf{\Sigma}$: \textbf{\arabic{PartialPoints}\,P.}}
     \setcounter{PartialPoints}{0}
 }
 \newcommand{\ProblemPts}{
-	\ifnum\value{PartialPoints}>0
-    \hrulefill \textcolor{black}{\large $\mathbf{\Sigma}$  \textbf{\arabic{ProblemPoints}\,P.}}\\[2ex]
+    \hrulefill \textcolor{red}{\large $\mathbf{\Sigma}$  \textbf{\arabic{ProblemPoints}\,P.}}\\[2ex]
     \setcounter{PartialPoints}{0}
     \setcounter{ProblemPoints}{0}
-	\fi
 }
 \newcommand{\TotalPts}{
-	\ifnum\value{ProblemPoints}>0
-    \hfill \fbox{\textcolor{black}{\Large Total Points: \textbf{\arabic{TotalPoints}\,P.}}}
-	\fi
+    \hfill \fbox{\textcolor{red}{\Large Summe Punkte: \textbf{\arabic{TotalPoints}\,P.}}}
 }
 
-\newenvironment{problem}{
+\newenvironment{solution}{
     \setcounter{PartialPoints}{0}
     \setcounter{ProblemPoints}{0}
     \begin{enumerate}
 }{
+    \SumPts
     \end{enumerate}
     
     \ProblemPts
     \setcounter{ProblemPoints}{0}
 }
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\solitem}{
+\ifnum\value{PartialPoints}>0
+\SumPts
+\fi
+\item
+}
 
 \setlength{\parskip}{2ex}
 \setlength{\parindent}{0ex}
-\setlength{\leftmargin}{0ex}
+
 
 \newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} 
 
@@ -83,27 +82,15 @@
 \begin{center}
 \textbf{\large __TITLE__}
 
-\textbf{\large  __EXAM__ (__SEMESTER__)}
+\textbf{\large __EXAM__ (__SEMESTER__): Solution}
 
 \small (__GROUP__)
 \end{center}
 
-\vspace{0.5cm}
-
-\fbox{\parbox{\textwidth}{
-\vspace{4ex}
-
-Name: \rule{7cm}{1pt} \hspace{2ex} Group: \rule{2cm}{1pt} \hfill Date: \rule{3cm}{1pt}
-
-\vspace{1cm}
-
-\hfill Points: \rule{1.9cm}{1pt}/\rule{1.9cm}{1pt} \hspace{1cm} Grade: \rule{2cm}{1pt} \hspace{1cm} Signum: \rule{2.5cm}{1pt}
-}}
 
 \vspace{0.5cm}
 
-
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
 
 __PROBLEMS__
 

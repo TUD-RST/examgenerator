@@ -315,11 +315,11 @@ Content of problem_2.tex:
 ::
 
     Answer the following problems!
-    \begin{Problem}
+    \begin{problem}
     \item I am thinking of a number between 1 and 10. What is that number? \Pts{1}
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} + {{context.rnum(__KEY2__, 20, 30)}}$ =   ? \Pts{2}
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}}$ =    ? \Pts{2}
-    \end{Problem}
+    \end{problem}
 
 Please note that you have to include ``$`` at the beginning *and* the end of each expression in order for the compiler
 to be able to properly do its job.
@@ -330,11 +330,11 @@ Content of solution_2.tex:
 ::
 
     The solution is the following:
-    \begin{Solution}
+    \begin{solution}
     \item I am thinking of a number between 1 and 10. What is that number? - ${{context.rnum(__KEY4__, 1, 10)}}$  \Pts{1}
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} + {{context.rnum(__KEY2__, 20, 30)}} = {{context.rnum(__KEY1__, 1000, 2000)} + {context.rnum(__KEY2__, 20, 30)}}$ \Pts{2}
     \item ${{context.rnum(__KEY1__, 1000, 2000)}} \cdot {{context.rnum(__KEY3__, 55555, 66666)}} = {{context.rnum(__KEY1__, 1000, 2000) * {context.rnum(__KEY3__, 55555, 66666)}$ \Pts{2}
-    \end{Solution}
+    \end{solution}
 
 It is important to notice that when actually performing calculations with the given values the placement of the curly braces ``{{}}`` changes.
 Both brackets always wraps around the the entire part of the calculation / expression.
