@@ -2,6 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{siunitx}
 \usepackage{german}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -12,7 +13,6 @@
 \usepackage{tabularx}
 \usepackage{cancel}
 \usepackage{enumitem}
-\usepackage{units}
 \usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
 
 
@@ -42,15 +42,19 @@
     \setcounter{PartialPoints}{0}
 }
 \newcommand{\ProblemPts}{
+	\ifnum\value{PartialPoints}>0
     \hrulefill \textcolor{black}{\large $\mathbf{\Sigma}$  \textbf{\arabic{ProblemPoints}\,P.}}\\[2ex]
     \setcounter{PartialPoints}{0}
     \setcounter{ProblemPoints}{0}
+	\fi
 }
 \newcommand{\TotalPts}{
+	\ifnum\value{ProblemPoints}>0
     \hfill \fbox{\textcolor{black}{\Large Total Points: \textbf{\arabic{TotalPoints}\,P.}}}
+	\fi
 }
 
-\newenvironment{Problem}{
+\newenvironment{problem}{
     \setcounter{PartialPoints}{0}
     \setcounter{ProblemPoints}{0}
     \begin{enumerate}
