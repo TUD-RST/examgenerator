@@ -42,12 +42,16 @@
     \setcounter{PartialPoints}{0}
 }
 \newcommand{\ProblemPts}{
+	\ifnum\value{PartialPoints}>0
     \hrulefill \textcolor{black}{\large $\mathbf{\Sigma}$  \textbf{\arabic{ProblemPoints}\,P.}}\\[2ex]
     \setcounter{PartialPoints}{0}
     \setcounter{ProblemPoints}{0}
+	\fi
 }
 \newcommand{\TotalPts}{
+	\ifnum\value{ProblemPoints}>0
     \hfill \fbox{\textcolor{black}{\Large Total Points: \textbf{\arabic{TotalPoints}\,P.}}}
+	\fi
 }
 
 \newenvironment{problem}{
