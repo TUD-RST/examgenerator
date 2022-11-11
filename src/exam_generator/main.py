@@ -254,6 +254,7 @@ def main():
     parser.add_argument(
         "-ct",
         "--create_test",
+        metavar="SETTINGSPATH",
         help="Creates a test based on the provided json settings file. Provide the path to the settings file of your liking.",
     )
     parser.add_argument(
@@ -265,17 +266,20 @@ def main():
     parser.add_argument(
         "-mp",
         "--make_pool",
-        help="Creates a preview for all problems of the given pool. Provide the Path to the pool.",
+        metavar="PATH",
+        help="Creates a preview for all problems of the given pool. Provide the path to the pool.",
     )
     parser.add_argument(
         "-ms",
         "--make_specific",
-        help="Creates a Preview for only the given problem you will need to provide the path to the problem",
+        metavar="PATH",
+        help="Creates a preview for only the given problem you will need to provide the path to the problem",
     )
 
     parser.add_argument(
         "-rs",
         "--random_seed",
+        metavar="SEED",
         type=int,
         help="Set a new random seed, allowing the same exam to be created, yet with different problems pulled. Provide a positive integer of your liking.",
     )
