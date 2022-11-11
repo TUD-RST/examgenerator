@@ -3,9 +3,9 @@ User Doc
 
 Introduction
 -----------------
-exam_generator is a script which is designed to create exams/ tests from 
+exam_generator is a script which is designed to create exams/ tests from
 pools of problems while ensuring that there will be no repetition amongst
-different groups. 
+different groups.
 The exams/ tests are based off of two major components:
 LaTeX files (problems, solutions, templates) and user defined settings.
 
@@ -16,8 +16,8 @@ Content Generation
 
 LaTeX Templates
 ^^^^^^^^^^^^^^^^^^^^^^^
-There are two LaTeX templates in the ``templates`` directory: one for problems 
-and one for sample solution and evaluation. Within the templates there are 
+There are two LaTeX templates in the ``templates`` directory: one for problems
+and one for sample solution and evaluation. Within the templates there are
 placeholders, which will later be replaced by this script.
 
 Problems/ Solutions
@@ -25,29 +25,29 @@ Problems/ Solutions
 
 Pools
 """"""""""""""""""""""""
-Problems and solutions are located in the
-``pool_data`` directory which is furthermore separated into *pools*. 
-Pools are sets of problems/ solutions of a specfic type. They can for example differ between general
-problems, that are used in every test, and problems that are specific for a given experiment. 
+Problems and solutions are located as LaTeX (```*.tex```) files in the
+``pool_data`` directory. This directory is separated into several *pool*-directories.
+Pools are sets of problems/ solutions of a specfic category. They can for example differ between general
+problems, that are used in every test, and problems that are specific for a given experiment.
 You may create as many pools following any category/ rule as you like. Pools are the small puzzle pieces
 that in the end will decide over the content of your exam. Names can range from *A1* to *ExperimentXYZ*.
 You have the freedom of choice. However, please refrain from including empty spaces.
 
-Naming Scheme
+File Naming Scheme
 """"""""""""""""""""""""
 
-Problems and solutions are saved in separate files. Files for problems have the prefix ``problem\_``,
-solutions the prefix ``solution\_``. 
+Problems and solutions are saved in separate ```*.tex```-files. Files for problems must
+have the prefix ``problem_``, solutions the prefix ``solution_``.
 
 You may follow up the prefix with any name to your liking, however mind that problem/ solution pairs
-have to have the exact same description following the prefix. 
+have to have the exact same description following the prefix.
 
 Additionally, please refrain from using "\\" or "/" in your filenames since this will cause compiling errors.
 
 File Content
 """"""""""""""""""""""""
-Subtasks of a problem should be structured in the ``problem`` environment.
 The problem text has to be written between ``\begin{problem}``, ``\end{problem}``.
+Subtasks of a problem should be structured in the ``problem`` environment.
 Every subtask starts with the ``\item`` keyword.
 
 Within the solution files the solution sub-task-text has
@@ -55,8 +55,11 @@ to be written in between ``\begin{solution}``, ``\end{solution}``.
 The solution of every subtask starts with the key
 ``\solitem``.
 
-For both the problem and solution files problem instructions, not part of a subtask should
-be written above their respective surroundings (see example below - text above ``\begin``). 
+For both, the problem and solution files, instructions which are not part of a subtask should
+be written above their respective environments (see example below - text above ``\begin``).
+
+Images can be included using the ```\includegraphics``` command. The path to the image must be
+relative to the problem or soultion file.
 
 It is possible to assign points to problems and
 solutions with the macro ``\Pts{n}``. Where ``n`` is the number of points given at that exact spot.
@@ -64,18 +67,19 @@ During the compiling process the given points will be added automatically for th
 Please be aware that if you would like to show points both on the exam and the solutions,
 you will have to manually input points in the problem and solution file.
 
-Furthermore, this script allows you to create problems with randomly generated paramaters. 
+Furthermore, this script allows you to create problems with randomly generated paramaters.
 In order to implement a random number within given bounds, you can call ``${{context.rnum(__KEY__, lower_bound, upper_bound)}}$``.
 The ``KEY`` gives you the option to reuse the same number within a problem/ solution. It follows a simple structure: ``__KEY{number}__``.
-Therefore, in order to reuse a number you can for example provide ``__KEY1__`` within all calls of the context.rnum function, 
+Therefore, in order to reuse a number you can for example provide ``__KEY1__`` within all calls of the context.rnum function,
 where the same value is required. While those random values do transfer over to the according solution files, they do not affect unlinked problems.
 This paramaterization can also be used to calculate the solutions for your given problems, simply by providing your formula with the according
-random values. More information on how to implement paramaterization into your exams is given in our third tutorial. 
-   
+random values. More information on how to implement paramaterization into your exams is given in our third tutorial.
+
+
 
 Problem example:
 ::
-   
+
    This is an example problem.
    \begin{problem}
    \item Are you happy? \Pts{10}
@@ -100,7 +104,7 @@ Solution example:
 Settings
 --------------------
 
-There are the following options for the exam creation, which can be configured 
+There are the following options for the exam creation, which can be configured
 in a json settings file:
 
 -  *title*: Title of the exam
@@ -112,15 +116,15 @@ in a json settings file:
 
 -  *number_of_groups*: Determines the number of different groups.
 
--  *copies*: When using paramaterization, this is the number of students who are taking the exam. 
-   
+-  *copies*: When using paramaterization, this is the number of students who are taking the exam.
+
 -  *page_format_exam*: Set this according on the planned printing format - Opions are "A4" or "A5"
 
 -  *page_format_solution*: Set this according on the planned printing format - Opions are "A4" or "A5"
 
 - options
    -  *generate_single_pdfs*: Should individual pdf files be created for each
-      exam (true/ false) 
+      exam (true/ false)
    -  *generate_sumo_pdf*: Should a sumo-file be created (true/ false)
 
    -  *delete_temp_data*: Should temporary data be deleted (true; false) true
@@ -130,26 +134,26 @@ in a json settings file:
 
    Enabling *generate_sumo_pdf* allows creating the tests for the entire semester in
    one go. However, this is only useful if the problems and solutions are
-   final and will not have to be corrected afterwards. 
+   final and will not have to be corrected afterwards.
 
 - sumo_options
    -  *solution_copies*: Number of solution copies in the sumo file
-   -  *exam_copies*: Number of copies per exam in the sumo file. 
+   -  *exam_copies*: Number of copies per exam in the sumo file.
 
 .. hint::
 
    The final amount of copies is determined by the product of *copies* and *exam_copies*.
 
-   When using *paramaterization* in any of your exam problems, ``copies`` is determined by the total 
+   When using *paramaterization* in any of your exam problems, ``copies`` is determined by the total
    number of students taking the exam and ``exam_copies`` should therefore be set to 1, unless you would
    like to have more copies of the entire exam.
-   On the other hand when **not** using paramaterization, copies should be set to 1 and exam_copies should 
+   On the other hand when **not** using paramaterization, copies should be set to 1 and exam_copies should
    be set to the total amount of students taking the exam. This allows you to print every individual exam as
    often as you like, without having to always print all questions for a predetermined amount of students.
 
 - *exams*: This is where you will be able to build your exams out of your pools.
-   For example: "TestExam": ["A1", "B", "CV03"] will create an exam called TestExam consisting 
-   of 3 problems randomly newly drawn from the given pools for each group_pair. A more detailed 
+   For example: "TestExam": ["A1", "B", "CV03"] will create an exam called TestExam consisting
+   of 3 problems randomly newly drawn from the given pools for each group_pair. A more detailed
    example of how to create exams is provided in the tutorial.
 
 Directory setup
@@ -157,7 +161,7 @@ Directory setup
 Following everything mentioned previously, your directory has to contain at least the following:
 
 ::
-   
+
    ├───pool_data
    │   └───examplePool_1
    │           problem_example1.tex
@@ -166,7 +170,7 @@ Following everything mentioned previously, your directory has to contain at leas
    ├───settings
    │       settings_example.json
    │
-   └────templates                            
+   └────templates
            template_problem.tex
            template_solution.tex
 
@@ -205,8 +209,8 @@ solutions:
 
 -  *-ms* [PROBLEMPATH] (–make_specific [PROBLEMPATH])
    creates a preview file for the given problem name of the problem
-   
-  
+
+
 
 -  *-h* (–help) for help
 
