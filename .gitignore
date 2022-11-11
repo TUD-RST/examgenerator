@@ -22,3 +22,7 @@
 !/docs
 !/test 
 !/examples
+/docs/build_develop/
+/dist/
+/.idea/
+/build/lib/exam_generator/

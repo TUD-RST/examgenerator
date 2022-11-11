@@ -26,7 +26,7 @@ As mentioned in the user documentation this project requires a specific director
 Since we would like to create an exam with three different pools, we firstly need to create three subdirectories
 in the ``pool_data`` directory. Secondly, we provide each pool with at least as many problem/ solution pairs as
 the number of different groups we would like to have. In this case we provide three problem/solution pairs for each
-pool, therefore allowing a maximum of three different groups. 
+pool, therefore allowing a maximum of three different groups.
 Lastly, we create our ``Math1.json`` settings file in the ``settings`` directory.
 
 Our requirements result in the following structure:
@@ -34,8 +34,8 @@ Our requirements result in the following structure:
 
 ::
 
-    C:.                                 ← Our current working directory                  
-    ├───pool_data                       ← Directory for all different pool directories                
+    C:.                                 ← Our current working directory
+    ├───pool_data                       ← Directory for all different pool directories
     │   ├───MC_easy                     ← Pool with easy multiple choice questions
     │   │       problem_1.tex
     │   │       problem_2.tex
@@ -60,12 +60,12 @@ Our requirements result in the following structure:
     │           solution_8.tex
     │           solution_9.tex
     │
-    ├───settings                        
-    │       Math1.json                  ← Settings file 
+    ├───settings
+    │       Math1.json                  ← Settings file
     │
     └───templates                       ← LaTeX Templates
             template_problem.tex
-            template_solution.tex 
+            template_solution.tex
 
 
 Settings
@@ -75,14 +75,14 @@ Now it is time to configure our settings in ``Math1.json``.
 
 ::
 
-    {            
+    {
     "title": "Exam for Math 1 (MA1)",   ← The title that will be displayed on the exam
     "variant_name": "Math1",            ← Short handle displayed in the file names
     "semester": "WS 2022/23",           ← Current semester
     "number_of_groups": 3,              ← Let's choose our maximum amount of possible groups
-    "copies": 1                         ← We are not using parametirization, therefore copies is set to 1                   
-    "page_format_exam": "A4",           ← Students will get their tests printed out in A4 format      
-    "page_format_solution": "A5",       ← Solution will be printed in A5 
+    "copies": 1                         ← We are not using parametirization, therefore copies is set to 1
+    "page_format_exam": "A4",           ← Students will get their tests printed out in A4 format
+    "page_format_solution": "A5",       ← Solution will be printed in A5
 
     "options":{
         "generate_single_pdfs": true,   ← We would like the option to look at the problems for each group seperately
@@ -90,7 +90,7 @@ Now it is time to configure our settings in ``Math1.json``.
         "delete_temp_data": true        ← Deleteing temporary data is always usefull
     },
 
-    "sumo_options":{                           
+    "sumo_options":{
         "exam_copies": 15,              ← Total number of students taking the exam
         "solution_copies": 1            ← There is only one solution copy required
     },
@@ -119,7 +119,7 @@ exam_generator -ct .\\settings\\Math1.json
 
 A new directory with all requested exams will be created:
 
-:: 
+::
 
     C:.
     ├───Exams-Math1-WS202223
@@ -148,7 +148,7 @@ Example 2: Multiple Exams
 Our second example focuses on creating multiple exams at once.
 It will go into further detail regarding the project settings.
 
-We would like to create three exams for three different lab experiments for 
+We would like to create three exams for three different lab experiments for
 electrical engineers in their 2nd semester.
 There is a total of 30 students attending each test and we would like to have
 two different groups. Since all of our problems/ solutions are already finalized,
@@ -158,13 +158,13 @@ Setup
 ^^^^^^^^^^^^^^^^^^^
 
 There is a total of eigth pools required for our three exams.
-Each pool contains at least two problem/ solution pairs. 
+Each pool contains at least two problem/ solution pairs.
 
 ::
 
     C:.
-    ├───pool_data               
-    │   ├───A2                          ← Starting problems 
+    ├───pool_data
+    │   ├───A2                          ← Starting problems
     │   │
     │   ├───B2                          ← Followup problems
     │   │
@@ -192,7 +192,7 @@ Settings
 Our lab exams have the following requirements:
 - The first problem is always one of pool *A2*
 - The second problem is always one of pool *B2*
-- There needs to be at least one lab specific problem 
+- There needs to be at least one lab specific problem
 
 Furthermore, we need copies for 30 students. With two groups for each test,
 that leaves us with 15 copies for our sumo file.
@@ -208,19 +208,19 @@ that leaves us with 15 copies for our sumo file.
     "page_format_exam": "A5",               ← Students will receive their exams in A5 format
     "page_format_solution": "A4",           ← Solutions in A4 format
 
-    "options":{ 
+    "options":{
         "generate_single_pdfs": false,      ← We do not need the tests for each group separately
         "generate_sumo_pdf": true,
         "delete_temp_data": true
     },
-    
-    "sumo_options":{ 
+
+    "sumo_options":{
         "sumo_problem_copies": 30,          ← 30 students
         "sumo_solution_copies": 1
     },
-    
 
-    "exams":{ 
+
+    "exams":{
         "Lab03": [                          ← First exam
         "A2",
         "B2",
@@ -252,7 +252,7 @@ exam_generator -ct .\\settings\\ET2.json
 
 Our exam directory will be created and the result is the following:
 
-::  
+::
 
     C:.
     ├───Exams-ET2-WS202223
@@ -272,7 +272,7 @@ Now you can simply print in your chosen format.
 Example 3: Parameterization
 -----------------------------
 Now that you are finally familiar with the basics, we can get to the fun stuff: creating exams with paramaters.
-This example will focus on how to implement parameters in your LaTeX problem/ solution files and how you will have 
+This example will focus on how to implement parameters in your LaTeX problem/ solution files and how you will have
 to adapt your settings to its usage.
 
 Let's again create a very simple math exam, using paramaters.
@@ -280,22 +280,22 @@ Let's again create a very simple math exam, using paramaters.
 Setup
 ^^^^^^^^^^^^^^^^^^^
 Our directory setup is exavtly the same as before. We only need to focus on the content of the problem/ solutions files
-in which we would like to implement randomly generated numbers. 
+in which we would like to implement randomly generated numbers.
 In this example we will look at problem_2.tex and its solution.
 ::
 
-    C:.                                 ← Our current working directory                  
-    ├───pool_data                       ← Directory for all different pool directories                
+    C:.                                 ← Our current working directory
+    ├───pool_data                       ← Directory for all different pool directories
     │   └───easy_calculations           ← Pool with easy multiple choice questions
-    │           problem_1.tex           
+    │           problem_1.tex
     │           problem_2.tex           ← Problem with parameters
-    │           problem_3.tex           
+    │           problem_3.tex
     │           solution_1.tex
     │           solution_2.tex          ← Solution to parameter problem
     │           solution_3.tex
     │
-    ├───settings                        
-    │       Math2.json                  ← Settings file 
+    ├───settings
+    │       Math2.json                  ← Settings file
     │
     └───templates                       ← LaTeX Templates
             template_problem.tex
@@ -308,7 +308,7 @@ Firstly, the students have to guess the correct number (randomly generated in th
 Secondly, they are asked to calculate the sum of two numbers.
 Lastly, they need find the product of two large numbers.
 
-Since the both the first parameters called in the second and third item are provided with the same key and 
+Since the both the first parameters called in the second and third item are provided with the same key and
 bounds, it will generate replace them with the same exact number.
 
 Content of problem_2.tex:
@@ -362,20 +362,20 @@ but in a different order.
     "page_format_exam": "A5",               ← Students will receive their exams in A5 format
     "page_format_solution": "A4",           ← Solutions in A4 format
 
-    "options":{ 
+    "options":{
         "generate_single_pdfs": true,       ← We will have the tests for each group
         "generate_sumo_pdf": true,
         "delete_temp_data": true
     },
-    
-    "sumo_options":{ 
+
+    "sumo_options":{
         "exam_copies": 1,                   ← When using parameterization this should be set to 1!
         "solution_copies": 1                ← We only need one copy of the solutions
     },
-    
 
-    "exams":{ 
-        "Math 101": [                          
+
+    "exams":{
+        "Math 101": [
         "easy_calculations",
         "easy_calculations",
         "easy_calculations"
@@ -391,7 +391,7 @@ exam_generator -ct .\\settings\\Math2.json
 
 Our exam directory will be created and the result is the following:
 
-::  
+::
 
     C:.
     ├───Exams-ET2-WS202223
