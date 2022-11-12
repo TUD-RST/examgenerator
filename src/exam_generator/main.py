@@ -315,7 +315,33 @@ def main():
 
 
 def bootstrap_app():
-    print("bootstrapping")
+    import sys
+    import shutil
+    package_abs_path = os.path.dirname(os.path.abspath(sys.modules.get(__name__).__file__))
+
+    copy_dirs = ["examples", "templates"]
+    destination_root = os.path.abspath(os.getcwd())
+
+    existing = []
+    for dirname in copy_dirs:
+        dst = os.path.join(destination_root, dirname)
+        if os.path.exists(dst):
+            existing.append(dst)
+            print(f"The directory ./{dirname} already exists. Please delete/rename it.")
+
+    if existing:
+        print("Bootstrapping canceled")
+        sys.exit()
+
+
+    print("copying ... ")
+    for dirname in copy_dirs:
+        src = os.path.join(package_abs_path, dirname)
+        dst = os.path.join(destination_root, dirname)
+        shutil.copytree(src, dst)
+        print("  ✓", src)
+    print("done")
+
 
 
 if __name__ == "__main__":
