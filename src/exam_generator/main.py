@@ -284,9 +284,18 @@ def main():
         help="Set a new random seed, allowing the same exam to be created, yet with different problems pulled. Provide a positive integer of your liking.",
     )
 
+    parser.add_argument(
+        "--bootstrap",
+        action="store_true",
+        help="bootstrap the example content in the current working directory",
+    )
+
     args = parser.parse_args()
 
-    if (
+    if args.bootstrap:
+        bootstrap_app()
+
+    elif (
         (args.create_test is None)
         and (args.make_all == False)
         and (args.make_pool is None)
@@ -303,6 +312,10 @@ def main():
 
     else:
         exam_generator(args)
+
+
+def bootstrap_app():
+    print("bootstrapping")
 
 
 if __name__ == "__main__":
