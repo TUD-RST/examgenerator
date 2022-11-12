@@ -18,18 +18,32 @@ __version__ = (
 with open("requirements.txt") as requirements_file:
     requirements = requirements_file.read()
 
+
+def package_files(directory):
+    # source: https://stackoverflow.com/a/36693250
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            paths.append(os.path.join(path, filename))
+    return paths
+
+package_file_list1 = package_files("examples")
+package_file_list2 = package_files("templates")
+
+
 setup(
     name=packagename,
     version=__version__,
     author='Niklas Weber',
     packages=find_packages("src"),
     package_dir = {"": "src"},
-    package_data={'abc': ['templates/*']},
+    package_data={"": [*package_file_list1, *package_file_list2]},
+    include_package_data=True,
     url='',
     license='',
     description='Script for generating exams based on selected settings/ problems',
     long_description="""
-    Exam_generator is a script which is designed to create exams/ tests from pools of problems while 
+    Exam_generator is a script which is designed to create exams/ tests from pools of problems while
     ensuring that there will be no repetition amongst different groups. The exams/ tests are based off
     of two major components: LaTeX files (problems, solutions, templates) and user defined settings.
     """,
