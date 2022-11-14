@@ -3,29 +3,24 @@
 
 # Exam Generator
 
-Exam_generator is a script which is designed to create exams/ tests from 
-pools of problems while ensuring that there will be no repetition amongst
-different groups. Furthermore, you can create problems with values, randomly generated within
-boundaries, provided in your LaTeX files.
+`exam_generator` is a script which is designed to create exams/ tests from 
+pools of problems for different groups of students. It is ensured that there will be no repetition of problems amongst different groups. Furthermore, you can create parameterized problems with values, randomly generated within
+boundaries. The problems and their solutions are written in LaTeX.
+
+![This is an image](docs/source/inkscape/pool-exams.svg)
 
 ## Installation
 
-- install [python](https://www.python.org/downloads/) on your device (version > 3.7)
+- install [Python](https://www.python.org/downloads/) on your device (version > 3.7)
 - clone the repository
 - open your command prompt in the directory where the `setup.py` file is located
 - run `pip install -e .` in your command line 
-
-## Current Status and Issues
-
-This project is currently in the development process and is set to release at the end of October 2022.
-
-You can find the current issues [here](https://github.com/TUD-RST/examgenerator/issues)
 
 ## Documentation
 
 Documentation for this project including a detailed user guide, tutorials and the API doc is available
 on our [readthedocs page](https://exam-generator.readthedocs.io/en/latest/userdoc.html).
-Optionally, you can also view our documentation locally, by executing any of the html files in our [docs directory](https://github.com/TUD-RST/examgenerator/tree/main/docs/build/html).
+Optionally, you can also view our documentation locally, by opening any of the html files in our [docs directory](https://github.com/TUD-RST/examgenerator/tree/main/docs/build/html).
 
 ## Example
 

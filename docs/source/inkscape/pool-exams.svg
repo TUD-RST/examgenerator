@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="112.09568mm"
+   height="98.896385mm"
+   viewBox="0 0 112.09568 98.896386"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   sodipodi:docname="pool-exams.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="1"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.5892817"
+     inkscape:cx="207.01176"
+     inkscape:cy="227.77586"
+     inkscape:window-width="1920"
+     inkscape:window-height="1137"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid9"
+       originx="-18.25625"
+       originy="-8.3093179" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="Arrow2"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Arrow2"
+       markerWidth="20"
+       markerHeight="5.2631578"
+       viewBox="0 0 7.7 5.6"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.7)"
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         id="arrow2L" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-18.256251,-8.3093179)">
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#f2f2f2;stroke-width:0.264583"
+       id="rect4043"
+       width="111.96339"
+       height="98.764091"
+       x="18.388542"
+       y="8.4416094" />
+    <path
+       style="fill:#999999;fill-opacity:1;stroke:#999999;stroke-width:0.264583;marker-end:url(#Arrow2)"
+       d="M 35.002337,15.257344 108.21188,56.103699"
+       id="path3309"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g2101"
+       transform="translate(0,0.0661459)">
+      <rect
+         style="fill:#ffaaaa;stroke:#000000;stroke-width:0.264583"
+         id="rect63"
+         width="15.875"
+         height="18.520834"
+         x="18.520834"
+         y="13.229166"
+         rx="1" />
+      <rect
+         style="fill:#ff0000;stroke:#000000;stroke-width:0.264583"
+         id="rect223"
+         width="15.875"
+         height="18.520834"
+         x="21.298958"
+         y="18.653124"
+         rx="1" />
+      <rect
+         style="fill:#800000;stroke:#000000;stroke-width:0.264583"
+         id="rect225"
+         width="15.875"
+         height="18.520834"
+         x="23.8125"
+         y="23.8125"
+         rx="1" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.175px;fill:none;stroke:#000000;stroke-width:0.264583"
+         x="21.904348"
+         y="10.874536"
+         id="text293"><tspan
+           sodipodi:role="line"
+           id="tspan291"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';stroke-width:0.264583"
+           x="21.904348"
+           y="10.874536">Pool 1</tspan></text>
+    </g>
+    <g
+       id="g2115"
+       transform="translate(10.671805)">
+      <rect
+         style="fill:#aaeeff;stroke:#000000;stroke-width:0.264583"
+         id="rect227"
+         width="15.875"
+         height="18.520834"
+         x="53.048958"
+         y="13.361458"
+         rx="1" />
+      <rect
+         style="fill:#00ccff;stroke:#000000;stroke-width:0.264583"
+         id="rect229"
+         width="15.875"
+         height="18.520834"
+         x="55.82708"
+         y="18.785416"
+         rx="1" />
+      <rect
+         style="fill:#004455;stroke:#000000;stroke-width:0.264583"
+         id="rect231"
+         width="15.875"
+         height="18.520834"
+         x="58.340622"
+         y="23.944792"
+         rx="1" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.175px;fill:none;stroke:#000000;stroke-width:0.264583"
+         x="57.364552"
+         y="10.874536"
+         id="text297"><tspan
+           sodipodi:role="line"
+           id="tspan295"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';stroke-width:0.264583"
+           x="57.364552"
+           y="10.874536">Pool 2</tspan></text>
+    </g>
+    <g
+       id="g2122"
+       transform="translate(21.475897)">
+      <rect
+         style="fill:#ffeeaa;stroke:#000000;stroke-width:0.264583"
+         id="rect233"
+         width="15.875"
+         height="18.520834"
+         x="87.444794"
+         y="13.361458"
+         rx="1" />
+      <rect
+         style="fill:#ffcc00;stroke:#000000;stroke-width:0.264583"
+         id="rect235"
+         width="15.875"
+         height="18.520834"
+         x="90.222916"
+         y="18.785416"
+         rx="1" />
+      <rect
+         style="fill:#806600;stroke:#000000;stroke-width:0.264583"
+         id="rect237"
+         width="15.875"
+         height="18.520834"
+         x="92.736458"
+         y="23.944792"
+         rx="1" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.175px;fill:none;stroke:#000000;stroke-width:0.264583"
+         x="90.828308"
+         y="10.874536"
+         id="text301"><tspan
+           sodipodi:role="line"
+           id="tspan299"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';stroke-width:0.264583"
+           x="90.828308"
+           y="10.874536">Pool 3</tspan></text>
+    </g>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.264583"
+       id="rect353"
+       width="20.502251"
+       height="28.676104"
+       x="18.520834"
+       y="56.817078"
+       rx="1" />
+    <rect
+       style="fill:#ffaaaa;fill-opacity:1;stroke:#000000;stroke-width:0.264583"
+       id="rect402"
+       width="15.042601"
+       height="7.6996436"
+       x="21.250658"
+       y="63.030342"
+       rx="1" />
+    <rect
+       style="fill:#00ccff;fill-opacity:1;stroke:#000000;stroke-width:0.264583"
+       id="rect404"
+       width="15.042601"
+       height="7.6996436"
+       x="21.250658"
+       y="74.154762"
+       rx="1" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:none;stroke:#000000;stroke-width:0.264583"
+       x="21.042974"
+       y="60.681732"
+       id="text408"><tspan
+         sodipodi:role="line"
+         id="tspan406"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';stroke-width:0.264583"
+         x="21.042974"
+         y="60.681732">Exam A - 1</tspan></text>
+    <g
+       id="g2136"
+       transform="translate(0.13229179)">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:0.264583"
+         id="rect410"
+         width="20.502251"
+         height="28.676104"
+         x="44.192913"
+         y="56.817078"
+         rx="1" />
+      <rect
+         style="fill:#800000;fill-opacity:1;stroke:#000000;stroke-width:0.264583"
+         id="rect412"
+         width="15.042601"
+         height="7.6996436"
+         x="46.922737"
+         y="63.030342"
+         rx="1" />
+      <rect
+         style="fill:#aaeeff;fill-opacity:1;stroke:#000000;stroke-width:0.264583"
+         id="rect414"
+         width="15.042601"
+         height="7.6996436"
+         x="46.922737"
+         y="74.154762"
+         rx="1" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.175px;fill:none;stroke:#000000;stroke-width:0.264583"
+         x="46.715054"
+         y="60.681732"
+         id="text418"><tspan
+           sodipodi:role="line"
+           id="tspan416"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';stroke-width:0.264583"
+           x="46.715054"
+           y="60.681732">Exam A - 2</tspan></text>
+    </g>
+    <g
+       id="g2143"
+       transform="translate(3.2952177)">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:0.264583"
+         id="rect420"
+         width="20.502251"
+         height="28.676104"
+         x="80.485512"
+         y="56.784523"
+         rx="1" />
+      <rect
+         style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:0.264583"
+         id="rect422"
+         width="15.042601"
+         height="7.6996436"
+         x="83.21534"
+         y="62.997787"
+         rx="1" />
+      <rect
+         style="fill:#ffcc00;fill-opacity:1;stroke:#000000;stroke-width:0.264583"
+         id="rect424"
+         width="15.042601"
+         height="7.6996436"
+         x="83.21534"
+         y="74.122208"
+         rx="1" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.175px;fill:none;stroke:#000000;stroke-width:0.264583"
+         x="83.007652"
+         y="60.649178"
+         id="text428"><tspan
+           sodipodi:role="line"
+           id="tspan426"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';stroke-width:0.264583"
+           x="83.007652"
+           y="60.649178">Exam B - 1</tspan></text>
+    </g>
+    <g
+       id="g2150"
+       transform="translate(3.2952177)">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:0.264583"
+         id="rect430"
+         width="20.502251"
+         height="28.676104"
+         x="106.28989"
+         y="56.784523"
+         rx="1" />
+      <rect
+         style="fill:#ffaaaa;fill-opacity:1;stroke:#000000;stroke-width:0.264583"
+         id="rect432"
+         width="15.042601"
+         height="7.6996436"
+         x="109.01971"
+         y="62.997787"
+         rx="1" />
+      <rect
+         style="fill:#806600;fill-opacity:1;stroke:#000000;stroke-width:0.264583"
+         id="rect434"
+         width="15.042601"
+         height="7.6996436"
+         x="109.01971"
+         y="74.122208"
+         rx="1" />
+      <text
+         xml:space="preserve"
+         style="font-size:3.175px;fill:none;stroke:#000000;stroke-width:0.264583"
+         x="108.81203"
+         y="60.649178"
+         id="text438"><tspan
+           sodipodi:role="line"
+           id="tspan436"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';stroke-width:0.264583"
+           x="108.81203"
+           y="60.649178">Exam B - 2</tspan></text>
+    </g>
+    <path
+       style="fill:#806600;fill-opacity:1;stroke:#000000;stroke-width:0.264583;marker-end:url(#Arrow2)"
+       d="M 18.853794,31.649665 27.63565,54.605381"
+       id="path2243"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#806600;fill-opacity:1;stroke:#000000;stroke-width:0.264583;marker-end:url(#Arrow2)"
+       d="M 66.633502,36.81054 31.298206,55.437781"
+       id="path3281"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#806600;fill-opacity:1;stroke:#000000;stroke-width:0.264583;marker-end:url(#Arrow2)"
+       d="m 38.997852,42.304374 14.60865,13.133407"
+       id="path3287"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#806600;fill-opacity:1;stroke:#000000;stroke-width:0.264583;marker-end:url(#Arrow2)"
+       d="M 63.470386,31.816145 55.770739,55.271301"
+       id="path3291"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#999999;fill-opacity:1;stroke:#999999;stroke-width:0.264583;marker-end:url(#Arrow2)"
+       d="M 37.499534,20.917658 82.740471,55.937219"
+       id="path3299"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#999999;fill-opacity:1;stroke:#999999;stroke-width:0.264583;marker-end:url(#Arrow2)"
+       d="M 110.91713,37.476458 95.392937,55.43778"
+       id="path3315"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#999999;fill-opacity:1;stroke:#999999;stroke-width:0.264583;marker-end:url(#Arrow2)"
+       d="m 122.07128,42.970292 0.1249,12.301008"
+       id="path3370"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:none;stroke:#000000;stroke-width:0.264583"
+       x="21.946667"
+       y="98.918564"
+       id="text3393"><tspan
+         sodipodi:role="line"
+         id="tspan3391"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';stroke-width:0.264583"
+         x="21.946667"
+         y="98.918564">Problems from Pool 1 und 2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;fill:none;stroke:#000000;stroke-width:0.264583"
+       x="106.70538"
+       y="98.419121"
+       id="text3499"><tspan
+         sodipodi:role="line"
+         id="tspan3497"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="106.70538"
+         y="98.419121">Problems from Pool 1 und 3</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="106.70538"
+         y="102.41683"
+         id="tspan3592">(problems from Pool 1 not</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="106.70538"
+         y="106.41454"
+         id="tspan3596">repeated in groups!)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;text-align:center;text-anchor:middle;fill:none;stroke:#000000;stroke-width:0.264583"
+       x="28.762312"
+       y="88.864388"
+       id="text4179"><tspan
+         sodipodi:role="line"
+         id="tspan4177"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="28.762312"
+         y="88.864388">for student</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="28.762312"
+         y="92.4179"
+         id="tspan4283">group 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;text-align:center;text-anchor:middle;fill:none;stroke:#000000;stroke-width:0.264583"
+       x="54.566685"
+       y="88.864388"
+       id="text4289"><tspan
+         sodipodi:role="line"
+         id="tspan4285"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="54.566685"
+         y="88.864388">for student</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="54.566685"
+         y="92.4179"
+         id="tspan4287">group 2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;text-align:center;text-anchor:middle;fill:none;stroke:#000000;stroke-width:0.264583"
+       x="94.022209"
+       y="88.864388"
+       id="text4295"><tspan
+         sodipodi:role="line"
+         id="tspan4291"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="94.022209"
+         y="88.864388">for student</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="94.022209"
+         y="92.4179"
+         id="tspan4293">group 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;text-align:center;text-anchor:middle;fill:none;stroke:#000000;stroke-width:0.264583"
+       x="119.82658"
+       y="88.864388"
+       id="text4301"><tspan
+         sodipodi:role="line"
+         id="tspan4297"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="119.82658"
+         y="88.864388">for student</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="119.82658"
+         y="92.4179"
+         id="tspan4299">group 2</tspan></text>
+  </g>
+</svg>
