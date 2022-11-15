@@ -19,16 +19,17 @@ with open("requirements.txt") as requirements_file:
     requirements = requirements_file.read()
 
 
-def package_files(directory):
-    # source: https://stackoverflow.com/a/36693250
+def package_files(package_dir, directory):
+    # source: https://stackoverflow.com/a/36693250 (adapted)
     paths = []
-    for (path, directories, filenames) in os.walk(directory):
+    for (path, dirs, filenames) in os.walk(os.path.join(package_dir, packagename, directory)):
         for filename in filenames:
-            paths.append(os.path.join(path, filename))
+            paths.append(os.path.join(path.replace(package_dir + os.sep, ""), filename))
     return paths
 
-package_file_list1 = package_files("examples")
-package_file_list2 = package_files("templates")
+
+package_file_list1 = package_files("src", "examples")
+package_file_list2 = package_files("src", "templates")
 
 
 setup(
