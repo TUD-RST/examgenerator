@@ -40,9 +40,21 @@ jobs:
       run: |
         black ./src/exam_generator/
 
-    - name: Update documentation 
+    - name: Update documentation
       run: |
         sphinx-build -b html docs/source  docs/build/html
+
+    - name: test bootstrap
+# first, check that data dirs do not already exist, then create them, then ensure their existence
+      run: |
+        mkdir tmp
+        cd tmp
+        test ! -d examples
+        test ! -d templates
+        exam_generator --bootstrap
+        test -d examples
+        test -d templates
+        cd ..
         
     - name: Test with pytest
       run: |
