@@ -1,4 +1,0 @@
-recursive-include ./templates
-include ./settings/settings_template.json
-
-recursive-include ./docs

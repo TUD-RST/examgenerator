@@ -254,6 +254,7 @@ def main():
     parser.add_argument(
         "-ct",
         "--create_test",
+        metavar="SETTINGSPATH",
         help="Creates a test based on the provided json settings file. Provide the path to the settings file of your liking.",
     )
     parser.add_argument(
@@ -265,24 +266,36 @@ def main():
     parser.add_argument(
         "-mp",
         "--make_pool",
-        help="Creates a preview for all problems of the given pool. Provide the Path to the pool.",
+        metavar="PATH",
+        help="Creates a preview for all problems of the given pool. Provide the path to the pool.",
     )
     parser.add_argument(
         "-ms",
         "--make_specific",
-        help="Creates a Preview for only the given problem you will need to provide the path to the problem",
+        metavar="PATH",
+        help="Creates a preview for only the given problem you will need to provide the path to the problem",
     )
 
     parser.add_argument(
         "-rs",
         "--random_seed",
+        metavar="SEED",
         type=int,
         help="Set a new random seed, allowing the same exam to be created, yet with different problems pulled. Provide a positive integer of your liking.",
     )
 
+    parser.add_argument(
+        "--bootstrap",
+        action="store_true",
+        help="bootstrap the example content in the current working directory",
+    )
+
     args = parser.parse_args()
 
-    if (
+    if args.bootstrap:
+        bootstrap_app()
+
+    elif (
         (args.create_test is None)
         and (args.make_all == False)
         and (args.make_pool is None)
@@ -299,6 +312,36 @@ def main():
 
     else:
         exam_generator(args)
+
+
+def bootstrap_app():
+    import sys
+    import shutil
+    package_abs_path = os.path.dirname(os.path.abspath(sys.modules.get(__name__).__file__))
+
+    copy_dirs = ["examples", "templates"]
+    destination_root = os.path.abspath(os.getcwd())
+
+    existing = []
+    for dirname in copy_dirs:
+        dst = os.path.join(destination_root, dirname)
+        if os.path.exists(dst):
+            existing.append(dst)
+            print(f"The directory ./{dirname} already exists. Please delete/rename it.")
+
+    if existing:
+        print("Bootstrapping canceled")
+        sys.exit()
+
+
+    print("copying ... ")
+    for dirname in copy_dirs:
+        src = os.path.join(package_abs_path, dirname)
+        dst = os.path.join(destination_root, dirname)
+        shutil.copytree(src, dst)
+        print("  ✓", src)
+    print("done")
+
 
 
 if __name__ == "__main__":
