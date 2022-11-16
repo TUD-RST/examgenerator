@@ -24,12 +24,16 @@ def package_files(package_dir, directory):
     paths = []
     for (path, dirs, filenames) in os.walk(os.path.join(package_dir, packagename, directory)):
         for filename in filenames:
-            paths.append(os.path.join(path.replace(package_dir + os.sep, ""), filename))
+            # replace "src/exam_generator/" with ""
+            prefix = os.path.join(package_dir, packagename) + "/"
+            paths.append(os.path.join(path.replace(prefix, ""), filename))
     return paths
 
 
 package_file_list1 = package_files("src", "examples")
 package_file_list2 = package_files("src", "templates")
+
+print(package_file_list2)
 
 
 
@@ -38,8 +42,8 @@ setup(
     version=__version__,
     author='Niklas Weber',
     packages=find_packages("src"),
-    package_dir = {"": "src"},
-    package_data={"": [*package_file_list1, *package_file_list2]},
+    package_dir = {packagename: os.path.join("src", packagename)},
+    package_data={packagename: [*package_file_list1, *package_file_list2]},
     include_package_data=True,
     url='',
     license='',
