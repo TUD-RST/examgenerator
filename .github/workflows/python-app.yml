@@ -8,6 +8,7 @@ on:
     branches: 
     - main
     - develop
+    - feature/test_bootstrap_ci
   pull_request:
     branches:
     - main
@@ -20,10 +21,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.10
+
+    - name: Set up Python 3.11
       uses: actions/setup-python@v2
       with:
-        python-version: "3.9"
+        python-version: "3.11"
+
+# The following command allows to connect to the ci-container via ssh
+# very useful for debugging
+# source: https://github.com/marketplace/actions/debugging-with-tmate
+
+#     - name: Setup tmate session
+#       uses: mxschmitt/action-tmate@v3
 
     - name: Install dependencies
       run: |
