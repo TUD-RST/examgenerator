@@ -33,9 +33,6 @@ def package_files(package_dir, directory):
 package_file_list1 = package_files("src", "examples")
 package_file_list2 = package_files("src", "templates")
 
-print(package_file_list2)
-
-
 
 setup(
     name=packagename,
