@@ -32,15 +32,14 @@ package_file_list1 = package_files("src", "examples")
 package_file_list2 = package_files("src", "templates")
 
 
-print([*package_file_list1, *package_file_list2])
 
 setup(
     name=packagename,
     version=__version__,
     author='Niklas Weber',
     packages=find_packages("src"),
-    package_dir = {packagename: "src"},
-    package_data={packagename: [*package_file_list1, *package_file_list2]},
+    package_dir = {"": "src"},
+    package_data={"": [*package_file_list1, *package_file_list2]},
     include_package_data=True,
     url='',
     license='',
