@@ -28,8 +28,7 @@ def check_directory(root_directory) -> bool:
     :return: False=not all exist, True= all exist
     :rtype: bool
     """
-    if not os.path.isdir(os.path.join(root_directory, "settings")):
-        raise MissingDirectoryError(
+    if not os.path.isdir(os.path.join(root_directory, "settings")):        raise MissingDirectoryError(
             f"{errorInfo()} settings directory does not exist in \
             current working directory. Please make sure you are starting this program in \
                 a directory following the instructions."
@@ -244,6 +243,8 @@ def create_custom_test_list(test_types_dictionary, pool_info):
             f"{errorInfo()} No custom exams provided in your settings. \
             Please make sure you follow the instructions on creating custom exams."
         )
+
+    generated_pools = {}
     custom_test_list = []
 
     # converts all test types (strings) to actual test types
@@ -253,22 +254,17 @@ def create_custom_test_list(test_types_dictionary, pool_info):
 
         for pool_name in pool_list:
 
-            # selects the correct file list for the pool
-            pool_file_list = []
-            for pool in pool_info:
-                if pool[1] == pool_name:
-                    pool_file_list = pool[0]
-                    break
+            # We only need a single Pool class instance for each pool directory
+            if pool_name not in generated_pools:
+                # selects the correct file list for the pool
+                pool_file_list = []
+                for pool in pool_info:
+                    if pool[1] == pool_name:
+                        pool_file_list = pool[0]
+                        break
+                generated_pools[pool_name] = Pool(pool_name, pool_file_list)
 
-            new_pool = Pool(pool_name, pool_file_list)
-
-            # checking if new pool already exists so not two instances are created
-            for existing_pool in custom_test_pools:
-                if existing_pool.name == new_pool.name:
-                    new_pool = existing_pool
-                    break
-
-            custom_test_pools.append(new_pool)
+            custom_test_pools.append(generated_pools[pool_name])
 
         custom_test = TestType(test_name, *custom_test_pools)
 
