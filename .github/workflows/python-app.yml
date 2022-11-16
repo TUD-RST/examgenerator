@@ -20,6 +20,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+# source: https://github.com/marketplace/actions/debugging-with-tmate
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+
     - name: Set up Python 3.10
       uses: actions/setup-python@v2
       with:
