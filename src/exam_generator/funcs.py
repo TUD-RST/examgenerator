@@ -28,7 +28,8 @@ def check_directory(root_directory) -> bool:
     :return: False=not all exist, True= all exist
     :rtype: bool
     """
-    if not os.path.isdir(os.path.join(root_directory, "settings")):        raise MissingDirectoryError(
+    if not os.path.isdir(os.path.join(root_directory, "settings")):
+        raise MissingDirectoryError(
             f"{errorInfo()} settings directory does not exist in \
             current working directory. Please make sure you are starting this program in \
                 a directory following the instructions."
@@ -245,6 +246,7 @@ def create_custom_test_list(test_types_dictionary, pool_info):
         )
 
     generated_pools = {}
+    pool_usages = {}
     custom_test_list = []
 
     # converts all test types (strings) to actual test types
@@ -263,8 +265,14 @@ def create_custom_test_list(test_types_dictionary, pool_info):
                         pool_file_list = pool[0]
                         break
                 generated_pools[pool_name] = Pool(pool_name, pool_file_list)
+                pool_usages[pool_name] = 0
 
             custom_test_pools.append(generated_pools[pool_name])
+            pool_usages[pool_name] += 1
+
+            if (pool_usages[pool_name]) > len(generated_pools[pool_name].stack_available):
+                raise PoolError(pool_name, f"Used {pool_usages[pool_name]} times, but does only contain "
+                                           f"{len(generated_pools[pool_name].stack_available)} problems!")
 
         custom_test = TestType(test_name, *custom_test_pools)
 

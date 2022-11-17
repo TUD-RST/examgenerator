@@ -69,6 +69,21 @@ class CompilingError(Exception):
         self.file = extra_info
 
 
+class PoolError(Exception):
+    """
+    Error raised when something went wrong during pool creation
+
+    :param pool: errorInfo()
+    :type info: func
+
+    :param pool: name of the affected pool
+    :type pool: str
+    """
+
+    def __int__(self, pool, info):
+        self.info = f"Pool {pool}: {info}"
+
+
 def errorInfo():
     """
     Gives information about the origin of the raised error.
