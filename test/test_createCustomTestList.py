@@ -91,3 +91,24 @@ def test_create_custom_test_list_noEntries():
     test_types_dic = {}
     with pytest.raises(customExceptions.SettingsError):
         funcs.create_custom_test_list(test_types_dic, pool_info)
+
+
+def test_create_custom_test_list_pool_error():
+    """
+    Expects a PoolError when being executed since pool does not contain enough problems
+    """
+    directory = os.path.join(os.getcwd(), "test_directories", "createCustomTestList_1")
+
+    pool_info = funcs.pull_pool_data(directory)
+
+    # test_types resembling the json data (A1 and B1 are pulled 3 times but do only
+    # contain 2 tests)
+    test_types_dic = {
+        "test1": ["A1", "B1", "CV03"],
+        "test2": ["A1", "B1"],
+        "test3": ["A1", "B1"],
+    }
+
+    # checking the function
+    with pytest.raises(customExceptions.PoolError):
+        funcs.create_custom_test_list(test_types_dic, pool_info)
