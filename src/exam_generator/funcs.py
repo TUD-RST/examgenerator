@@ -244,6 +244,9 @@ def create_custom_test_list(test_types_dictionary, pool_info):
             f"{errorInfo()} No custom exams provided in your settings. \
             Please make sure you follow the instructions on creating custom exams."
         )
+
+    generated_pools = {}
+    pool_usages = {}
     custom_test_list = []
 
     # converts all test types (strings) to actual test types
@@ -253,22 +256,23 @@ def create_custom_test_list(test_types_dictionary, pool_info):
 
         for pool_name in pool_list:
 
-            # selects the correct file list for the pool
-            pool_file_list = []
-            for pool in pool_info:
-                if pool[1] == pool_name:
-                    pool_file_list = pool[0]
-                    break
+            # We only need a single Pool class instance for each pool directory
+            if pool_name not in generated_pools:
+                # selects the correct file list for the pool
+                pool_file_list = []
+                for pool in pool_info:
+                    if pool[1] == pool_name:
+                        pool_file_list = pool[0]
+                        break
+                generated_pools[pool_name] = Pool(pool_name, pool_file_list)
+                pool_usages[pool_name] = 0
 
-            new_pool = Pool(pool_name, pool_file_list)
+            custom_test_pools.append(generated_pools[pool_name])
+            pool_usages[pool_name] += 1
 
-            # checking if new pool already exists so not two instances are created
-            for existing_pool in custom_test_pools:
-                if existing_pool.name == new_pool.name:
-                    new_pool = existing_pool
-                    break
-
-            custom_test_pools.append(new_pool)
+            if (pool_usages[pool_name]) > len(generated_pools[pool_name].stack_available):
+                raise PoolError(pool_name, f"Used {pool_usages[pool_name]} times, but does only contain "
+                                           f"{len(generated_pools[pool_name].stack_available)} problems!")
 
         custom_test = TestType(test_name, *custom_test_pools)
 
