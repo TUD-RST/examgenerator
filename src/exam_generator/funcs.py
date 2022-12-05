@@ -52,11 +52,11 @@ def check_directory(root_directory) -> bool:
     return True
 
 
-def initialize_random_number_generator(seed=1024):
+def initialize_random_number_generator(seed=None):
     """
     Initializes random seed.
 
-    :param seed: seed. Defaults to 1024 for debugging purposes.
+    :param seed: int or float; Seed for random number generator. Default: None (use system clock).
     :type seed: int
     """
     random.seed(seed)
