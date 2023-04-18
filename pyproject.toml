@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+# ToDo: Check relation to src/exam_generator/release.py
+# write_to = "src/exam_generator/_version.py"
+
+[project]
+name = "exam_generator"
+# version is generated automatically via setuptools_scm
+dynamic = ["version"]
+authors = [
+    {name = "Niklas Weber", email = "niklas.weber2@mailbox.tu-dresden.de"},
+    {name = "Carsten Knoll", email = "carsten.knoll@tu-dresden.de"},
+    {name = "Jan Winkler", email = "jan.winkler@tu-dresden.de"}
+]
+description = "Script for generating exams based on selected settings/ problems"
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = [""]
+license = {text = ""}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "addict",
+    "PyPDF2",
+    "jinja2"
+]
+
+[project.urls]
+homepage = "https://github.com/TUD-RST/examgenerator"
+documentation = "https://exam-generator.readthedocs.io/en/latest/userdoc.html"
+repository = "https://github.com/TUD-RST/examgenerator"
+
+[project.scripts]
+exam_generator = "exam_generator:main"
