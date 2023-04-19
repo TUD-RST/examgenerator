@@ -36,3 +36,8 @@ repository = "https://github.com/TUD-RST/examgenerator"
 
 [project.scripts]
 exam_generator = "exam_generator:main"
+
+
+# see https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html#dynamic-metadata
+[tool.setuptools.dynamic]
+version = {attr = "exam_generator.release.__version__"}
