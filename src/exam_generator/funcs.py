@@ -167,6 +167,11 @@ def check_settings(settings, settings_file):
             f"{errorInfo()} Number of copies has to be at least one in {settings_file}."
         )
 
+    if isinstance(settings.seed, (int, float)) and settings.seed < 0:
+        raise SettingsError(
+            f"{errorInfo()} Random seed needs to larger or equal to zero in {settings_file}."
+        )
+
 
 def pull_pool_data(latex_directory):
     """

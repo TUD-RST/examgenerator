@@ -53,13 +53,6 @@ def exam_generator(args):
 
     # Settings are adjusted in the settings json files in the settings directory and then loaded into Python
     # No change of settings in this program!
-
-    if args.random_seed is not None:
-        seed = args.random_seed
-        initialize_random_number_generator(seed)
-    else:
-        initialize_random_number_generator()
-
     settings_path = args.create_test
 
     path_settings = os.path.join(root_directory, settings_path)
@@ -83,6 +76,12 @@ def exam_generator(args):
     settings = Dict(settings_dictionary)
 
     check_settings(settings, settings_name)
+
+    # Initialize random number generator
+    if "seed" in settings.keys():
+        initialize_random_number_generator(settings.seed)
+    else:
+        initialize_random_number_generator()
 
     # assigning int values to string decleration of pages_per_sheet for usage in sumo func
     if settings.page_format_exam == "A4":
@@ -277,14 +276,6 @@ def main():
     )
 
     parser.add_argument(
-        "-rs",
-        "--random_seed",
-        metavar="SEED",
-        type=int,
-        help="Set a new random seed, allowing the same exam to be created, yet with different problems pulled. Provide a positive integer of your liking.",
-    )
-
-    parser.add_argument(
         "--bootstrap",
         action="store_true",
         help="bootstrap the example content in the current working directory",
@@ -302,13 +293,6 @@ def main():
         and (args.make_specific is None)
     ):
         parser.error("Please choose at least one of the options. For help type: -h")
-
-    elif args.random_seed is not None and args.create_test is None:
-        parser.error("You can only select a random seed when creating an exam.")
-
-    elif args.random_seed is not None:
-        if args.random_seed <= 0:
-            parser.error("Please select a positive integer as your random seed.")
 
     else:
         exam_generator(args)

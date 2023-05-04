@@ -114,6 +114,12 @@ in a json settings file:
 
 -  *semester*: Current Semester for example: "WS 2022/23"
 
+-  *seed* (optional): A non negative integer or floating point value for seeding
+   the random number generator. This is useful to ensure that the same exams are
+   compiled from run to run, e.g. after fixing errors in one of the tasks. If
+   this parameter is not set the random number generator is initialized using
+   the system date.
+
 -  *number_of_groups*: Determines the number of different groups.
 
 -  *copies*: When using paramaterization, this is the number of students who are taking the exam.
@@ -188,15 +194,6 @@ directory. With these it is now possible to easily create exams:
    the chosen settings file]) creates a folder in which the created
    tests, based on the provided settings, are saved
 
-If you would like to select a new random seed, allowing for different results
-when creating the same exam:
-
-- *-rs* [seed]
-
-.. Hint::
-
-   This only works in combination with creating an exam (-ct).
-
 
 Additionally, the script can help with the creation/ review of problems/
 solutions:
@@ -231,11 +228,11 @@ At the root directory you can now call:
 
 
 exam_generator [-h] [-ct] SETTINGSPATH [-ma] [-mp] POOLPATH
-[-ms] PROBLEMPATH [-rs] SEED
+[-ms] PROBLEMPATH
 
 
 **Syntax for the stand-alone application**
 
 exam_generator.exe [-h] [-ct] SETTINGSPATH [-ma] [-mp] POOLPATH [-ms]
-PROBLEMPATH [-rs] SEED
+PROBLEMPATH
 
