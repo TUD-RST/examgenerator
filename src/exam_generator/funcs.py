@@ -169,7 +169,7 @@ def check_settings(settings, settings_file):
 
     if isinstance(settings.seed, (int, float)) and settings.seed < 0:
         raise SettingsError(
-            f"{errorInfo()} Random seed needs to larger or equal to zero in {settings_file}."
+            f"{errorInfo()} Random seed needs to be larger or equal to zero in {settings_file}."
         )
 
 
@@ -415,7 +415,8 @@ def generate_tex_files(
         template_solution = d.read()
 
     for group in range(number_group_pairs):
-        group_name = f"{group + 1}"
+        #group_name = f"{group + 1}"
+        group_name = f"{2*group + 1}-{2*group + 2}"
 
         for test_index, test_typ in enumerate(test_list_variant):
             # Problem
@@ -831,7 +832,8 @@ def combine_group_files(
     for test in test_list_variant:
         name = test.name.replace(" ", "")
         for group in range(groups):
-            group_name = f"{group + 1}"
+            #group_name = f"{group + 1}"
+            group_name = f"{2*group + 1}-{2*group + 2}"
             group_prob_files = [
                 file
                 for file in pdf_files
