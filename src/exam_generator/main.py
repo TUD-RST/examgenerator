@@ -78,7 +78,7 @@ def exam_generator(args):
     check_settings(settings, settings_name)
 
     # Initialize random number generator
-    if "seed" in settings.keys():
+    if "seed" in settings:
         initialize_random_number_generator(settings.seed)
     else:
         initialize_random_number_generator()
