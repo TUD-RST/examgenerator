@@ -416,7 +416,7 @@ def generate_tex_files(
 
     for group in range(number_group_pairs):
         #group_name = f"{group + 1}"
-        group_name = f"{2*group + 1}-{2*group + 2}"
+        group_name = f"{2*group + 1:02d}-{2*group + 2:02d}"
 
         for test_index, test_typ in enumerate(test_list_variant):
             # Problem
@@ -833,7 +833,7 @@ def combine_group_files(
         name = test.name.replace(" ", "")
         for group in range(groups):
             #group_name = f"{group + 1}"
-            group_name = f"{2*group + 1}-{2*group + 2}"
+            group_name = f"{2*group + 1:02d}-{2*group + 2:02d}"
             group_prob_files = [
                 file
                 for file in pdf_files
