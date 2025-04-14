@@ -4,13 +4,11 @@ This module contains all functions relevant for the exam-generator.
 
 import os
 from platform import platform
-from tempfile import tempdir
 from PyPDF2 import PdfReader, PdfWriter
 import glob
 import subprocess
 import shutil
 from pathlib import Path
-from addict import Dict
 import platform
 import math
 from jinja2 import Environment, FileSystemLoader
@@ -905,34 +903,23 @@ def build_sumo(directory, sumo_name, pdf_list, pages_per_sheet, copies_per_file)
         * pdf file sumo_name.pdf
 
     """
-
+    print(f"==== Creating {sumo_name} for {pdf_list} ===")
     os.chdir(directory)
     writer = PdfWriter()
 
-    open_files = []
     for pdf in pdf_list:
-        d = open(pdf, "rb")
-        open_files.append(d)
-        # TODO create extra func with: with open
-        reader = PdfReader(d)
-        num_pages = len(reader.pages)
-        more_than_multiple = num_pages % pages_per_sheet
-        if more_than_multiple == 0:
-            blank_pages = 0
-        else:
-            blank_pages = pages_per_sheet - more_than_multiple
-
+        reader = PdfReader(pdf)
+        additional_blanks = (pages_per_sheet - len(reader.pages) % pages_per_sheet) % pages_per_sheet
         for copy in range(copies_per_file):
-            for page in range(num_pages):
-                writer.add_page(reader.pages[page])
-            for blank_page in range(blank_pages):
+            writer.append(reader)
+            for _ in range(0, additional_blanks):
                 writer.add_blank_page()
 
     with open(sumo_name, "wb+") as d:
+        print(f"   Start writing {sumo_name}")
         writer.write(d)
 
-    for d in open_files:
-        d.close()
+    print(f"==== Finished creating {sumo_name} for {pdf_list} ===\n")
 
 
 ######################################
